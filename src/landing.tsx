@@ -345,11 +345,6 @@ export const Landing: React.FC = () => {
     </>
   );
 };
-const Wrapper = styled.div`
-  overflow-x: hidden;
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-`;
 
 const CanvasWrap = styled.div`
   position: fixed;
@@ -368,62 +363,6 @@ const IntroSection = styled.section`
   }
 `;
 
-const IntroContent = styled.div`
-  max-width: min(92%, 46rem);
-  text-align: center;
-  padding: 1.25rem var(--padX);
-
-  h1 {
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    margin: 0 0 1rem;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-  }
-  p {
-    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
-    margin: 0 auto 1.75rem;
-    max-width: 34rem;
-    opacity: 0.9;
-  }
-`;
-
-const PrimaryButton = styled.button`
-  padding: 0.7rem 1.25rem;
-  border: 1.5px solid ${COLORS.text};
-  background: transparent;
-  color: ${COLORS.text};
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-  font-size: clamp(0.9rem, 3.2vw, 1rem);
-
-  &:hover {
-    background: ${COLORS.text};
-    color: ${COLORS.bg};
-    transform: translateY(-1px);
-  }
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-const Title = styled.h2`
-  font-size: clamp(1.4rem, 5vw, 2.2rem);
-  margin: 0 0 0.75rem;
-  text-align: center;
-`;
-
-const Lead = styled.p`
-  max-width: 44rem;
-  margin: 0 auto 1rem;
-  opacity: 0.85;
-  text-align: center;
-  font-size: clamp(0.95rem, 3.2vw, 1.05rem);
-`;
-
 const VideoSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -433,45 +372,11 @@ const VideoSection = styled.section`
   text-align: center;
 
   @supports (height: 70dvh) {
-    min-height: 70dvh;
+    min-height: 55vh;
   }
 
   @media (min-width: ${BREAK_MD}) {
     padding: 3.5rem var(--padX) 2.5rem; /* aðeins meira bil á stærri skjám */
-  }
-`;
-
-const VideoText = styled.div`
-  text-align: center;
-  margin-bottom: 1.25rem;
-  max-width: 40rem;
-  padding: 0 var(--padX);
-  animation: fadeInUp 0.6s ease forwards;
-  opacity: 0;
-
-  h2 {
-    font-size: clamp(1.4rem, 5.5vw, 2.4rem);
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.03em;
-    line-height: 1.2;
-    background: linear-gradient(90deg, ${COLORS.accent}, #ffffff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  p {
-    font-size: clamp(0.9rem, 3.2vw, 1rem);
-    opacity: 0.75;
-    margin: 0 auto;
-  }
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 `;
 
@@ -542,20 +447,6 @@ const CTA = styled.div`
   }
 `;
 
-const CTAButton = styled.a`
-  display: inline-block;
-  margin-top: 0.75rem;
-  padding: 0.7rem 1.05rem;
-  border-radius: 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  text-transform: uppercase;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  color: ${COLORS.text};
-  text-decoration: none;
-  font-size: clamp(0.85rem, 3vw, 0.95rem);
-`;
-
 const Footer = styled.footer`
   width: 100%;
   background: rgba(255, 255, 255, 0.02);
@@ -573,157 +464,6 @@ const FooterContent = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`;
-
-const FooterLogo = styled.img`
-  height: clamp(2rem, 6vw, 3rem);
-  cursor: pointer;
-  opacity: 0.85;
-  transition: opacity 0.25s ease;
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const FooterNote = styled.p`
-  font-size: clamp(0.7rem, 2.8vw, 0.8rem);
-  opacity: 0.55;
-`;
-
-const HeaderWrapper = styled.header<{ scrolled: boolean }>`
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  width: 100%;
-  top: 0;
-  padding: 0.75rem 0;
-  background: transparent;
-  border: 0;
-
-  @media (min-width: ${BREAK_LG}) {
-    top: ${({ scrolled }) => (scrolled ? "15px" : "0")};
-    width: ${({ scrolled }) => (scrolled ? "65%" : "100%")};
-    padding: ${({ scrolled }) => (scrolled ? "0.5rem 0" : "1.25rem 0")};
-    background: rgba(255, 255, 255, ${({ scrolled }) => (scrolled ? 0.08 : 0)});
-    backdrop-filter: ${({ scrolled }) => (scrolled ? "blur(10px)" : "none")};
-    border-radius: ${({ scrolled }) => (scrolled ? "1rem" : "0")};
-    border: ${({ scrolled }) =>
-      scrolled ? "1px solid rgba(255,255,255,0.12)" : "1px solid transparent"};
-    box-shadow: ${({ scrolled }) =>
-      scrolled ? "0 6px 24px rgba(0, 0, 0, 0.1)" : "none"};
-  }
-`;
-
-const HeaderInner = styled.div`
-  width: 100%;
-  padding: 0 var(--padX);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const HeaderLogo = styled.img`
-  height: clamp(2rem, 7vw, 3rem);
-  cursor: pointer;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  opacity: 0.95;
-  &:hover {
-    transform: scale(1.03);
-    opacity: 1;
-  }
-  @media (min-width: ${BREAK_LG}) {
-    height: 4rem;
-  }
-`;
-
-const HeaderNav = styled.nav`
-  display: none;
-  gap: 1.25rem;
-  @media (min-width: ${BREAK_LG}) {
-    display: flex;
-  }
-`;
-
-const NavItem = styled.button`
-  background: none;
-  border: none;
-  color: ${COLORS.text};
-  font-size: 0.95rem;
-  font-weight: 700;
-  font-family: "Inter", "Helvetica Neue", sans-serif;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.6rem 1.25rem;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: ${COLORS.accent};
-    transform: translateY(-1px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${COLORS.accent};
-    outline-offset: 2px;
-  }
-`;
-
-const MobileMenuToggle = styled.button`
-  display: inline-flex;
-  font-size: 1.75rem;
-  background: none;
-  border: none;
-  color: ${COLORS.text};
-  cursor: pointer;
-
-  @media (min-width: ${BREAK_LG}) {
-    display: none;
-  }
-`;
-
-const MobileMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-top: none;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 199;
-  padding: 1rem 0;
-  gap: 0.5rem;
-  border-radius: 0 0 1rem 1rem;
-
-  @media (min-width: ${BREAK_LG}) {
-    display: none;
-  }
-`;
-
-const MobileNavItem = styled.button`
-  background: none;
-  border: none;
-  color: ${COLORS.text};
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: ${COLORS.accent};
-  }
 `;
 
 const Section = styled.section<{ $compact?: boolean }>`
@@ -770,22 +510,14 @@ const Stat = styled.div`
   min-width: 84px;
 `;
 
-const Big = styled.div<{ $compact?: boolean }>`
-  font-weight: 900;
-  font-size: ${({ $compact }) =>
-    $compact ? "clamp(1rem, 4vw, 1.3rem)" : "clamp(1.1rem, 4.5vw, 1.6rem)"};
-  line-height: 1.1;
-  margin-bottom: 0.1rem;
-`;
-
 const Small = styled.p<{ $compact?: boolean }>`
   margin: 0;
   opacity: 0.78;
   font-size: ${({ $compact }) =>
     $compact
-      ? "clamp(0.7rem, 3vw, 0.85rem)"
-      : "clamp(0.75rem, 3.2vw, 0.95rem)"};
-  line-height: 1.3;
+      ? "clamp(0.85rem, 3.6vw, 0.95rem)"
+      : "clamp(0.9rem, 3.8vw, 1.05rem)"};
+  line-height: 1.35;
 `;
 
 const Card = styled.div<{ $compact?: boolean }>`
@@ -808,4 +540,305 @@ const Card = styled.div<{ $compact?: boolean }>`
     font-size: clamp(0.9rem, 3.4vw, 1rem);
     line-height: 1.5;
   }
+`;
+
+/* --- NÝTT: Wrapper bætir padding-top = header-hæð --- */
+const Wrapper = styled.div`
+  overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-top: var(--headerH);
+`;
+
+/* ---------------- Header ---------------- */
+
+const HeaderWrapper = styled.header<{ scrolled: boolean }>`
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 100%;
+  top: 0;
+  padding: 0.5rem 0; /* minna vertical padding – við notum hæðina á innihaldinu */
+  background: rgba(11, 13, 19, 0.25); /* smá bakgrunnur í síma */
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  @media (min-width: ${BREAK_LG}) {
+    background: transparent;
+    border-bottom: 0;
+    top: ${({ scrolled }) => (scrolled ? "15px" : "0")};
+    width: ${({ scrolled }) => (scrolled ? "65%" : "100%")};
+    padding: ${({ scrolled }) => (scrolled ? "0.5rem 0" : "1.1rem 0")};
+    background: rgba(255, 255, 255, ${({ scrolled }) => (scrolled ? 0.08 : 0)});
+    backdrop-filter: ${({ scrolled }) => (scrolled ? "blur(10px)" : "none")};
+    border-radius: ${({ scrolled }) => (scrolled ? "1rem" : "0")};
+    border: ${({ scrolled }) =>
+      scrolled ? "1px solid rgba(255,255,255,0.12)" : "1px solid transparent"};
+    box-shadow: ${({ scrolled }) =>
+      scrolled ? "0 6px 24px rgba(0, 0, 0, 0.1)" : "none"};
+  }
+`;
+
+const HeaderInner = styled.div`
+  width: 100%;
+  padding: 0 var(--padX);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px; /* tryggjum gott tap-target + vertical rhythm */
+  @media (max-width: ${BREAK_LG}) {
+    min-height: 88px; /* stærra í síma */
+  }
+`;
+
+const MobileMenuToggle = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem; /* stærri hamborgari í síma */
+  line-height: 1;
+  width: 56px;
+  height: 56px; /* stórt tappable svæði */
+  background: none;
+  border: none;
+  color: ${COLORS.text};
+  cursor: pointer;
+  border-radius: 14px;
+  -webkit-tap-highlight-color: transparent;
+
+  @media (min-width: ${BREAK_LG}) {
+    display: none;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const HeaderLogo = styled.img`
+  height: clamp(2.6rem, 10vw, 3.6rem); /* STÆRRA LOGÓ í síma */
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.95;
+
+  &:hover {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  &:active {
+    transform: scale(0.99);
+  }
+
+  @media (min-width: ${BREAK_LG}) {
+    height: 4rem;
+  }
+`;
+
+const HeaderNav = styled.nav`
+  display: none;
+  gap: 1.25rem;
+  @media (min-width: ${BREAK_LG}) {
+    display: flex;
+  }
+`;
+
+const NavItem = styled.button`
+  background: none;
+  border: none;
+  color: ${COLORS.text};
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: ${COLORS.accent};
+    transform: translateY(-1px);
+  }
+  &:focus-visible {
+    outline: 2px solid ${COLORS.accent};
+    outline-offset: 2px;
+  }
+`;
+
+const MobileMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: none;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 199;
+  padding: 0.75rem 0;
+  gap: 0.25rem;
+  border-radius: 0 0 1rem 1rem;
+
+  @media (min-width: ${BREAK_LG}) {
+    display: none;
+  }
+`;
+
+const MobileNavItem = styled.button`
+  background: none;
+  border: none;
+  color: ${COLORS.text};
+  font-size: 1.05rem; /* stærra í síma */
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.9rem 1.6rem; /* stærra tap-target */
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  width: min(90%, 520px);
+  text-align: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+    color: ${COLORS.accent};
+  }
+`;
+
+/* ---------------- Stækkaðir textar á mobilen ---------------- */
+
+const IntroContent = styled.div`
+  max-width: min(92%, 46rem);
+  text-align: center;
+  padding: 1.25rem var(--padX);
+
+  h1 {
+    font-size: clamp(2.4rem, 11vw, 3.75rem); /* stærra í síma */
+    margin: 0 0 1rem;
+    letter-spacing: 0.02em;
+    line-height: 1.08;
+  }
+  p {
+    font-size: clamp(1.05rem, 4vw, 1.15rem); /* stærra í síma */
+    margin: 0 auto 1.75rem;
+    max-width: 34rem;
+    opacity: 0.9;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: clamp(1.6rem, 6.2vw, 2.35rem); /* stærra í síma */
+  margin: 0 0 0.85rem;
+  text-align: center;
+`;
+
+const Lead = styled.p`
+  max-width: 44rem;
+  margin: 0 auto 1rem;
+  opacity: 0.88;
+  text-align: center;
+  font-size: clamp(1rem, 4.2vw, 1.15rem); /* stærra í síma */
+`;
+
+const PrimaryButton = styled.button`
+  padding: 0.9rem 1.35rem; /* stærra tap-target */
+  border: 1.5px solid ${COLORS.text};
+  background: transparent;
+  color: ${COLORS.text};
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-size: clamp(1rem, 3.6vw, 1.05rem);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: ${COLORS.text};
+    color: ${COLORS.bg};
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const VideoText = styled.div`
+  text-align: center;
+  margin-bottom: 1.25rem;
+  max-width: 40rem;
+  padding: 0 var(--padX);
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+
+  h2 {
+    font-size: clamp(1.6rem, 6vw, 2.5rem); /* stærra í síma */
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.03em;
+    line-height: 1.18;
+    background: linear-gradient(90deg, ${COLORS.accent}, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  p {
+    font-size: clamp(1rem, 3.8vw, 1.06rem); /* stærra í síma */
+    opacity: 0.78;
+    margin: 0 auto;
+  }
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const CTAButton = styled.a`
+  display: inline-block;
+  margin-top: 0.85rem;
+  padding: 0.9rem 1.15rem; /* stærra í síma */
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.065em;
+  color: ${COLORS.text};
+  text-decoration: none;
+  font-size: clamp(0.98rem, 3.8vw, 1.05rem);
+`;
+
+const FooterLogo = styled.img`
+  height: clamp(2.2rem, 7vw, 3.2rem); /* örlítið stærra */
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.25s ease;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const FooterNote = styled.p`
+  font-size: clamp(0.8rem, 3vw, 0.9rem); /* stærra í síma */
+  opacity: 0.6;
+`;
+
+/* --- Smá stærri tölur/usp kort í síma --- */
+
+const Big = styled.div<{ $compact?: boolean }>`
+  font-weight: 900;
+  font-size: ${({ $compact }) =>
+    $compact ? "clamp(1.15rem, 5vw, 1.4rem)" : "clamp(1.25rem, 5.2vw, 1.7rem)"};
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
 `;

@@ -25,7 +25,7 @@ export const App: React.FC = () => {
         <Route
           path="/"
           element={
-            true ? (
+            authenticated ? (
               <Landing />
             ) : (
               <Container>
