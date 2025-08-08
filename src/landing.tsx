@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import styled, { createGlobalStyle, css } from "styled-components";
 import { DarkVeil } from "./herlpers";
 import { SnakeSteps } from "./stepSection";
+import frameIcon from "./images/frame.svg";
 
 const COLORS = {
   bg: "#0B0D13",
@@ -11,9 +12,21 @@ const COLORS = {
   text: "#FFFFFF",
 };
 
-const BREAK = "1000px";
+const BREAK_SM = "480px";
+const BREAK_MD = "768px";
+const BREAK_LG = "1024px";
+const BREAK = BREAK_LG;
+
 const GlobalStyle = createGlobalStyle`
   *,*::before,*::after{box-sizing:border-box}
+  :root {
+    --maxw: 1200px;
+    --padX: 1rem;
+    --rad: 12px;
+  }
+  @media (min-width: ${BREAK_MD}) {
+    :root { --padX: 1.25rem; }
+  }
   body {
     margin: 0;
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Helvetica", sans-serif;
@@ -21,6 +34,7 @@ const GlobalStyle = createGlobalStyle`
     color: ${COLORS.text};
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
   }
   :focus-visible {
     outline: 2px solid ${COLORS.accent};
@@ -30,26 +44,11 @@ const GlobalStyle = createGlobalStyle`
     max-width: 100%;
     display: block;
   }
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after { animation: none !important; transition: none !important; }
+  }
 `;
 
-const steps: { title: string; desc: string; icon: string }[] = [
-  {
-    title: "Select your powder",
-    desc: "Choose pre-workout, protein, or recovery.",
-    icon: "choose.svg",
-  },
-  {
-    title: "Make payment",
-    desc: "Tap card or phone – done in seconds.",
-    icon: "pay.svg",
-  },
-  {
-    title: "Place your bottle",
-    desc: "Put bottle where the light appears.",
-    icon: "bottle.svg",
-  },
-];
-const stepIcons = ["choose", "pay", "bottle"];
 const menuItems = [
   { label: "HOW IT WORKS", target: "#steps" },
   { label: "VIDEO", target: "#video" },
@@ -75,9 +74,14 @@ export const Landing: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      if (window.innerWidth > parseInt(BREAK)) {
+        setScrolled(window.scrollY > 40);
+      } else {
+        setScrolled(false);
+      }
       setShowScrollTop(window.scrollY > 300);
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -134,12 +138,13 @@ export const Landing: React.FC = () => {
             ref={toggleRef}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={menuOpen}
           >
             ☰
           </MobileMenuToggle>
 
           <HeaderLogo
-            src="https://raw.githubusercontent.com/adambjorgvins/publicDuft/ed647a29b068593dc5a57bc59b4ce124bc080d89/Frame%201.svg"
+            src={frameIcon}
             alt="DUFTBAR logo"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           />
@@ -151,13 +156,11 @@ export const Landing: React.FC = () => {
                 onClick={() => {
                   const el = document.querySelector(item.target);
                   if (!el) return;
-
                   const yOffset = -120;
                   const y =
                     el.getBoundingClientRect().top +
                     window.pageYOffset +
                     yOffset;
-
                   window.scrollTo({ top: y, behavior: "smooth" });
                 }}
               >
@@ -190,7 +193,7 @@ export const Landing: React.FC = () => {
           </MobileMenu>
         )}
       </HeaderWrapper>
-      <Wrapper id="main">
+      <Wrapper>
         <CanvasWrap>
           <DarkVeil
             hueShift={0}
@@ -202,32 +205,77 @@ export const Landing: React.FC = () => {
           />
         </CanvasWrap>
 
+        {/* Hero / Intro */}
         <IntroSection>
           <IntroContent>
             <h1>DUFTBAR</h1>
             <p>
-              A smart, self-serve powder dispenser that delivers perfectly dosed
-              supplements — like protein or pre-workout — straight into your
-              bottle. No scoops. No mess. No single-use plastic. Just scan,
-              choose, and fill.
+              A smart, self-serve powder dispenser that fills directly into your
+              own bottle. No single-use plastic, no scoops — just precise dosing
+              in seconds.
             </p>
-
             <PrimaryButton type="button" onClick={scrollToVideo}>
-              Watch video <span aria-hidden>▶</span>
+              Watch Video <span aria-hidden>▶</span>
             </PrimaryButton>
           </IntroContent>
         </IntroSection>
 
+        {/* Mission */}
+        <Section>
+          <Title>Powder, perfectly dosed — anywhere</Title>
+          <Lead>
+            DUFTBAR is designed to offer a hygienic, precise, and eco-friendly
+            solution for supplements — anywhere.
+          </Lead>
+        </Section>
+
+        {/* USP Grid */}
+        <Section $compact>
+          <Grid>
+            {[
+              ["No plastic", "Fills into your own bottle."],
+              ["Perfect dose", "±0.1g Dosing accuracy."],
+              ["Hygienic", "Closed system, contact-free."],
+              ["Fast", "Filled in ~10s."],
+            ].map(([t, d]) => (
+              <Card key={t} $compact>
+                <h3>{t}</h3>
+                <Small $compact>{d}</Small>
+              </Card>
+            ))}
+          </Grid>
+        </Section>
+
+        <Section aria-label="Key numbers" $compact>
+          <Strip $compact>
+            <Stat>
+              <Big $compact>0</Big>
+              <Small $compact>Single-use plastic</Small>
+            </Stat>
+            <Stat>
+              <Big $compact>±0.1g</Big>
+              <Small $compact>Dosing accuracy</Small>
+            </Stat>
+            <Stat>
+              <Big $compact>~10s</Big>
+              <Small $compact>Serving time</Small>
+            </Stat>
+            <Stat>
+              <Big $compact>24/7</Big>
+              <Small $compact>Self-serve</Small>
+            </Stat>
+          </Strip>
+        </Section>
         <SnakeSteps id="steps" />
+
         <VideoSection ref={videoRef} id="video">
           <VideoText>
             <h2>Experience the Future of Supplement Dispensing</h2>
             <p>
-              Watch how DUFTBAR works in real-time – no scoops, no mess, just
-              pure innovation.
+              See how DUFTBAR works in real time — no scoops, no mess, just
+              innovation in action.
             </p>
           </VideoText>
-
           {videoSrc ? (
             <Iframe
               src={`${videoSrc}&autoplay=1`}
@@ -249,30 +297,45 @@ export const Landing: React.FC = () => {
           )}
         </VideoSection>
 
-        <ImageSection id="photo">
-          <HeroImage
-            src="https://sdmntprnortheu.oaiusercontent.com/files/00000000-b128-61f4-81a7-9bffb6fdad9e/raw?se=2025-08-07T15%3A54%3A51Z&sp=r&sv=2024-08-04&sr=b&scid=c8e78d7a-f484-5b26-815f-d7ca33019e6b&skoid=b928fb90-500a-412f-a661-1ece57a7c318&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-08-07T08%3A26%3A18Z&ske=2025-08-08T08%3A26%3A18Z&sks=b&skv=2024-08-04&sig=pKDC3JJeuBP1QG1AHZcfFCECwQ1Re9JrhW4QCN9bMkY%3D"
-            alt="Athlete refilling reusable bottle at DUFTBAR dispenser"
-            loading="lazy"
-          />
-        </ImageSection>
+        <Section>
+          <Title>Built for accuracy & hygiene</Title>
+          <Two>
+            <Card>
+              <h3>Technology</h3>
+              <Small>
+                Real-time weighing, closed dosing system, contactless payment,
+                remote monitoring.
+              </Small>
+            </Card>
+            <Card>
+              <h3>Hygiene</h3>
+              <Small>
+                Closed flow paths, easy-to-clean design, and regular
+                sanitization.
+              </Small>
+            </Card>
+          </Two>
+        </Section>
 
-        {showScrollTop && (
-          <ScrollToTopButton
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            aria-label="Scroll to top"
-          >
-            ↑
-          </ScrollToTopButton>
-        )}
+        <Section>
+          <CTA>
+            <Title>Bring DUFTBAR to your location?</Title>
+            <Lead>
+              We’re opening for pilot installations. Let’s talk and see if it’s
+              a good fit.
+            </Lead>
+            <CTAButton href="mailto:hello@duftbar.is">Get in touch</CTAButton>
+          </CTA>
+        </Section>
+
+        {/* Footer */}
         <Footer>
           <FooterContent>
             <FooterLogo
-              src="https://raw.githubusercontent.com/adambjorgvins/publicDuft/ed647a29b068593dc5a57bc59b4ce124bc080d89/Frame%201.svg"
+              src={frameIcon}
               alt="DUFTBAR Logo"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             />
-
             <FooterNote>
               © {new Date().getFullYear()} DUFTBAR ehf. — All rights reserved.
             </FooterNote>
@@ -282,9 +345,10 @@ export const Landing: React.FC = () => {
     </>
   );
 };
-
 const Wrapper = styled.div`
   overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 `;
 
 const CanvasWrap = styled.div`
@@ -294,160 +358,115 @@ const CanvasWrap = styled.div`
   pointer-events: none;
 `;
 
-const sectionBase = css`
-  width: 100%;
+const IntroSection = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const IntroSection = styled.section`
-  ${sectionBase};
-  min-height: 85vh;
-  @supports (height: 85dvh) {
-    min-height: 85dvh;
+  min-height: 80vh;
+  @supports (height: 80dvh) {
+    min-height: 80dvh;
   }
 `;
 
 const IntroContent = styled.div`
-  max-width: min(90%, 96rem);
+  max-width: min(92%, 46rem);
   text-align: center;
-  padding: 2rem 1rem;
-
-  @media (max-width: ${BREAK}) {
-    padding: 4rem 1.5rem 2rem;
-  }
+  padding: 1.25rem var(--padX);
 
   h1 {
-    font-size: clamp(3rem, 12vw, 6rem);
-    margin: 0 0 1.5rem;
-    letter-spacing: 0.04em;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    margin: 0 0 1rem;
+    letter-spacing: 0.02em;
     line-height: 1.1;
   }
-
   p {
-    font-size: clamp(1rem, 4vw, 1.15rem);
-    margin: 0 auto 2.5rem;
-    max-width: 38rem;
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    margin: 0 auto 1.75rem;
+    max-width: 34rem;
+    opacity: 0.9;
   }
 `;
 
 const PrimaryButton = styled.button`
-  padding: 0.75rem 2rem;
-  border: 2px solid ${COLORS.text};
+  padding: 0.7rem 1.25rem;
+  border: 1.5px solid ${COLORS.text};
   background: transparent;
   color: ${COLORS.text};
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
   cursor: pointer;
-  transition: background 0.25s, transform 0.2s;
+  transition: background 0.2s, transform 0.15s;
+  font-size: clamp(0.9rem, 3.2vw, 1rem);
 
   &:hover {
     background: ${COLORS.text};
     color: ${COLORS.bg};
-    transform: scale(1.05);
+    transform: translateY(-1px);
   }
   &:active {
-    transform: scale(0.97);
+    transform: translateY(0);
   }
 `;
 
-const MobileMenuToggle = styled.button`
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: ${COLORS.text};
-  cursor: pointer;
-
-  @media (max-width: ${BREAK}) {
-    display: block;
-  }
+const Title = styled.h2`
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  margin: 0 0 0.75rem;
+  text-align: center;
 `;
 
-const MobileMenu = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); /* for Safari */
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-top: none;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+const Lead = styled.p`
+  max-width: 44rem;
+  margin: 0 auto 1rem;
+  opacity: 0.85;
+  text-align: center;
+  font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+`;
+
+const VideoSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 199;
-  padding: 1.5rem 0;
-  gap: 1rem;
-  border-radius: 0 0 1rem 1rem;
+  min-height: 55vh;
+  padding: 2rem var(--padX) 1rem; /* minna bil á síma */
+  text-align: center;
 
-  @media (min-width: ${BREAK}) {
-    display: none;
+  @supports (height: 70dvh) {
+    min-height: 70dvh;
   }
-`;
 
-const MobileNavItem = styled.button`
-  background: none;
-  border: none;
-  color: ${COLORS.text};
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: ${COLORS.accent};
+  @media (min-width: ${BREAK_MD}) {
+    padding: 3.5rem var(--padX) 2.5rem; /* aðeins meira bil á stærri skjám */
   }
-`;
-
-const Iframe = styled.iframe`
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  max-width: 64rem;
-  border: 0;
-  border-radius: 0.75rem;
-  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.45);
 `;
 
 const VideoText = styled.div`
   text-align: center;
-  margin-bottom: 2.5rem;
-  max-width: 800px;
-  padding: 0 1rem;
-  animation: fadeInUp 0.9s ease forwards;
+  margin-bottom: 1.25rem;
+  max-width: 40rem;
+  padding: 0 var(--padX);
+  animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
 
   h2 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    margin-bottom: 0.75rem;
-    letter-spacing: 0.05em;
+    font-size: clamp(1.4rem, 5.5vw, 2.4rem);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.03em;
     line-height: 1.2;
     background: linear-gradient(90deg, ${COLORS.accent}, #ffffff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
   p {
-    font-size: 1rem;
-    opacity: 0.7;
-    max-width: 600px;
+    font-size: clamp(0.9rem, 3.2vw, 1rem);
+    opacity: 0.75;
     margin: 0 auto;
   }
-
   @keyframes fadeInUp {
     0% {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(16px);
     }
     100% {
       opacity: 1;
@@ -456,49 +475,21 @@ const VideoText = styled.div`
   }
 `;
 
-const VideoSection = styled.section`
-  ${sectionBase};
-  flex-direction: column;
-  min-height: 85vh;
-  padding: 6rem 1rem 4rem;
-  position: relative;
-  text-align: center;
-
-  @supports (height: 85dvh) {
-    min-height: 85dvh;
-  }
-`;
-
-const Placeholder = styled.p`
-  font-size: 1rem;
-  opacity: 0.7;
-`;
-
-const ImageSection = styled.section`
-  ${sectionBase};
-  padding: 0;
-`;
-
-const HeroImage = styled.img`
+const Iframe = styled.iframe`
+  aspect-ratio: 16 / 9;
   width: 100%;
-  height: 85vh;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-
-  @supports (height: 85dvh) {
-    height: 85dvh;
-  }
-
-  @media (max-width: ${BREAK}) {
-    border-radius: 0;
-  }
+  max-width: 58rem;
+  max-height: 60vh;
+  border: 0;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.45);
 `;
 
 const VideoPreview = styled.div`
   width: 100%;
-  max-width: 64rem;
+  max-width: 58rem;
   aspect-ratio: 16 / 9;
+  max-height: 60vh;
   background: #000;
   border-radius: 0.75rem;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.45);
@@ -507,10 +498,9 @@ const VideoPreview = styled.div`
   justify-content: center;
   cursor: pointer;
   position: relative;
-  transition: transform 0.2s ease;
-
+  transition: transform 0.15s ease;
   &:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
   }
 `;
 
@@ -523,63 +513,135 @@ const PlayButton = styled.div`
   backdrop-filter: blur(6px);
   transition: all 0.3s ease;
   box-shadow: 0 0 1rem rgba(255, 255, 255, 0.15);
-
   &:hover {
     background: rgba(255, 255, 255, 0.35);
     transform: scale(1.1);
   }
 `;
 
-const HeaderWrapper = styled.header<{ scrolled: boolean }>`
-  position: fixed;
-  top: ${({ scrolled }) => (scrolled ? "15px" : "0")};
-  left: 50%;
-  transform: translateX(-50%);
-  width: ${({ scrolled }) => (scrolled ? "65%" : "100%")};
+const Two = styled.div`
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  text-align: center; /* centrera allt í gridinu */
 
-  padding: ${({ scrolled }) => (scrolled ? "0.5rem 0" : "1.5rem 0")};
-  background: rgba(255, 255, 255, ${({ scrolled }) => (scrolled ? 0.08 : 0)});
-  backdrop-filter: ${({ scrolled }) => (scrolled ? "blur(10px)" : "none")};
-  border-radius: ${({ scrolled }) => (scrolled ? "1rem" : "0")};
-  border: ${({ scrolled }) =>
-    scrolled ? "2px solid rgba(255, 255, 255, 0.12)" : "1px solid transparent"};
-  box-shadow: ${({ scrolled }) =>
-    scrolled ? "0 6px 24px rgba(0, 0, 0, 0.1)" : "none"};
+  @media (max-width: ${BREAK}) {
+    grid-template-columns: 1fr;
+  }
+`;
 
-  transition: width 0.4s ease, top 0.4s ease, padding 0.4s ease,
-    background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease,
-    border-radius 0.4s ease, backdrop-filter 0.2s ease;
+const CTA = styled.div`
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--rad);
+  padding: 1.25rem;
+  background: ${COLORS.surface};
 
-  z-index: 100;
+  @media (min-width: ${BREAK_MD}) {
+    padding: 1.75rem;
+  }
+`;
+
+const CTAButton = styled.a`
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.7rem 1.05rem;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: ${COLORS.text};
+  text-decoration: none;
+  font-size: clamp(0.85rem, 3vw, 0.95rem);
+`;
+
+const Footer = styled.footer`
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem var(--padX) 2rem;
   display: flex;
   justify-content: center;
 `;
 
+const FooterContent = styled.div`
+  width: 100%;
+  max-width: var(--maxw);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const FooterLogo = styled.img`
+  height: clamp(2rem, 6vw, 3rem);
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.25s ease;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const FooterNote = styled.p`
+  font-size: clamp(0.7rem, 2.8vw, 0.8rem);
+  opacity: 0.55;
+`;
+
+const HeaderWrapper = styled.header<{ scrolled: boolean }>`
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 100%;
+  top: 0;
+  padding: 0.75rem 0;
+  background: transparent;
+  border: 0;
+
+  @media (min-width: ${BREAK_LG}) {
+    top: ${({ scrolled }) => (scrolled ? "15px" : "0")};
+    width: ${({ scrolled }) => (scrolled ? "65%" : "100%")};
+    padding: ${({ scrolled }) => (scrolled ? "0.5rem 0" : "1.25rem 0")};
+    background: rgba(255, 255, 255, ${({ scrolled }) => (scrolled ? 0.08 : 0)});
+    backdrop-filter: ${({ scrolled }) => (scrolled ? "blur(10px)" : "none")};
+    border-radius: ${({ scrolled }) => (scrolled ? "1rem" : "0")};
+    border: ${({ scrolled }) =>
+      scrolled ? "1px solid rgba(255,255,255,0.12)" : "1px solid transparent"};
+    box-shadow: ${({ scrolled }) =>
+      scrolled ? "0 6px 24px rgba(0, 0, 0, 0.1)" : "none"};
+  }
+`;
+
 const HeaderInner = styled.div`
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0 var(--padX);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease;
 `;
 
 const HeaderLogo = styled.img`
-  height: 4rem;
+  height: clamp(2rem, 7vw, 3rem);
   cursor: pointer;
-  transition: transform 0.3s ease;
-
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0.95;
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  @media (min-width: ${BREAK_LG}) {
+    height: 4rem;
   }
 `;
 
 const HeaderNav = styled.nav`
-  display: flex;
-  gap: 1.5rem;
-
-  @media (max-width: ${BREAK}) {
-    display: none;
+  display: none;
+  gap: 1.25rem;
+  @media (min-width: ${BREAK_LG}) {
+    display: flex;
   }
 `;
 
@@ -608,90 +670,142 @@ const NavItem = styled.button`
     outline-offset: 2px;
   }
 `;
-const ScrollToTopButton = styled.button`
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 3.2rem;
-  height: 3.2rem;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(6px);
-  color: ${COLORS.text};
+
+const MobileMenuToggle = styled.button`
+  display: inline-flex;
+  font-size: 1.75rem;
+  background: none;
   border: none;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  font-weight: bold;
+  color: ${COLORS.text};
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background 0.2s ease;
 
-  &:hover {
-    background: ${COLORS.accent};
-    color: ${COLORS.bg};
-    transform: translate(-50%, -4px);
-  }
-
-  @media (max-width: ${BREAK}) {
-    bottom: 1rem;
-    width: 2.8rem;
-    height: 2.8rem;
-    font-size: 1.25rem;
+  @media (min-width: ${BREAK_LG}) {
+    display: none;
   }
 `;
 
-const Footer = styled.footer`
-  width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3rem 1.5rem 2rem;
-  display: flex;
-  justify-content: center;
-`;
-
-const FooterContent = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  text-align: center;
+const MobileMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: none;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-`;
+  z-index: 199;
+  padding: 1rem 0;
+  gap: 0.5rem;
+  border-radius: 0 0 1rem 1rem;
 
-const FooterLogo = styled.img`
-  height: 3rem;
-  cursor: pointer;
-  opacity: 0.85;
-  transition: opacity 0.3s ease;
-
-  &:hover {
-    opacity: 1;
+  @media (min-width: ${BREAK_LG}) {
+    display: none;
   }
 `;
 
-const FooterNav = styled.nav`
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const FooterLink = styled.a`
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+const MobileNavItem = styled.button`
+  background: none;
+  border: none;
   color: ${COLORS.text};
-  text-decoration: none;
-  transition: color 0.2s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  transition: all 0.2s ease;
 
   &:hover {
+    background: rgba(255, 255, 255, 0.08);
     color: ${COLORS.accent};
   }
 `;
 
-const FooterNote = styled.p`
-  font-size: 0.75rem;
-  opacity: 0.5;
+const Section = styled.section<{ $compact?: boolean }>`
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: ${({ $compact }) =>
+    $compact ? "1.5rem var(--padX)" : "2rem var(--padX)"};
+
+  @media (min-width: ${BREAK_MD}) {
+    padding: ${({ $compact }) =>
+      $compact ? "2rem var(--padX)" : "3rem var(--padX)"};
+  }
+`;
+
+const Grid = styled.div`
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: stretch;
+
+  @media (min-width: ${BREAK_MD}) {
+    gap: 0.9rem;
+  }
+`;
+
+const Strip = styled.div<{ $compact?: boolean }>`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: stretch;
+  gap: ${({ $compact }) => ($compact ? "0.5rem" : "0.75rem")};
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: ${({ $compact }) => ($compact ? "0.6rem 0.6rem" : "0.8rem 0.8rem")};
+  border-radius: ${({ $compact }) => ($compact ? "0.9rem" : "1rem")};
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+`;
+
+const Stat = styled.div`
+  text-align: center;
+  flex: 0 0 auto;
+  min-width: 84px;
+`;
+
+const Big = styled.div<{ $compact?: boolean }>`
+  font-weight: 900;
+  font-size: ${({ $compact }) =>
+    $compact ? "clamp(1rem, 4vw, 1.3rem)" : "clamp(1.1rem, 4.5vw, 1.6rem)"};
+  line-height: 1.1;
+  margin-bottom: 0.1rem;
+`;
+
+const Small = styled.p<{ $compact?: boolean }>`
+  margin: 0;
+  opacity: 0.78;
+  font-size: ${({ $compact }) =>
+    $compact
+      ? "clamp(0.7rem, 3vw, 0.85rem)"
+      : "clamp(0.75rem, 3.2vw, 0.95rem)"};
+  line-height: 1.3;
+`;
+
+const Card = styled.div<{ $compact?: boolean }>`
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: ${COLORS.surface};
+  border-radius: 0.9rem;
+  padding: ${({ $compact }) => ($compact ? "0.9rem 1rem" : "1rem")};
+  text-align: center; /* centrera textann */
+
+  h3 {
+    font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+    margin: 0 0 0.4rem;
+    letter-spacing: 0.02em;
+  }
+
+  p,
+  ${Small} {
+    margin: 0;
+    opacity: 0.78;
+    font-size: clamp(0.9rem, 3.4vw, 1rem);
+    line-height: 1.5;
+  }
 `;

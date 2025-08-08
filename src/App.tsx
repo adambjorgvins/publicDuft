@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Landing } from "./landing";
+import { DuftbarMenu } from "./Vending";
 import styled from "styled-components";
 
 const PASSWORD = "987654321";
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [input, setInput] = useState("");
 
@@ -17,23 +19,34 @@ const App: React.FC = () => {
     }
   };
 
-  if (authenticated) {
-    return <Landing />;
-  }
-
   return (
-    <Container>
-      <h1>Coming Soon</h1>
-      <form onSubmit={handleSubmit}>
-        <Input
-          type="password"
-          placeholder="Sláðu inn lykilorð..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            true ? (
+              <Landing />
+            ) : (
+              <Container>
+                <h1>Coming Soon</h1>
+                <form onSubmit={handleSubmit}>
+                  <Input
+                    type="password"
+                    placeholder="Sláðu inn lykilorð..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                  <Button type="submit">Staðfesta</Button>
+                </form>
+              </Container>
+            )
+          }
         />
-        <Button type="submit">Staðfesta</Button>
-      </form>
-    </Container>
+
+        <Route path="/vending" element={<DuftbarMenu />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -5,6 +5,8 @@ const COLORS = {
   accent: "#eff8ffff",
 };
 
+const BREAK = "1000px";
+
 const AnimatedPath = styled.path`
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
@@ -195,17 +197,29 @@ const Wrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: ${BREAK}) {
+    padding: 4rem 1rem 3rem;
+  }
 `;
 
 const SnakeLine = styled.svg`
   position: absolute;
-  top: 60px; /* <== Byrjar nær fyrsta boxi */
+  top: 60px;
   left: 50%;
   width: 400px;
-  height: calc(100% - 100px); /* <== Endar aðeins fyrir ofan footer */
+  height: calc(100% - 140px); /* smá meira buffer neðst */
   transform: translateX(-50%);
   z-index: 0;
   pointer-events: none;
+
+  @media (max-width: ${BREAK}) {
+    top: 36px;
+    width: 62vw;
+    max-width: 420px;
+    min-width: 260px;
+    height: 600px; /* <- stillanlegt: 480–560px eftir smekk */
+  }
 `;
 
 const StepsContainer = styled.ol`
@@ -216,6 +230,10 @@ const StepsContainer = styled.ol`
   flex-direction: column;
   gap: 8rem;
   z-index: 1;
+
+  @media (max-width: ${BREAK}) {
+    gap: 3.75rem; /* smá meiri loft en samt kompakt */
+  }
 `;
 
 const StepItem = styled.li<{ align: "left" | "right" }>`
@@ -232,14 +250,27 @@ const StepItem = styled.li<{ align: "left" | "right" }>`
     align === "left" ? "translateX(-60px)" : "translateX(60px)"};
 
   h3 {
-    font-size: 1.25rem;
+    font-size: clamp(1.2rem, 4.8vw, 1.5rem);
     margin-bottom: 0.75rem;
     color: ${COLORS.accent};
   }
 
   p {
-    font-size: 1rem;
+    font-size: clamp(1rem, 4.2vw, 1.1rem);
+    line-height: 1.55;
     opacity: 0.9;
+    margin: 0;
+  }
+
+  /* <-- Lykilbreyting: á síma haldast kortin “criss cross”, en mýkri offset og speglað alignment */
+  @media (max-width: ${BREAK}) {
+    width: min(92vw, 380px);
+    align-self: ${({ align }) =>
+      align === "left" ? "flex-start" : "flex-end"};
+    transform: ${({ align }) =>
+      align === "left" ? "translateX(-14px)" : "translateX(14px)"};
+    text-align: ${({ align }) => (align === "left" ? "left" : "right")};
+    padding: 1.4rem 1.2rem;
   }
 `;
 
@@ -248,11 +279,18 @@ const StepHeader = styled.div`
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
+  justify-content: space-between;
 
   h3 {
-    font-size: 1.25rem;
+    font-size: clamp(1.2rem, 4.8vw, 1.5rem);
     color: ${COLORS.accent};
     margin: 0;
+  }
+
+  @media (max-width: ${BREAK}) {
+    /* spegla layout með text-align breytingunni */
+    justify-content: ${({ theme }) =>
+      (theme as any)?.justify || "space-between"};
   }
 `;
 
@@ -260,8 +298,14 @@ const IconWrapper = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   svg {
     display: block;
+    width: 28px;
+    height: auto;
+  }
+  @media (max-width: ${BREAK}) {
+    svg {
+      width: 30px;
+    }
   }
 `;
