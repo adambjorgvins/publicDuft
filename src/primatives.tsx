@@ -61,10 +61,12 @@ export const LogoMark = styled.div`
 
 export const Nav = styled.nav`
   display: none;
-  gap: 24px;
+  gap: 16px;
+
   @media (min-width: 768px) {
     display: flex;
   }
+
   a {
     font-size: 14px;
     color: ${({ theme }) => (theme as any).subtleText};
@@ -74,9 +76,72 @@ export const Nav = styled.nav`
   }
 `;
 
+export const MobileMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: none;
+  border: 0;
+  color: ${({ theme }) => (theme as any).text};
+  cursor: pointer;
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+export const ThemeToggleWrap = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 8px; /* smá spacing */
+  button {
+    border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+    background: transparent;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: ${({ theme }) => (theme as any).text};
+    cursor: pointer;
+    &:hover {
+      background: ${({ theme }) => (theme as any).soft};
+    }
+  }
+`;
+
+export const MobileMenu = styled(motion.nav)`
+  position: fixed;
+  inset: 0;
+  background: ${({ theme }) => (theme as any).bg};
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+
+  button.close {
+    align-self: flex-end;
+    font-size: 32px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    margin-bottom: 40px;
+    color: ${({ theme }) => (theme as any).text};
+  }
+
+  a {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: ${({ theme }) => (theme as any).text};
+  }
+  a:hover {
+    color: ${({ theme }) => (theme as any).brand};
+  }
+`;
+
 export const HeaderActions = styled.div`
   display: none;
   gap: 8px;
+
   @media (min-width: 768px) {
     display: flex;
   }
@@ -147,6 +212,11 @@ export const H1 = styled(motion.h1)`
   font-weight: 700;
   letter-spacing: -0.02em;
   font-size: clamp(42px, 8vw, 88px);
+`;
+export const RightControls = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px; /* hér færðu gap=2px milli burger og sun/moon */
 `;
 
 export const Lead = styled(motion.p)`

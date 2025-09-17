@@ -19,7 +19,6 @@ import {
   StickyHeader,
   Container,
   Row,
-  LogoMark,
   Nav as TopNav,
   HeaderActions,
   GhostBtn,
@@ -44,6 +43,10 @@ import {
   PrimarySubmit,
   SideCard,
   FooterWrap,
+  MobileMenuButton,
+  MobileMenu,
+  ThemeToggleWrap,
+  RightControls,
 } from "./primatives";
 import { MachineMiniSVG } from "./mashine-svg";
 import { GlobalStyle } from "./global-styles";
@@ -125,6 +128,8 @@ export default function DuftbarPage(): JSX.Element {
 
     return () => clearTimeout(timeout);
   }, [text, phase]);
+
+  const [menuOpen, setMenuOpen] = useState(false);
   const items = [
     "preworkout?",
     "protein?",
@@ -198,41 +203,84 @@ export default function DuftbarPage(): JSX.Element {
         <StickyHeader>
           <Container>
             <Row>
+              {/* Logo + text */}
               <a
                 href="#hero"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 12,
-                }}
+                style={{ display: "flex", alignItems: "center", gap: 8 }}
               >
                 <Logo size={28} />
-                <span style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
-                  duftbar
-                </span>
+                <span style={{ fontWeight: 600 }}>duftbar</span>
               </a>
+
+              {/* Desktop nav */}
               <TopNav>
-                {t.nav.map((n: { label: string; href: string }) => (
+                {t.nav.map((n) => (
                   <a key={n.href} href={n.href}>
                     {n.label}
                   </a>
                 ))}
               </TopNav>
-              <HeaderActions>
-                <GhostBtn onClick={toggleTheme} aria-label="Toggle dark mode">
-                  {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-                </GhostBtn>
-                <LinkBtn href="#contact">{t.talkToUs}</LinkBtn>
-                <GhostBtn
-                  onClick={() => setLang(lang === "en" ? "is" : "en")}
-                  aria-label="Toggle language"
-                >
+
+              {/* Right controls */}
+              <RightControls>
+                {/* Desktop only */}
+                <HeaderActions>
+                  <GhostBtn
+                    onClick={() => setLang(lang === "en" ? "is" : "en")}
+                  >
+                    {lang === "en" ? "ÍSL" : "EN"}
+                  </GhostBtn>
+                </HeaderActions>
+
+                {/* Theme toggle always visible */}
+                <ThemeToggleWrap>
+                  <GhostBtn onClick={toggleTheme}>
+                    {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                  </GhostBtn>
+                </ThemeToggleWrap>
+                <GhostBtn onClick={() => setLang(lang === "en" ? "is" : "en")}>
                   {lang === "en" ? "ÍSL" : "EN"}
                 </GhostBtn>
-              </HeaderActions>
+                <MobileMenuButton onClick={() => setMenuOpen(true)}>
+                  ☰
+                </MobileMenuButton>
+              </RightControls>
             </Row>
           </Container>
         </StickyHeader>
+        <AnimatePresence>
+          {menuOpen && (
+            <MobileMenu
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+            >
+              <button className="close" onClick={() => setMenuOpen(false)}>
+                ✕
+              </button>
+
+              {t.nav.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {n.label}
+                </a>
+              ))}
+
+              <div style={{ marginTop: "auto" }}>
+                <GhostBtn onClick={toggleTheme}>
+                  {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                </GhostBtn>
+                <GhostBtn onClick={() => setLang(lang === "en" ? "is" : "en")}>
+                  {lang === "en" ? "ÍSL" : "EN"}
+                </GhostBtn>
+              </div>
+            </MobileMenu>
+          )}
+        </AnimatePresence>
 
         <Hero id="hero">
           <HeroBg />
