@@ -1,4 +1,3 @@
-// src/pages/DuftbarPage.tsx
 import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -56,8 +55,8 @@ import { Logo } from "./logo";
 
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
-  const [mode, setMode] = useState<"light" | "dark">("dark");
-  const [lang, setLang] = useState<Locale>("en"); // default
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [lang, setLang] = useState<Locale>("en");
   const t = locale[lang];
 
   useEffect(() => {
@@ -93,7 +92,7 @@ export default function DuftbarPage(): JSX.Element {
           setText(fullWord.slice(0, text.length + 1));
         }, 120);
       } else {
-        timeout = setTimeout(() => setPhase("dots"), 1000); // bíður 1s
+        timeout = setTimeout(() => setPhase("dots"), 1000);
       }
     }
 
@@ -130,19 +129,8 @@ export default function DuftbarPage(): JSX.Element {
   }, [text, phase]);
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const items = [
-    "preworkout?",
-    "protein?",
-    "electrolytes?",
-    "creatine?",
-    "energy boost?",
-  ];
-
-  const afterItems = [
-    "Running late to class?",
-    "Need fuel for your meeting?",
-    "Duftbar — fuel in seconds.",
-  ];
+  const items = t.items;
+  const afterItems = t.afterItems;
 
   const [index, setIndex] = useState(0);
   const [phaseIndex, setPhaseIndex] = useState<number | null>(null);
@@ -158,13 +146,12 @@ export default function DuftbarPage(): JSX.Element {
         setIndex((prev) => {
           if (prev + 1 === items.length) {
             clearInterval(timer);
-            setTimeout(() => setPhaseIndex(0), 1200); // smá delay áður en nýi textinn byrjar
+            setTimeout(() => setPhaseIndex(0), 1200);
           }
           return prev + 1 < items.length ? prev + 1 : prev;
         });
       }, 1000);
     } else {
-      // Seinni listinn
       timer = setInterval(() => {
         setPhaseIndex((prev) =>
           prev !== null ? (prev + 1) % afterItems.length : 0
@@ -221,18 +208,8 @@ export default function DuftbarPage(): JSX.Element {
                 ))}
               </TopNav>
 
-              {/* Right controls */}
               <RightControls>
-                {/* Desktop only */}
-                <HeaderActions>
-                  <GhostBtn
-                    onClick={() => setLang(lang === "en" ? "is" : "en")}
-                  >
-                    {lang === "en" ? "ÍSL" : "EN"}
-                  </GhostBtn>
-                </HeaderActions>
-
-                {/* Theme toggle always visible */}
+                <HeaderActions></HeaderActions>
                 <ThemeToggleWrap>
                   <GhostBtn onClick={toggleTheme}>
                     {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
@@ -290,9 +267,9 @@ export default function DuftbarPage(): JSX.Element {
                 lineHeight: 1.1,
                 textAlign: "center",
                 margin: 0,
-                fontSize: "clamp(3rem, 6vw, 5rem)", // <-- tryggir stóran texta
-                fontWeight: 700, // <-- heldur honum bold
-                letterSpacing: "-0.02em", // <-- smá herðing
+                fontSize: "clamp(3rem, 6vw, 5rem)",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
               }}
             >
               {text}
@@ -301,7 +278,7 @@ export default function DuftbarPage(): JSX.Element {
                 transition={{ repeat: Infinity, duration: 0.8 }}
                 style={{
                   display: "inline-block",
-                  fontSize: "0.8em", // gerir cursor aðeins minni en textinn
+                  fontSize: "0.8em",
                 }}
               >
                 |
@@ -309,7 +286,6 @@ export default function DuftbarPage(): JSX.Element {
             </H1>
             <Lead
               style={{
-                // miðjum „sviðið“ sjálft, en ekki textann innan
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -322,10 +298,8 @@ export default function DuftbarPage(): JSX.Element {
                   position: "relative",
                   display: "inline-block",
                   whiteSpace: "nowrap",
-                  // engin föst width: breidd læsist með ósýnilegum "sizer" hér að neðan
                 }}
               >
-                {/* SIZER: tryggir að sviðið verði breiðast af (Forgot your + lengsta stikk) eða lengsta afterItem */}
                 <div
                   aria-hidden="true"
                   style={{
@@ -342,21 +316,20 @@ export default function DuftbarPage(): JSX.Element {
 
                 {/* VISIBLE CONTENT */}
                 {phaseIndex === null ? (
-                  // Fasi 1: "Forgot your " + [item] (bara stikk-orðin hreyfast)
                   <div
                     style={{
                       display: "flex",
-                      alignItems: "center", // <-- miðjar lóðrétt í stað baseline
+                      alignItems: "center",
                       justifyContent: "center",
                       whiteSpace: "nowrap",
                     }}
                   >
                     <span
                       style={{
-                        lineHeight: "1.2em", // tryggir sama baseline
+                        lineHeight: "1.2em",
                       }}
                     >
-                      Forgot your&nbsp;
+                      {t.forgotYour}&nbsp;
                     </span>
 
                     <span
@@ -365,7 +338,7 @@ export default function DuftbarPage(): JSX.Element {
                         display: "inline-block",
                         width: `${longestItem.length}ch`,
                         height: "1.2em",
-                        lineHeight: "1.2em", // <-- heldur sömu hæð/línu
+                        lineHeight: "1.2em",
                       }}
                     >
                       <AnimatePresence mode="wait">
@@ -388,7 +361,6 @@ export default function DuftbarPage(): JSX.Element {
                     </span>
                   </div>
                 ) : (
-                  // Fasi 2: afterItems byrjar á NÁKVÆMLEGA sama X og "Forgot your"
                   <span
                     style={{
                       position: "relative",
@@ -411,7 +383,7 @@ export default function DuftbarPage(): JSX.Element {
                         style={{
                           position: "absolute",
                           top: 0,
-                          left: 0, // sama upphaf og "Forgot your"
+                          left: 0,
                           whiteSpace: "nowrap",
                         }}
                       >
