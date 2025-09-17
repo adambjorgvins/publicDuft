@@ -1,7 +1,7 @@
 // src/pages/DuftbarPage.tsx
 import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -49,10 +49,11 @@ import { MachineMiniSVG } from "./mashine-svg";
 import { GlobalStyle } from "./global-styles";
 import { dark, light } from "./theme";
 import { Locale, locale } from "./locale";
+import { Logo } from "./logo";
 
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
-  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mode, setMode] = useState<"light" | "dark">("dark");
   const [lang, setLang] = useState<Locale>("en"); // default
   const t = locale[lang];
 
@@ -124,6 +125,50 @@ export default function DuftbarPage(): JSX.Element {
 
     return () => clearTimeout(timeout);
   }, [text, phase]);
+  const items = [
+    "preworkout?",
+    "protein?",
+    "electrolytes?",
+    "creatine?",
+    "energy boost?",
+  ];
+
+  const afterItems = [
+    "Running late to class?",
+    "Need fuel for your meeting?",
+    "Duftbar — fuel in seconds.",
+  ];
+
+  const [index, setIndex] = useState(0);
+  const [phaseIndex, setPhaseIndex] = useState<number | null>(null);
+  const longestItem = items.reduce((a, b) => (a.length > b.length ? a : b));
+  const longestAfter = afterItems.reduce((a, b) =>
+    a.length > b.length ? a : b
+  );
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+
+    if (phaseIndex === null) {
+      timer = setInterval(() => {
+        setIndex((prev) => {
+          if (prev + 1 === items.length) {
+            clearInterval(timer);
+            setTimeout(() => setPhaseIndex(0), 1200); // smá delay áður en nýi textinn byrjar
+          }
+          return prev + 1 < items.length ? prev + 1 : prev;
+        });
+      }, 1000);
+    } else {
+      // Seinni listinn
+      timer = setInterval(() => {
+        setPhaseIndex((prev) =>
+          prev !== null ? (prev + 1) % afterItems.length : 0
+        );
+      }, 2000);
+    }
+
+    return () => clearInterval(timer);
+  }, [phaseIndex]);
 
   const toggleTheme = () => {
     const next = mode === "dark" ? "light" : "dark";
@@ -161,7 +206,7 @@ export default function DuftbarPage(): JSX.Element {
                   gap: 12,
                 }}
               >
-                <LogoMark />
+                <Logo size={28} />
                 <span style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
                   duftbar
                 </span>
@@ -189,29 +234,147 @@ export default function DuftbarPage(): JSX.Element {
           </Container>
         </StickyHeader>
 
-        {/* Hero */}
         <Hero id="hero">
           <HeroBg />
           <Container style={{ padding: "128px 24px" }}>
-            <H1>
+            <H1
+              style={{
+                lineHeight: 1.1,
+                textAlign: "center",
+                margin: 0,
+                fontSize: "clamp(3rem, 6vw, 5rem)", // <-- tryggir stóran texta
+                fontWeight: 700, // <-- heldur honum bold
+                letterSpacing: "-0.02em", // <-- smá herðing
+              }}
+            >
               {text}
               <motion.span
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
-                style={{ display: "inline-block" }}
+                style={{
+                  display: "inline-block",
+                  fontSize: "0.8em", // gerir cursor aðeins minni en textinn
+                }}
               >
                 |
               </motion.span>
             </H1>
-
             <Lead
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              style={{
+                // miðjum „sviðið“ sjálft, en ekki textann innan
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "1.5rem",
+              }}
             >
-              {t.heroLead}
+              {/* STAGE: fast breidd, miðjuð; vinstri brún = upphafspunktur allra fasa */}
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
+                  // engin föst width: breidd læsist með ósýnilegum "sizer" hér að neðan
+                }}
+              >
+                {/* SIZER: tryggir að sviðið verði breiðast af (Forgot your + lengsta stikk) eða lengsta afterItem */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    visibility: "hidden",
+                    height: 0,
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span>Forgot your </span>
+                  <span>{longestItem}</span>
+                  <div>{longestAfter}</div>
+                </div>
+
+                {/* VISIBLE CONTENT */}
+                {phaseIndex === null ? (
+                  // Fasi 1: "Forgot your " + [item] (bara stikk-orðin hreyfast)
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center", // <-- miðjar lóðrétt í stað baseline
+                      justifyContent: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        lineHeight: "1.2em", // tryggir sama baseline
+                      }}
+                    >
+                      Forgot your&nbsp;
+                    </span>
+
+                    <span
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        width: `${longestItem.length}ch`,
+                        height: "1.2em",
+                        lineHeight: "1.2em", // <-- heldur sömu hæð/línu
+                      }}
+                    >
+                      <AnimatePresence mode="wait">
+                        <motion.span
+                          key={items[index]}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.35 }}
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {items[index]}
+                        </motion.span>
+                      </AnimatePresence>
+                    </span>
+                  </div>
+                ) : (
+                  // Fasi 2: afterItems byrjar á NÁKVÆMLEGA sama X og "Forgot your"
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      height: "1.2em",
+                      lineHeight: "1.2em",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {/* ghost til að halda stöðugri hæð/breidd */}
+                    <span style={{ visibility: "hidden" }}>{longestAfter}</span>
+
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={afterItems[phaseIndex]}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.35 }}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0, // sama upphaf og "Forgot your"
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {afterItems[phaseIndex]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                )}
+              </div>
             </Lead>
+
             <Ctas
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}

@@ -30,6 +30,7 @@ export interface LocaleStrings {
   formNotes: string;
   requestPlacement: string;
   footerMade: string;
+  taglines: string[];
 }
 
 export const locale: Record<Locale, LocaleStrings> = {
@@ -37,75 +38,87 @@ export const locale: Record<Locale, LocaleStrings> = {
     nav: [
       { label: "Product", href: "#product" },
       { label: "How it works", href: "#how" },
-      { label: "For Gyms", href: "#gyms" },
+      { label: "For Spaces", href: "#gyms" },
       { label: "Contact", href: "#contact" },
     ],
     talkToUs: "Talk to us",
-    heroLead:
-      "Smart powder vending — clean, quick and contactless for gyms, arenas, offices and everyday athletes.",
+    heroLead: "Smart powder vending — stylish, sustainable and fast.",
+    taglines: [
+      "Forgot your preworkout?",
+      "Running late to class?",
+      "Need fuel for your meeting?",
+      "Duftbar — fuel in seconds.",
+    ],
     getMachine: "Get the machine",
-    howItWorks: "How Duftbar works",
-    duftbarMachine: "The Duftbar Machine",
+    howItWorks: "How duftbar works",
+    duftbarMachine: "The duftbar Machine",
     machineDesc:
-      "Precision dosing, cashless payments and a minimal, robust enclosure — designed to look at home in premium gyms and modern workplaces.",
-    machineFeatures1: "NEMA-driven augers for gram-accurate control",
-    machineFeatures2: "21.5″ touch with an accessible, queue-friendly flow",
-    machineFeatures3: "Cashless only (tap phone, card or watch)",
-    machineFeatures4: "Cloud telemetry, remote recipes and firmware updates",
+      "A sleek, furniture-like design with precision dosing, cashless payments and eco-friendly serving. It blends into any modern space — from gyms to co-working hubs.",
+    machineFeatures1: "Accurate single, double or triple scoop dispensing",
+    machineFeatures2: "21.5″ intuitive touch display with beautiful UI",
+    machineFeatures3: "Cashless only (phone, card or watch)",
+    machineFeatures4: "Cloud telemetry, remote recipes and updates",
     howDesc:
-      "Walk up. Tap to pay. Dispense. Duftbar removes friction so members refuel fast and keep training.",
+      "Walk up. Choose your blend. Tap to pay. Dispense in seconds. No friction, no waste — just fuel when you need it.",
     stepChoose: "Choose",
-    stepChooseText: "Pick blend and size",
+    stepChooseText: "Pick your blend and size",
     stepTap: "Tap to pay",
-    stepTapText: "Fast, cashless checkout",
+    stepTapText: "Fast, seamless checkout",
     stepGo: "Dispense",
-    stepGoText: "Fresh mix in seconds",
+    stepGoText: "Freshly mixed in seconds",
     bringDuftbar: "Bring Duftbar to your venue",
     bringDesc:
-      "We handle install and support. Tell us about your location and we’ll tailor the setup to fit.",
+      "We handle installation, service and support. Share your space with us and we’ll tailor the setup to fit perfectly.",
     formName: "Your name",
     formContact: "Email or phone",
-    formVenue: "Venue (gym, office, arena …)",
+    formVenue: "Venue (gym, office, university …)",
     formNotes: "Anything we should know?",
     requestPlacement: "Request a placement",
-    footerMade: "Designed and built with care in Iceland",
+    footerMade: "Designed and built with care and Iceland",
   },
 
   is: {
     nav: [
       { label: "Vélin", href: "#product" },
       { label: "Hvernig þetta virkar", href: "#how" },
-      { label: "Fyrir líkamsræktarstöðvar", href: "#gyms" },
+      { label: "Fyrir aðstöðu", href: "#gyms" },
       { label: "Hafðu samband", href: "#contact" },
     ],
     talkToUs: "Hafðu samband",
     heroLead:
-      "Snjall sjálfsali fyrir næringarduft – hraður, hreinlegur og snertilaus; hannaður fyrir líkamsræktarstöðvar, íþróttamannvirki og vinnustaði.",
+      "Snjöll og sjálfbær lausn fyrir næringarduft – hraðvirk og hreinleg.",
+    taglines: [
+      "Gleymdirðu preworkout?",
+      "Seinn á fund?",
+      "Þarft orku fyrir daginn?",
+      "Duftbar — eldsneyti á sekúndum.",
+    ],
     getMachine: "Fáðu vélina",
     howItWorks: "Hvernig Duftbar virkar",
     duftbarMachine: "Duftbar-vélin",
     machineDesc:
-      "Nákvæm skömmtun, snertilausar greiðslur og einföld, stílhrein hönnun sem fellur vel að nútímalegum líkamsræktarrýmum og vinnustöðum.",
-    machineFeatures1: "NEMA-drifið skrúfukerfi með gramm-nákvæmri skömmtun",
-    machineFeatures2: '21,5" snertiskjár með aðgengilegu og hraðvirku flæði',
-    machineFeatures3: "Einungis snertilausar greiðslur (sími, kort, úr)",
-    machineFeatures4: "Skýjatenging, rekjanleiki og fjaruppfærslur uppskrifta",
+      "Falleg hönnun sem líkist húsgagni, með nákvæma skömmtun, snertilausar greiðslur og vistvæna nálgun. Fellur inn í hvaða nútímarými sem er – frá líkamsrækt til samvinnurýma.",
+    machineFeatures1:
+      "Einfaldir, tvöfaldir eða þrefaldir skammtar með nákvæmni",
+    machineFeatures2: '21,5" snertiskjár með glæsilegu og notendavænu viðmóti',
+    machineFeatures3: "Aðeins snertilausar greiðslur (sími, kort, úr)",
+    machineFeatures4: "Skýjatenging, uppskriftir og fjaruppfærslur",
     howDesc:
-      "Gakktu að, greiddu snertilaust, vélin blandar – þú heldur áfram með æfinguna.",
+      "Gakktu að. Veldu blöndu. Greiddu. Vél blandar á sekúndum. Engin fyrirhöfn, engin sóun – bara eldsneyti þegar þú þarft á því að halda.",
     stepChoose: "Veldu",
     stepChooseText: "Veldu blöndu og stærð",
     stepTap: "Greiddu",
-    stepTapText: "Snertilaust og öruggt",
+    stepTapText: "Hraðvirkt og snertilaust",
     stepGo: "Njóttu",
-    stepGoText: "Blandað og tilbúið á örskotsstundu",
+    stepGoText: "Tilbúið á örfáum sekúndum",
     bringDuftbar: "Komdu Duftbar fyrir hjá þér",
     bringDesc:
-      "Við sjáum um ráðgjöf, uppsetningu og þjónustu. Segðu okkur frá aðstæðum og við mótum lausn sem hentar.",
+      "Við sjáum um uppsetningu, þjónustu og stuðning. Segðu okkur frá þínum aðstæðum og við mótum lausn sem smellpassar.",
     formName: "Nafn þitt",
     formContact: "Netfang eða símanúmer",
-    formVenue: "Staður (líkamsrækt, skrifstofa, íþróttahöll …)",
-    formNotes: "Eitthvað sem við eigum að vita?",
+    formVenue: "Staður (líkamsrækt, háskóli, skrifstofa …)",
+    formNotes: "Eitthvað sem við ættum að vita?",
     requestPlacement: "Senda inn beiðni",
-    footerMade: "Hannað og smíðað af alúð á Íslandi",
+    footerMade: "Hannað af alúð og smíðað á Íslandi",
   },
 };
