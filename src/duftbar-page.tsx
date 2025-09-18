@@ -11,6 +11,7 @@ import {
   Sparkles,
   Sun,
   Moon,
+  ArrowDown,
 } from "lucide-react";
 
 import {
@@ -51,7 +52,7 @@ import { GlobalStyle } from "./global-styles";
 import { dark, light } from "./theme";
 import { Locale, locale } from "./locale";
 import { Logo } from "./logo";
-import MachineMiniSVG from "./mini-mashine";
+import { TypewriterDuftbar } from "./roller";
 
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
@@ -190,19 +191,37 @@ export default function DuftbarPage(): JSX.Element {
         <StickyHeader>
           <Container>
             <Row>
-              {/* Logo + text */}
               <a
-                href="#hero"
-                style={{ display: "flex", alignItems: "center", gap: 8 }}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  cursor: "pointer",
+                }}
               >
                 <Logo size={28} />
                 <span style={{ fontWeight: 600 }}>duftbar</span>
               </a>
 
-              {/* Desktop nav */}
               <TopNav>
                 {t.nav.map((n) => (
-                  <a key={n.href} href={n.href}>
+                  <a
+                    key={n.href}
+                    href={n.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const el = document.querySelector(n.href);
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
                     {n.label}
                   </a>
                 ))}
@@ -261,15 +280,24 @@ export default function DuftbarPage(): JSX.Element {
 
         <Hero id="hero">
           <HeroBg />
-          <Container style={{ padding: "128px 24px" }}>
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center", // vertical center
+              alignItems: "center", // horizontal center
+              textAlign: "center",
+              padding: "0 24px",
+            }}
+          >
             <H1
               style={{
-                lineHeight: 1.1,
                 textAlign: "center",
                 margin: 0,
-                fontSize: "clamp(3rem, 6vw, 5rem)",
-                fontWeight: 700,
                 letterSpacing: "-0.02em",
+                fontSize: "clamp(3.5rem, 9vw, 4rem)", // extra large locally
+                fontWeight: 800,
+                lineHeight: 1.02,
               }}
             >
               {text}
@@ -278,7 +306,7 @@ export default function DuftbarPage(): JSX.Element {
                 transition={{ repeat: Infinity, duration: 0.8 }}
                 style={{
                   display: "inline-block",
-                  fontSize: "0.8em",
+                  fontSize: "1em",
                 }}
               >
                 |
@@ -289,110 +317,20 @@ export default function DuftbarPage(): JSX.Element {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                fontSize: "1.5rem",
+                minHeight: "3.2em",
               }}
             >
-              {/* STAGE: fast breidd, miðjuð; vinstri brún = upphafspunktur allra fasa */}
-              <div
-                style={{
-                  position: "relative",
-                  display: "inline-block",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <div
-                  aria-hidden="true"
-                  style={{
-                    visibility: "hidden",
-                    height: 0,
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  <span>Forgot your </span>
-                  <span>{longestItem}</span>
-                  <div>{longestAfter}</div>
-                </div>
-
-                {/* VISIBLE CONTENT */}
-                {phaseIndex === null ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        lineHeight: "1.2em",
-                      }}
-                    >
-                      {t.forgotYour}&nbsp;
-                    </span>
-
-                    <span
-                      style={{
-                        position: "relative",
-                        display: "inline-block",
-                        width: `${longestItem.length}ch`,
-                        height: "1.2em",
-                        lineHeight: "1.2em",
-                      }}
-                    >
-                      <AnimatePresence mode="wait">
-                        <motion.span
-                          key={items[index]}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.35 }}
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {items[index]}
-                        </motion.span>
-                      </AnimatePresence>
-                    </span>
-                  </div>
-                ) : (
-                  <span
-                    style={{
-                      position: "relative",
-                      display: "inline-block",
-                      height: "1.2em",
-                      lineHeight: "1.2em",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {/* ghost til að halda stöðugri hæð/breidd */}
-                    <span style={{ visibility: "hidden" }}>{longestAfter}</span>
-
-                    <AnimatePresence mode="wait">
-                      <motion.span
-                        key={afterItems[phaseIndex]}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.35 }}
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {afterItems[phaseIndex]}
-                      </motion.span>
-                    </AnimatePresence>
-                  </span>
-                )}
-              </div>
+              <TypewriterDuftbar
+                afterItems={t.afterItems}
+                forgotYour={t.forgotYour}
+                items={t.items}
+                finalText={
+                  lang === "is"
+                    ? "Engar áhyggjur, við reddum þessu ;)"
+                    : "no worries we got you ;)"
+                }
+                fontSize="clamp(16px, 2vw, 20px)"
+              />
             </Lead>
 
             <Ctas
@@ -402,7 +340,7 @@ export default function DuftbarPage(): JSX.Element {
               transition={{ duration: 0.6, delay: 0.15 }}
             >
               <SolidBtn href="#contact">
-                {t.getMachine} <ArrowRight size={16} />
+                {t.getMachine} <ArrowDown size={16} />
               </SolidBtn>
               <OutlineBtn href="#how">{t.howItWorks}</OutlineBtn>
             </Ctas>
@@ -585,7 +523,6 @@ export default function DuftbarPage(): JSX.Element {
             </Grid2>
           </Container>
         </Section>
-        {/* For Spaces */}
         <Section
           id="spaces"
           style={{ background: mode === "dark" ? "#0f0f11" : "#fafafa" }}

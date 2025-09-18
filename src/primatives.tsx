@@ -162,7 +162,6 @@ export const LinkBtn = styled.a`
   &:hover{ background: ${({ theme }) => (theme as any).soft}
 `;
 
-/* Hero */
 export const Hero = styled.section`
   position: relative;
   overflow: hidden;
@@ -170,6 +169,7 @@ export const Hero = styled.section`
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 80px 0; /* adjust as you like */
 `;
 
 export const HeroBg = styled.div`
@@ -181,10 +181,12 @@ export const HeroBg = styled.div`
 
 /* Typography + Buttons */
 export const H1 = styled(motion.h1)`
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
-  font-size: clamp(42px, 8vw, 88px);
+  font-size: clamp(56px, 9vw, 112px);
+  line-height: 1.02;
 `;
+
 export const RightControls = styled.div`
   display: flex;
   align-items: center;
@@ -192,10 +194,12 @@ export const RightControls = styled.div`
 `;
 
 export const Lead = styled(motion.p)`
-  max-width: 720px;
-  margin: 16px auto 0;
-  font-size: clamp(16px, 2.2vw, 20px);
+  max-width: 760px;
+  margin: 14px auto 0;
+  /* Smaller everywhere: phone → desktop */
+  font-size: clamp(14px, 1.6vw, 18px);
   color: ${({ theme }) => (theme as any).subtleText};
+  line-height: 1.5;
 `;
 
 export const Ctas = styled(motion.div)`

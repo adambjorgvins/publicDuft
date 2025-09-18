@@ -44,7 +44,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     nav: [
       { label: "Product", href: "#product" },
       { label: "How it works", href: "#how" },
-      { label: "For Spaces", href: "#gyms" },
+      { label: "For Spaces", href: "#spaces" },
       { label: "Contact", href: "#contact" },
     ],
     spacesTitle: "For Spaces",
@@ -69,13 +69,7 @@ export const locale: Record<Locale, LocaleStrings> = {
       },
     ],
     forgotYour: "Forgot your",
-    items: [
-      "preworkout?",
-      "protein?",
-      "electrolytes?",
-      "creatine?",
-      "energy boost?",
-    ],
+    items: ["supplements?"],
     afterItems: [
       "Running late to class?",
       "Need fuel for your meeting?",
@@ -91,7 +85,7 @@ export const locale: Record<Locale, LocaleStrings> = {
       "duftbar — fuel on demand.",
     ],
     getMachine: "Get the machine",
-    howItWorks: "How duftbar works",
+    howItWorks: "How does it work?",
     duftbarMachine: "The duftbar machine",
     machineDesc:
       "A design-forward, furniture-like dispenser that delivers precision scoops, seamless cashless payments and eco-friendly servings. Built to blend into modern gyms, offices and campuses.",
@@ -122,7 +116,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     nav: [
       { label: "Vélin", href: "#product" },
       { label: "Hvernig virkar", href: "#how" },
-      { label: "Fyrir rými", href: "#gyms" },
+      { label: "Fyrir rými", href: "#spaces" },
       { label: "Hafðu samband", href: "#contact" },
     ],
     spacesTitle: "Fyrir rými",
@@ -147,7 +141,7 @@ export const locale: Record<Locale, LocaleStrings> = {
       },
     ],
     forgotYour: "Gleymdirðu",
-    items: ["preworkout?", "prótein?", "rafvakar?", "kreatín?", "orkuskot?"],
+    items: ["fæðubótarefni?"],
     afterItems: [
       "Seinn í tíma?",
       "Þarft orku fyrir fundinn?",
