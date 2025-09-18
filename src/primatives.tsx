@@ -176,35 +176,7 @@ export const HeroBg = styled.div`
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    to bottom,
-    ${({ theme }) => (theme as any).bg},
-    ${({ theme }) => (theme as any).bg} 60%,
-    ${({ theme }) => (theme as any).soft}
-  );
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    border-radius: 999px;
-    filter: blur(80px);
-    opacity: 0.4;
-    pointer-events: none;
-  }
-  &::before {
-    width: 40rem;
-    height: 40rem;
-    left: -10%;
-    top: -10%;
-    background: radial-gradient(circle at 30% 30%, #cfe3ff, transparent 55%);
-  }
-  &::after {
-    width: 36rem;
-    height: 36rem;
-    right: -8%;
-    top: 10%;
-    background: radial-gradient(circle at 60% 60%, #d9cffd, transparent 55%);
-  }
+  background: ${({ theme }) => (theme as any).bg};
 `;
 
 /* Typography + Buttons */

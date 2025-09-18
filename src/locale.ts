@@ -34,6 +34,9 @@ export interface LocaleStrings {
   requestPlacement: string;
   footerMade: string;
   taglines: string[];
+  spacesTitle: string;
+  spacesDesc: string;
+  spaces: { title: string; text: string }[];
 }
 
 export const locale: Record<Locale, LocaleStrings> = {
@@ -43,6 +46,27 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "How it works", href: "#how" },
       { label: "For Spaces", href: "#gyms" },
       { label: "Contact", href: "#contact" },
+    ],
+    spacesTitle: "For Spaces",
+    spacesDesc:
+      "duftbar blends seamlessly into any environment — designed for gyms, universities, offices, arenas, and beyond.",
+    spaces: [
+      {
+        title: "Gyms & Studios",
+        text: "Instant pre-workout or protein fuel before and after sessions.",
+      },
+      {
+        title: "Universities",
+        text: "Energy and focus on-demand between lectures and study marathons.",
+      },
+      {
+        title: "Offices & Co-working",
+        text: "Boost productivity with sustainable fuel right at work.",
+      },
+      {
+        title: "Arenas & Events",
+        text: "Fast and reliable nutrition for athletes and fans alike.",
+      },
     ],
     forgotYour: "Forgot your",
     items: [
@@ -55,19 +79,20 @@ export const locale: Record<Locale, LocaleStrings> = {
     afterItems: [
       "Running late to class?",
       "Need fuel for your meeting?",
-      "Duftbar — fuel in seconds.",
+      "duftbar — fuel in seconds.",
     ],
+
     talkToUs: "Talk to us",
     heroLead: "Smart. Sustainable. Nutrition in seconds.",
     taglines: [
       "Forgot your preworkout?",
       "Running late to class?",
       "Need fuel before a meeting?",
-      "Duftbar — fuel on demand.",
+      "duftbar — fuel on demand.",
     ],
     getMachine: "Get the machine",
-    howItWorks: "How Duftbar works",
-    duftbarMachine: "The Duftbar Machine",
+    howItWorks: "How duftbar works",
+    duftbarMachine: "The duftbar machine",
     machineDesc:
       "A design-forward, furniture-like dispenser that delivers precision scoops, seamless cashless payments and eco-friendly servings. Built to blend into modern gyms, offices and campuses.",
     machineFeatures1: "Exact single, double or triple scoop dispensing",
@@ -82,7 +107,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     stepTapText: "Instant, frictionless checkout",
     stepGo: "Go",
     stepGoText: "Your drink ready in seconds",
-    bringDuftbar: "Bring Duftbar to your venue",
+    bringDuftbar: "Bring duftbar to your venue",
     bringDesc:
       "We handle installation, servicing and support. You provide the space — we make it effortless.",
     formName: "Your name",
@@ -100,12 +125,33 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "Fyrir rými", href: "#gyms" },
       { label: "Hafðu samband", href: "#contact" },
     ],
+    spacesTitle: "Fyrir rými",
+    spacesDesc:
+      "duftbar fellur náttúrulega inn í hvaða umhverfi sem er — hönnuð fyrir líkamsræktarstöðvar, háskóla, skrifstofur, íþróttahallir og fleira.",
+    spaces: [
+      {
+        title: "Líkamsrækt & Stúdíó",
+        text: "Skammtar af preworkout eða próteini fyrir og eftir æfingar.",
+      },
+      {
+        title: "Háskólar",
+        text: "Orka og einbeiting á milli fyrirlestra og námslotna.",
+      },
+      {
+        title: "Skrifstofur & Co-working",
+        text: "Aukin framleiðni með sjálfbæru eldsneyti á vinnustaðnum.",
+      },
+      {
+        title: "Íþróttaleikvangar & Viðburðir",
+        text: "Hröð og áreiðanleg næring fyrir bæði keppendur og áhorfendur.",
+      },
+    ],
     forgotYour: "Gleymdirðu",
     items: ["preworkout?", "prótein?", "rafvakar?", "kreatín?", "orkuskot?"],
     afterItems: [
       "Seinn í tíma?",
       "Þarft orku fyrir fundinn?",
-      "Duftbar — eldsneyti á sekúndum.",
+      "duftbar — eldsneyti á sekúndum.",
     ],
     talkToUs: "Hafðu samband",
     heroLead: "Snjöll, sjálfbær lausn — næring á sekúndum.",
@@ -113,11 +159,11 @@ export const locale: Record<Locale, LocaleStrings> = {
       "Gleymdirðu preworkout?",
       "Seinn í tíma eða fund?",
       "Þarft auka orku fyrir daginn?",
-      "Duftbar — eldsneyti á sekúndum.",
+      "duftbar — eldsneyti á sekúndum.",
     ],
     getMachine: "Fáðu vélina",
-    howItWorks: "Svona virkar Duftbar",
-    duftbarMachine: "Duftbar-vélin",
+    howItWorks: "Svona virkar duftbar",
+    duftbarMachine: "duftbar-vélin",
     machineDesc:
       "Vandað tæki sem líkist húsgagni og blandast umhverfinu náttúrulega. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gera hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
     machineFeatures1:
@@ -133,7 +179,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     stepTapText: "Hraðvirkt, snertilaust ferli",
     stepGo: "Njóttu",
     stepGoText: "Drykkurinn tilbúinn á sekúndum",
-    bringDuftbar: "Komdu Duftbar í þitt rými",
+    bringDuftbar: "Komdu duftbar í þitt rými",
     bringDesc:
       "Við sjáum um uppsetningu, þjónustu og stuðning. Þú leggur til rýmið — við gerum afganginn.",
     formName: "Nafn þitt",

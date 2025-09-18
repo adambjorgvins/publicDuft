@@ -47,11 +47,11 @@ import {
   ThemeToggleWrap,
   RightControls,
 } from "./primatives";
-import { MachineMiniSVG } from "./mashine-svg";
 import { GlobalStyle } from "./global-styles";
 import { dark, light } from "./theme";
 import { Locale, locale } from "./locale";
 import { Logo } from "./logo";
+import MachineMiniSVG from "./mini-mashine";
 
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
@@ -65,14 +65,13 @@ export default function DuftbarPage(): JSX.Element {
       const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
       setProgress(scrolled);
     };
-    const saved =
-      (localStorage.getItem("theme") as "light" | "dark" | null) ?? null;
-    setMode(
-      saved ??
-        (window.matchMedia?.("(prefers-color-scheme: dark)")?.matches
-          ? "dark"
-          : "light")
-    );
+    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
+    if (saved) {
+      setMode(saved);
+    } else {
+      setMode("light");
+    }
+
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -184,6 +183,7 @@ export default function DuftbarPage(): JSX.Element {
             background: mode === "dark" ? "#fafafa" : "#0a0a0a",
             zIndex: 50,
             transition: "width .15s",
+            marginBottom: -12,
           }}
         />
 
@@ -419,7 +419,15 @@ export default function DuftbarPage(): JSX.Element {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <MachineMiniSVG />
+                <img
+                  src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHNrNzlrbWY5bGhjOWJ2bHc1aWx6b3RsbXJ1ZmgwbmlxZ3BudmY4dCZlcD12MV9faW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/XwSKnh6Glv8l7zeX8C/giphy.gif"
+                  alt="duftbar machine mockup"
+                  style={{
+                    width: "100%",
+                    borderRadius: 20,
+                    boxShadow: "0 20px 40px rgba(0,0,0,.3)",
+                  }}
+                />
               </Card>
 
               <motion.div
@@ -561,10 +569,91 @@ export default function DuftbarPage(): JSX.Element {
                       justifyContent: "center",
                     }}
                   >
-                    <MachineMiniSVG />
+                    <img
+                      src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHNrNzlrbWY5bGhjOWJ2bHc1aWx6b3RsbXJ1ZmgwbmlxZ3BudmY4dCZlcD12MV9faW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/XwSKnh6Glv8l7zeX8C/giphy.gif"
+                      alt="duftbar machine mockup"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        borderRadius: 20,
+                        boxShadow: "0 20px 40px rgba(0,0,0,.3)",
+                      }}
+                    />
                   </div>
                 </div>
               </motion.div>
+            </Grid2>
+          </Container>
+        </Section>
+        {/* For Spaces */}
+        <Section
+          id="spaces"
+          style={{ background: mode === "dark" ? "#0f0f11" : "#fafafa" }}
+        >
+          <Container style={{ padding: "96px 24px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: 48 }}
+            >
+              <Kicker>{t.spacesTitle}</Kicker>
+              <P style={{ maxWidth: 640, margin: "12px auto 0" }}>
+                {t.spacesDesc}
+              </P>
+            </motion.div>
+
+            <Grid2>
+              {t.spaces.map((s, i) => (
+                <motion.div
+                  key={s.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  style={{
+                    background: mode === "dark" ? "#1a1a1c" : "#fff",
+                    border: `1px solid ${
+                      mode === "dark" ? "#2d2d2f" : "#e5e7eb"
+                    }`,
+                    borderRadius: 20,
+                    padding: 28,
+                    textAlign: "center",
+                    boxShadow:
+                      "0 1px 0 rgba(0,0,0,.04), 0 12px 40px -20px rgba(0,0,0,.2)",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 56,
+                      height: 56,
+                      margin: "0 auto 16px",
+                      borderRadius: 16,
+                      background: mode === "dark" ? "#111" : "#f4f4f5",
+                    }}
+                  >
+                    {i === 0 && <Dumbbell size={28} />}
+                    {i === 1 && <Sparkles size={28} />}
+                    {i === 2 && <CheckCircle2 size={28} />}
+                    {i === 3 && <MapPin size={28} />}
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 18 }}>{s.title}</div>
+                  <div
+                    style={{
+                      marginTop: 8,
+                      fontSize: 15,
+                      color: mode === "dark" ? "#c7c7c7" : "#525252",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {s.text}
+                  </div>
+                </motion.div>
+              ))}
             </Grid2>
           </Container>
         </Section>
@@ -634,7 +723,7 @@ export default function DuftbarPage(): JSX.Element {
             }}
           >
             <div style={{ fontSize: 14 }}>
-              © {new Date().getFullYear()} Duftbar ehf.
+              © {new Date().getFullYear()} duftbar ehf.
             </div>
             <div style={{ fontSize: 14 }}>{t.footerMade}</div>
           </Container>
