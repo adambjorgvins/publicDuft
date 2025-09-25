@@ -1,6 +1,7 @@
 import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import {
   ArrowRight,
   CheckCircle2,
@@ -30,6 +31,10 @@ import {
   Ctas,
   SolidBtn,
   OutlineBtn,
+  VisuallyHidden,
+  ContactRow,
+  ContactLabel,
+  ContactSub,
   Section,
   Grid2,
   Card,
@@ -47,6 +52,7 @@ import {
   MobileMenu,
   ThemeToggleWrap,
   RightControls,
+  Grid3,
 } from "./primatives";
 import { GlobalStyle } from "./global-styles";
 import { dark, light } from "./theme";
@@ -327,7 +333,7 @@ export default function DuftbarPage(): JSX.Element {
                 finalText={
                   lang === "is"
                     ? "Engar áhyggjur, við reddum þessu ;)"
-                    : "no worries we got you ;)"
+                    : "no worries we got you"
                 }
                 fontSize="clamp(16px, 2vw, 20px)"
               />
@@ -356,16 +362,25 @@ export default function DuftbarPage(): JSX.Element {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 20,
+                  background: mode === "dark" ? "#1a1a1c" : "#f3f4f6",
+                  minHeight: 300,
+                }}
               >
-                <img
-                  src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHNrNzlrbWY5bGhjOWJ2bHc1aWx6b3RsbXJ1ZmgwbmlxZ3BudmY4dCZlcD12MV9faW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/XwSKnh6Glv8l7zeX8C/giphy.gif"
-                  alt="duftbar machine mockup"
+                <span
                   style={{
-                    width: "100%",
-                    borderRadius: 20,
-                    boxShadow: "0 20px 40px rgba(0,0,0,.3)",
+                    fontSize: "2rem",
+                    fontWeight: 800,
+                    textAlign: "center",
+                    color: mode === "dark" ? "#fafafa" : "#111827",
                   }}
-                />
+                >
+                  IMAGE/VIDEO OF THE DUFTBAR HERE
+                </span>
               </Card>
 
               <motion.div
@@ -394,7 +409,6 @@ export default function DuftbarPage(): JSX.Element {
           </Container>
         </Section>
 
-        {/* How it works */}
         <Section
           id="how"
           style={{ background: mode === "dark" ? "#111214" : "#f6f6f7" }}
@@ -453,7 +467,7 @@ export default function DuftbarPage(): JSX.Element {
                             textTransform: "uppercase",
                           }}
                         >
-                          {String(i + 1).padStart(2, "0")}
+                          {String(i + 1).padStart(6, "Step ")}
                         </div>
                       </div>
                       <div style={{ marginTop: 12, fontWeight: 700 }}>
@@ -470,7 +484,6 @@ export default function DuftbarPage(): JSX.Element {
                   ))}
                 </HowGrid>
               </motion.div>
-
               <motion.div
                 initial={{ opacity: 0, x: 16 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -507,16 +520,26 @@ export default function DuftbarPage(): JSX.Element {
                       justifyContent: "center",
                     }}
                   >
-                    <img
-                      src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHNrNzlrbWY5bGhjOWJ2bHc1aWx6b3RsbXJ1ZmgwbmlxZ3BudmY4dCZlcD12MV9faW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/XwSKnh6Glv8l7zeX8C/giphy.gif"
-                      alt="duftbar machine mockup"
+                    <div
                       style={{
-                        width: "100%",
-                        height: "auto",
-                        borderRadius: 20,
-                        boxShadow: "0 20px 40px rgba(0,0,0,.3)",
+                        position: "absolute",
+                        inset: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
-                    />
+                    >
+                      <span
+                        style={{
+                          fontSize: "2rem",
+                          fontWeight: 800,
+                          textAlign: "center",
+                          color: mode === "dark" ? "#ffffffff" : "#ffffffff",
+                        }}
+                      >
+                        IMAGE OF THE DUFTBAR HERE
+                      </span>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -595,7 +618,88 @@ export default function DuftbarPage(): JSX.Element {
           </Container>
         </Section>
 
-        {/* Contact */}
+        <Section
+          id="team"
+          style={{
+            background: mode === "dark" ? "#111214" : "#f9fafb",
+          }}
+        >
+          <Container style={{ padding: "96px 24px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: 48 }}
+            >
+              <Kicker>
+                {lang === "is" ? "Við erum duftbar" : "Meet the Team"}
+              </Kicker>
+              <P style={{ maxWidth: 640, margin: "12px auto 0" }}>
+                {lang === "is"
+                  ? "Hjá Duftbar sameinum við hönnun, nýjustu tækni og ástríðu fyrir heilsu. Við erum heltekin af því að skapa upplifun þar sem hraði, stíll og þjónusta renna saman — þannig að fólk fái nákvæmlega það sem það þarf, þegar það þarf á því að halda. Þetta er ekki bara vél, heldur nýr mælikvarði þæginda, sjálfbærni og orku í nútímalífinu."
+                  : "At Duftbar, we merge cutting-edge design, smart technology, and a relentless drive for health. We’re obsessed with creating experiences where speed, style, and service come together — giving people instant access to what they need, exactly where they need it. It’s not just a machine, it’s a new standard of convenience, sustainability, and energy for modern life"}
+              </P>
+            </motion.div>
+
+            <Grid3>
+              {t.team.map((m, i) => (
+                <motion.div
+                  key={m.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  style={{
+                    background: mode === "dark" ? "#1a1a1c" : "#fff",
+                    border: `1px solid ${
+                      mode === "dark" ? "#2d2d2f" : "#e5e7eb"
+                    }`,
+                    borderRadius: 20,
+                    padding: 28,
+                    textAlign: "center",
+                    boxShadow:
+                      "0 1px 0 rgba(0,0,0,.04), 0 12px 40px -20px rgba(0,0,0,.2)",
+                  }}
+                >
+                  <img
+                    src={m.img}
+                    alt={m.name}
+                    style={{
+                      width: 96,
+                      height: 96,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      margin: "0 auto 16px",
+                      boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+                    }}
+                  />
+                  <div style={{ fontWeight: 700, fontSize: 18 }}>{m.name}</div>
+                  <div
+                    style={{
+                      marginTop: 4,
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: mode === "dark" ? "#a1a1aa" : "#4b5563",
+                    }}
+                  >
+                    {m.role}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 12,
+                      fontSize: 15,
+                      lineHeight: 1.5,
+                      color: mode === "dark" ? "#c7c7c7" : "#525252",
+                    }}
+                  >
+                    {m.text}
+                  </div>
+                </motion.div>
+              ))}
+            </Grid3>
+          </Container>
+        </Section>
         <Contact id="contact">
           <Container style={{ padding: "96px 24px" }}>
             <ContactGrid>
@@ -603,11 +707,36 @@ export default function DuftbarPage(): JSX.Element {
                 <Kicker style={{ color: "#0a0a0a" }}>{t.bringDuftbar}</Kicker>
                 <P style={{ color: "#4b5563" }}>{t.bringDesc}</P>
 
-                <ContactForm onSubmit={(e) => e.preventDefault()}>
-                  <input placeholder={t.formName} />
-                  <input placeholder={t.formContact} />
-                  <input className="wide" placeholder={t.formVenue} />
+                <ContactForm
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    emailjs
+                      .sendForm(
+                        "service_2t3o7gx",
+                        "template_b82hfq7", // Template ID
+                        e.target as HTMLFormElement,
+                        "Y0n17dXccHdv0lIs4" // Public Key
+                      )
+                      .then(
+                        () => {
+                          alert("Takk! Beiðnin þín hefur verið send 🚀");
+                        },
+                        (error) => {
+                          console.error(error);
+                          alert("Villa kom upp við að senda email 😢");
+                        }
+                      );
+                  }}
+                >
+                  <input name="name" placeholder={t.formName} required />
+                  <input name="email" placeholder={t.formContact} required />
+                  <input
+                    name="venue"
+                    className="wide"
+                    placeholder={t.formVenue}
+                  />
                   <textarea
+                    name="message"
                     className="wide"
                     placeholder={t.formNotes}
                     rows={4}
@@ -618,30 +747,68 @@ export default function DuftbarPage(): JSX.Element {
                 </ContactForm>
               </div>
 
-              <SideCard>
-                <div className="row">
-                  <MapPin size={20} />
-                  <div>
-                    <div className="label">Reykjavík, Iceland</div>
-                    <div className="sub">
-                      Installations across IS — EU pilots on request
+              <SideCard as="section" aria-labelledby="contact-info">
+                <VisuallyHidden as="h3" id="contact-info">
+                  Contact information
+                </VisuallyHidden>
+                <address
+                  style={{ all: "unset" }}
+                  itemScope
+                  itemType="https://schema.org/Organization"
+                >
+                  <meta itemProp="name" content="Duftbar" />
+
+                  <ContactRow role="group" aria-label="Location">
+                    <MapPin size={20} aria-hidden="true" />
+                    <div>
+                      <ContactLabel
+                        itemProp="address"
+                        itemScope
+                        itemType="https://schema.org/PostalAddress"
+                      >
+                        <span itemProp="addressLocality">
+                          {t.contactLocationLabel}
+                        </span>
+                      </ContactLabel>
+                      <ContactSub>{t.contactLocationSub}</ContactSub>
                     </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <Mail size={20} />
-                  <div>
-                    <div className="label">hello@duftbar.is</div>
-                    <div className="sub">24h response on weekdays</div>
-                  </div>
-                </div>
-                <div className="row">
-                  <Phone size={20} />
-                  <div>
-                    <div className="label">+354 555 0000</div>
-                    <div className="sub">Sales &amp; Support</div>
-                  </div>
-                </div>
+                  </ContactRow>
+
+                  <ContactRow role="group" aria-label="Email">
+                    <Mail size={20} aria-hidden="true" />
+                    <div>
+                      <ContactLabel>
+                        <a
+                          href={`mailto:${t.contactEmailLabel}`}
+                          itemProp="email"
+                          rel="nofollow"
+                        >
+                          {t.contactEmailLabel}
+                        </a>
+                      </ContactLabel>
+                      <ContactSub>{t.contactEmailSub}</ContactSub>
+                    </div>
+                  </ContactRow>
+
+                  <ContactRow role="group" aria-label="Phone">
+                    <Phone size={20} aria-hidden="true" />
+                    <div>
+                      <ContactLabel>
+                        <a
+                          href={`tel:${t.contactPhoneLabel.replace(
+                            /\s+/g,
+                            ""
+                          )}`}
+                          itemProp="telephone"
+                          rel="nofollow"
+                        >
+                          {t.contactPhoneLabel}
+                        </a>
+                      </ContactLabel>
+                      <ContactSub>{t.contactPhoneSub}</ContactSub>
+                    </div>
+                  </ContactRow>
+                </address>
               </SideCard>
             </ContactGrid>
           </Container>
@@ -651,18 +818,52 @@ export default function DuftbarPage(): JSX.Element {
         <FooterWrap>
           <Container
             style={{
-              padding: "40px 24px",
-              display: "flex",
-              gap: 12,
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
+              padding: "64px 24px",
+              display: "grid",
+              gap: 32,
+              gridTemplateColumns: "1fr",
             }}
           >
-            <div style={{ fontSize: 14 }}>
-              © {new Date().getFullYear()} duftbar ehf.
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontWeight: 700, fontSize: 16 }}>
+                © {new Date().getFullYear()} Duftbar ehf.
+              </div>
+              <div style={{ fontSize: 14 }}>{t.footerMade}</div>
             </div>
-            <div style={{ fontSize: 14 }}>{t.footerMade}</div>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 13,
+                  letterSpacing: ".05em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {t.footerPayments}
+              </div>
+              <img
+                src="https://logosandtypes.com/wp-content/uploads/2024/07/verifone.svg"
+                alt="Verifone"
+                style={{
+                  height: 28,
+                  filter: mode === "dark" ? "invert(1) grayscale(1)" : "none",
+                }}
+              />
+            </div>
           </Container>
         </FooterWrap>
       </Page>

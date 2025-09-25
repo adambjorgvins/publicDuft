@@ -22,13 +22,18 @@
   },
   "homepage": "https://github.com/adambjorgvins/publicDuft#readme",
   "dependencies": {
+    "@appletosolutions/reactbits": "^1.0.3",
+    "@emailjs/browser": "^4.4.1",
+    "emailjs-com": "^3.2.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.544.0",
     "ogl": "^1.0.11",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "three": "^0.180.0",
+    "vanta": "^0.5.24"
   },
   "devDependencies": {
     "@types/react": "^19.1.13",

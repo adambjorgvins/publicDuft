@@ -10,7 +10,7 @@ export interface LocaleStrings {
   heroLead: string;
   getMachine: string;
   howItWorks: string;
-  items: string[]; // <--- nýtt
+  items: string[];
   afterItems: string[];
   duftbarMachine: string;
   machineDesc: string;
@@ -29,14 +29,27 @@ export interface LocaleStrings {
   bringDesc: string;
   formName: string;
   formContact: string;
+  footerMade: string;
+  footerPayments: string;
   formVenue: string;
   formNotes: string;
   requestPlacement: string;
-  footerMade: string;
   taglines: string[];
   spacesTitle: string;
   spacesDesc: string;
+  contactLocationLabel: string;
+  contactLocationSub: string;
+  contactEmailLabel: string;
+  contactEmailSub: string;
+  contactPhoneLabel: string;
+  contactPhoneSub: string;
   spaces: { title: string; text: string }[];
+  team: {
+    name: string;
+    role: string;
+    text: string;
+    img: string;
+  }[];
 }
 
 export const locale: Record<Locale, LocaleStrings> = {
@@ -45,29 +58,52 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "Product", href: "#product" },
       { label: "How it works", href: "#how" },
       { label: "For Spaces", href: "#spaces" },
+      { label: "Team", href: "#team" }, // 👈 bætti þessu við
       { label: "Contact", href: "#contact" },
     ],
+    team: [
+      {
+        name: "Adam Bæhrenz Björgvinsson",
+        role: "Founder – Software & Hardware",
+        text: "Adam leads software and hardware programming, building the core systems that power the machine.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png", // cartoon male avatar
+      },
+      {
+        name: "Sara Ísey Isorena Guðjónsdóttir",
+        role: "Co-Founder – Mechanical Design",
+        text: "Leads the mechanical design of the machine, focusing on structure and usability.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145852.png", // cartoon female avatar
+      },
+      {
+        name: "Baldur Geir Gunnarsson",
+        role: "Co-Founder – Electrical Design",
+        text: "Leads the electrical design and system integration for the machine.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png", // another cartoon male avatar
+      },
+    ],
+
     spacesTitle: "For Spaces",
     spacesDesc:
-      "duftbar blends seamlessly into any environment — designed for gyms, universities, offices, arenas, and beyond.",
+      "duftbar fits naturally into any environment — designed for gyms, universities, offices, arenas, and beyond.",
     spaces: [
       {
         title: "Gyms & Studios",
-        text: "Instant pre-workout or protein fuel before and after sessions.",
+        text: "Instant pre-workout or protein before and after sessions.",
       },
       {
         title: "Universities",
-        text: "Energy and focus on-demand between lectures and study marathons.",
+        text: "On-demand energy and focus between lectures and study marathons.",
       },
       {
         title: "Offices & Co-working",
-        text: "Boost productivity with sustainable fuel right at work.",
+        text: "Boost productivity with sustainable fuel at work.",
       },
       {
         title: "Arenas & Events",
-        text: "Fast and reliable nutrition for athletes and fans alike.",
+        text: "Fast, reliable nutrition for athletes and fans alike.",
       },
     ],
+
     forgotYour: "Forgot your",
     items: ["supplements?"],
     afterItems: [
@@ -86,30 +122,43 @@ export const locale: Record<Locale, LocaleStrings> = {
     ],
     getMachine: "Get the machine",
     howItWorks: "How does it work?",
+
     duftbarMachine: "The duftbar machine",
     machineDesc:
-      "A design-forward, furniture-like dispenser that delivers precision scoops, seamless cashless payments and eco-friendly servings. Built to blend into modern gyms, offices and campuses.",
-    machineFeatures1: "Exact single, double or triple scoop dispensing",
-    machineFeatures2: "21.5″ intuitive touchscreen with premium UI",
-    machineFeatures3: "100% cashless (phone, card or watch)",
+      "A design-forward, furniture-like dispenser that delivers precision scoops, seamless cashless payments, and eco-friendly servings. Sized and styled to fit modern gyms, offices, and campuses.",
+
+    machineFeatures1: "Exact single, double, or triple scoop dispensing",
+    machineFeatures2: '21.5" intuitive touchscreen with premium UI',
+    machineFeatures3: "100% cashless (phone, card, or watch)",
     machineFeatures4: "Cloud telemetry, remote recipes & updates",
+
     howDesc:
-      "Walk up. Choose your blend. Tap to pay. Dispensed in seconds. No hassle, no waste — just performance fuel when you need it.",
+      "Walk up. Choose your supplement. Tap to pay. Dispensed in seconds. No hassle, no waste — just performance fuel when you need it.",
     stepChoose: "Choose",
-    stepChooseText: "Select your blend and portion size",
+    stepChooseText: "Select your product or flavor and portion size",
     stepTap: "Tap",
     stepTapText: "Instant, frictionless checkout",
     stepGo: "Go",
     stepGoText: "Your drink ready in seconds",
+
     bringDuftbar: "Bring duftbar to your venue",
     bringDesc:
-      "We handle installation, servicing and support. You provide the space — we make it effortless.",
+      "We handle installation, servicing, and support. You provide the space — we make it effortless.",
+
     formName: "Your name",
     formContact: "Email or phone",
     formVenue: "Venue (gym, office, university …)",
     formNotes: "Anything we should know?",
     requestPlacement: "Request placement",
+
     footerMade: "Designed with care. Built in Iceland.",
+    footerPayments: "Secure payments powered by Verifone",
+    contactLocationLabel: "Reykjavík, Iceland",
+    contactLocationSub: "Installations across Iceland — EU pilots on request",
+    contactEmailLabel: "hello.duftbar@gmail.com",
+    contactEmailSub: "24h response on weekdays",
+    contactPhoneLabel: "+354 6982326",
+    contactPhoneSub: "Sales & Support",
   },
 
   is: {
@@ -117,15 +166,36 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "Vélin", href: "#product" },
       { label: "Hvernig virkar", href: "#how" },
       { label: "Fyrir rými", href: "#spaces" },
+      { label: "Teymið", href: "#team" }, // 👈 bætti þessu við
       { label: "Hafðu samband", href: "#contact" },
+    ],
+    team: [
+      {
+        name: "Adam Bæhrenz Björgvinsson",
+        role: "Stofnandi – Hugbúnaður & Vélbúnaður",
+        text: "Adam sér um hugbúnaðar- og vélbúnaðarforritun, hann byggir kjarnakerfin sem knýja vélina.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+      },
+      {
+        name: "Sara Ísey Isorena Guðjónsdóttir",
+        role: "Meðstofnandi – Vélhönnun",
+        text: "Sér um vélhönnun vélarinnar með áherslu á burðarþol og notagildi.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145852.png",
+      },
+      {
+        name: "Baldur Geir Gunnarsson",
+        role: "Meðstofnandi – Rafhönnun",
+        text: "Sér um rafhönnun og samþættingu kerfa fyrir vélina.",
+        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+      },
     ],
     spacesTitle: "Fyrir rými",
     spacesDesc:
-      "duftbar fellur náttúrulega inn í hvaða umhverfi sem er — hönnuð fyrir líkamsræktarstöðvar, háskóla, skrifstofur, íþróttahallir og fleira.",
+      "duftbar fellur náttúrulega að hvaða umhverfi sem er — hönnuð fyrir líkamsræktarstöðvar, háskóla, skrifstofur, íþróttahallir og fleira.",
     spaces: [
       {
         title: "Líkamsrækt & Stúdíó",
-        text: "Skammtar af preworkout eða próteini fyrir og eftir æfingar.",
+        text: "Skammtar af pre-workout eða próteini fyrir og eftir æfingar.",
       },
       {
         title: "Háskólar",
@@ -137,9 +207,10 @@ export const locale: Record<Locale, LocaleStrings> = {
       },
       {
         title: "Íþróttaleikvangar & Viðburðir",
-        text: "Hröð og áreiðanleg næring fyrir bæði keppendur og áhorfendur.",
+        text: "Hröð og áreiðanleg næring fyrir keppendur og áhorfendur.",
       },
     ],
+
     forgotYour: "Gleymdirðu",
     items: ["fæðubótarefni?"],
     afterItems: [
@@ -147,40 +218,55 @@ export const locale: Record<Locale, LocaleStrings> = {
       "Þarft orku fyrir fundinn?",
       "duftbar — eldsneyti á sekúndum.",
     ],
+
     talkToUs: "Hafðu samband",
     heroLead: "Snjöll, sjálfbær lausn — næring á sekúndum.",
     taglines: [
-      "Gleymdirðu preworkout?",
+      "Gleymdirðu pre-workout?",
       "Seinn í tíma eða fund?",
       "Þarft auka orku fyrir daginn?",
       "duftbar — eldsneyti á sekúndum.",
     ],
     getMachine: "Fáðu vélina",
     howItWorks: "Svona virkar duftbar",
+
     duftbarMachine: "duftbar-vélin",
     machineDesc:
-      "Vandað tæki sem líkist húsgagni og blandast umhverfinu náttúrulega. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gera hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
+      "Vandað tæki sem líkist húsgagni og fellur náttúrulega að umhverfi. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gera hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
+
     machineFeatures1:
-      "Einfaldir, tvöfaldir eða þrefaldir skammtar með nákvæmni",
+      "Einfaldur, tvöfaldur eða þrefaldur skammtar með nákvæmni",
     machineFeatures2: '21,5" snertiskjár með fyrsta flokks viðmóti',
     machineFeatures3: "Aðeins snertilausar greiðslur (sími, kort eða úr)",
-    machineFeatures4: "Skýjatenging, uppskriftir & fjaruppfærslur",
+    machineFeatures4: "Skýjatenging, uppskriftir og fjaruppfærslur",
+
     howDesc:
-      "Gakktu að. Veldu blöndu. Greiddu með snertingu. Drykkurinn tilbúinn á nokkrum sekúndum. Engin fyrirhöfn — bara eldsneyti þegar þú þarft á því að halda.",
+      "Gakktu að. Veldu vöruna. Greiddu með snertingu. Drykkurinn tilbúinn á nokkrum sekúndum. Engin fyrirhöfn — bara eldsneyti þegar þú þarft á því að halda.",
     stepChoose: "Veldu",
-    stepChooseText: "Veldu blöndu og skammtastærð",
+    stepChooseText: "Veldu vöru eða bragð og skammtastærð",
     stepTap: "Greiddu",
     stepTapText: "Hraðvirkt, snertilaust ferli",
     stepGo: "Njóttu",
     stepGoText: "Drykkurinn tilbúinn á sekúndum",
+
     bringDuftbar: "Komdu duftbar í þitt rými",
     bringDesc:
       "Við sjáum um uppsetningu, þjónustu og stuðning. Þú leggur til rýmið — við gerum afganginn.",
+
     formName: "Nafn þitt",
     formContact: "Netfang eða símanúmer",
     formVenue: "Staður (líkamsrækt, skrifstofa, háskóli …)",
     formNotes: "Eitthvað sem við ættum að vita?",
     requestPlacement: "Senda beiðni",
+
     footerMade: "Hannað af ástríðu. Byggt á Íslandi.",
+    footerPayments: "Öruggar greiðslur með Verifone",
+    contactLocationLabel: "Reykjavík, Ísland",
+    contactLocationSub:
+      "Uppsetningar um land allt — tilraunaverkefni í Evrópu eftir samkomulagi",
+    contactEmailLabel: "hello@duftbar.is",
+    contactEmailSub: "Svör innan 24 klst. á virkum dögum",
+    contactPhoneLabel: "+354 555 0000",
+    contactPhoneSub: "Sala & Þjónusta",
   },
 };

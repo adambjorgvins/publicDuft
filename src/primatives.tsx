@@ -30,6 +30,15 @@ export const Row = styled.div`
   height: 64px;
 `;
 
+export const Grid3 = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  @media (min-width: 900px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
 /* Header UI */
 export const LogoMark = styled.div`
   position: relative;
@@ -181,12 +190,10 @@ export const HeroBg = styled.div`
 
 /* Typography + Buttons */
 export const H1 = styled(motion.h1)`
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
-  font-size: clamp(56px, 9vw, 112px);
-  line-height: 1.02;
+  font-size: clamp(42px, 8vw, 88px);
 `;
-
 export const RightControls = styled.div`
   display: flex;
   align-items: center;
@@ -194,12 +201,10 @@ export const RightControls = styled.div`
 `;
 
 export const Lead = styled(motion.p)`
-  max-width: 760px;
-  margin: 14px auto 0;
-  /* Smaller everywhere: phone → desktop */
-  font-size: clamp(14px, 1.6vw, 18px);
+  max-width: 720px;
+  margin: 16px auto 0;
+  font-size: clamp(16px, 2.2vw, 20px);
   color: ${({ theme }) => (theme as any).subtleText};
-  line-height: 1.5;
 `;
 
 export const Ctas = styled(motion.div)`
@@ -244,7 +249,7 @@ export const Grid2 = styled.div`
   display: grid;
   gap: 48px;
   align-items: center;
-  grid-template-columns: 1fr;
+  grid-template-columns: 3fr;
   @media (min-width: 900px) {
     grid-template-columns: 1fr 1fr;
   }
@@ -260,6 +265,37 @@ export const Card = styled(motion.div)`
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 20px 60px -20px rgba(0, 0, 0, 0.25);
   color: ${({ theme }) => (theme as any).text};
   overflow: hidden;
+`;
+
+export const VisuallyHidden = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
+
+export const ContactRow = styled.div`
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 10px 12px;
+  padding: 10px 0;
+`;
+
+export const ContactLabel = styled.div`
+  font-weight: 600;
+  line-height: 1.2;
+`;
+
+export const ContactSub = styled.div`
+  opacity: 0.8;
+  line-height: 1.3;
+  margin-top: 2px;
 `;
 
 export const Kicker = styled.h2`

@@ -5,15 +5,17 @@ export const locale: Record<Locale, Record<string, any>> = {
     nav: [
       { label: "Product", href: "#product" },
       { label: "How it works", href: "#how" },
-      { label: "For Gyms", href: "#gyms" },
+      { label: "For Spaces", href: "#spaces" },
+      { label: "Team", href: "#team" }, // 👈 bætti þessu við
       { label: "Contact", href: "#contact" },
     ],
   },
   is: {
     nav: [
       { label: "Vélin", href: "#product" },
-      { label: "Hvernig það virkar", href: "#how" },
-      { label: "Fyrir líkamsræktarstöðvar", href: "#gyms" },
+      { label: "Hvernig virkar", href: "#how" },
+      { label: "Fyrir rými", href: "#spaces" },
+      { label: "Teymið", href: "#team" }, // 👈 bætti þessu við
       { label: "Hafðu samband", href: "#contact" },
     ],
   },
