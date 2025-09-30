@@ -170,24 +170,25 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "Fyrir rými", href: "#spaces" },
       { label: "Teymið", href: "#team" }, // 👈 bætti þessu við
       { label: "Hafðu samband", href: "#contact" },
+      { label: "Orri og Birgitta", href: "/pitch" },
     ],
     team: [
       {
         name: "Adam Bæhrenz Björgvinsson",
         role: "Stofnandi – Hugbúnaður & Vélbúnaður",
-        text: "Adam sér um hugbúnaðar- og vélbúnaðarforritun, hann byggir kjarnakerfin sem knýja vélina.",
+        text: "Adam er tölvunarfræðingur og sér um hugbúnaðar- og vélbúnaðarforritun, hann byggir kjarnakerfin sem knýja vélina.",
         img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
       },
       {
         name: "Sara Ísey Isorena Guðjónsdóttir",
         role: "Meðstofnandi – Vélhönnun",
-        text: "Sér um vélhönnun vélarinnar með áherslu á burðarþol og notagildi.",
+        text: "Sara er aerospace verkfræðingur og sér um vélhönnun vélarinnar með áherslu á burðarþol og notagildi.",
         img: "https://cdn-icons-png.flaticon.com/512/145/145852.png",
       },
       {
         name: "Baldur Geir Gunnarsson",
         role: "Meðstofnandi – Rafhönnun",
-        text: "Sér um rafhönnun og samþættingu kerfa fyrir vélina.",
+        text: "Baldur er vélaverkfræðingur og sér um rafhönnun og samþættingu kerfa fyrir vélina.",
         img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
       },
     ],
@@ -232,9 +233,9 @@ export const locale: Record<Locale, LocaleStrings> = {
     getMachine: "Fáðu vélina",
     howItWorks: "Svona virkar duftbar",
 
-    duftbarMachine: "Vélin",
+    duftbarMachine: "duftbar",
     machineDesc:
-      "Fallegasta húsgagnið sem fellur náttúrulega að umhverfinu. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gerir hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
+      "Vél sem fellur náttúrulega að umhverfinu. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gerir hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
 
     machineFeatures1:
       "Einfaldur, tvöfaldur eða þrefaldur skammtar með nákvæmni",
@@ -244,7 +245,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     machineFeatures5: "Skýjatenging, uppskriftir og fjaruppfærslur",
 
     howDesc:
-      "Gakktu að. Veldu vöruna. Greiddu með snertingu. Drykkurinn tilbúinn á nokkrum sekúndum. Engin fyrirhöfn — bara eldsneyti þegar þú þarft á því að halda.",
+      "Gakktu að. Veldu vöruna. Greiddu. Drykkurinn tilbúinn á nokkrum sekúndum. Engin fyrirhöfn — bara eldsneyti þegar þú þarft á því að halda.",
     stepChoose: "Veldu",
     stepChooseText: "Veldu vöru eða bragð og skammtastærð",
     stepTap: "Greiddu",
@@ -254,7 +255,7 @@ export const locale: Record<Locale, LocaleStrings> = {
 
     bringDuftbar: "Komdu duftbar í þitt rými",
     bringDesc:
-      "Við sjáum um uppsetningu, þjónustu og stuðning. Þú leggur til rýmið — við gerum afganginn.",
+      "Við sjáum um uppsetningu, þjónustu og stuðning. Þú leggur til rýmið — við gerum rest.",
 
     formName: "Nafn þitt",
     formContact: "Netfang eða símanúmer",

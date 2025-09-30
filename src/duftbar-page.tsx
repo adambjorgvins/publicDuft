@@ -5,7 +5,7 @@ import emailjs from "@emailjs/browser";
 //@ts-ignore
 import mashineImg from "./images/mashine.png";
 // @ts-ignore
-import duftbar from "./images/duftbar.mp4";
+import duftbar from "./images/duftbar.webm";
 import {
   ArrowRight,
   CheckCircle2,
@@ -63,6 +63,7 @@ import { dark, light } from "./theme";
 import { Locale, locale } from "./locale";
 import { Logo } from "./logo";
 import { TypewriterDuftbar } from "./roller";
+import { Link } from "react-router-dom";
 
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
@@ -235,6 +236,9 @@ export default function DuftbarPage(): JSX.Element {
                     {n.label}
                   </a>
                 ))}
+                <Link to="/pitch" style={{ cursor: "pointer" }}>
+                  <div  style={{ color: "red"}}>Birgitta og Orri</div>
+                </Link>
               </TopNav>
 
               <RightControls>
@@ -640,7 +644,7 @@ export default function DuftbarPage(): JSX.Element {
               </Kicker>
               <P style={{ maxWidth: 640, margin: "12px auto 0" }}>
                 {lang === "is"
-                  ? "Hjá Duftbar sameinum við hönnun, nýjustu tækni og ástríðu fyrir heilsu. Við erum heltekin af því að skapa upplifun þar sem hraði, stíll og þjónusta renna saman — þannig að fólk fái nákvæmlega það sem það þarf, þegar það þarf á því að halda. Þetta er ekki bara vél, heldur nýr mælikvarði þæginda, sjálfbærni og orku í nútímalífinu."
+                  ? "Hjá duftbar sameinum við hönnun, nýjustu tækni og ástríðu fyrir heilsu. Við erum heltekin af því að skapa upplifun þar sem hraði, stíll og þjónusta renna saman — þannig að fólk fái nákvæmlega það sem það þarf, þegar það þarf á því að halda. Þetta er ekki bara vél, heldur nýr mælikvarði þæginda, sjálfbærni og orku í nútímalífinu."
                   : "At Duftbar, we merge cutting-edge design, smart technology, and a relentless drive for health. We’re obsessed with creating experiences where speed, style, and service come together — giving people instant access to what they need, exactly where they need it. It’s not just a machine, it’s a new standard of convenience, sustainability, and energy for modern life"}
               </P>
             </motion.div>

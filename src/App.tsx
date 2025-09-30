@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DuftbarPage from "./duftbar-page";
 import Login from "./login";
-
+import PitchPage from "./pitch";
 export default function App() {
   const [authed, setAuthed] = useState(false);
 
@@ -25,6 +25,7 @@ export default function App() {
             )
           }
         />
+        <Route path="/pitch" element={<PitchPage />} />
       </Routes>
     </BrowserRouter>
   );
