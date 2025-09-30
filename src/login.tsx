@@ -42,7 +42,7 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin === "duftbar1337") {
+    if (pin === "worldfit") {
       localStorage.setItem("duftbar-auth", "true");
       onSuccess();
     } else {
