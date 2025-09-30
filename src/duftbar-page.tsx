@@ -336,7 +336,7 @@ export default function DuftbarPage(): JSX.Element {
                 items={t.items}
                 finalText={
                   lang === "is"
-                    ? "Engar áhyggjur, við reddum þessu ;)"
+                    ? "Engar áhyggjur, duftbar reddar þessu."
                     : "no worries we got you"
                 }
                 fontSize="clamp(16px, 2vw, 20px)"
