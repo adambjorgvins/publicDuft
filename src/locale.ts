@@ -18,6 +18,7 @@ export interface LocaleStrings {
   machineFeatures2: string;
   machineFeatures3: string;
   machineFeatures4: string;
+  machineFeatures5: string;
   howDesc: string;
   stepChoose: string;
   stepChooseText: string;
@@ -129,8 +130,9 @@ export const locale: Record<Locale, LocaleStrings> = {
 
     machineFeatures1: "Exact single, double, or triple scoop dispensing",
     machineFeatures2: '21.5" intuitive touchscreen with premium UI',
-    machineFeatures3: "100% cashless (phone, card, or watch)",
-    machineFeatures4: "Cloud telemetry, remote recipes & updates",
+    machineFeatures3: "Over 1000 servings in the machine",
+    machineFeatures4: "100% cashless (phone, card, or watch)",
+    machineFeatures5: "Cloud telemetry, remote recipes & updates",
 
     howDesc:
       "Walk up. Choose your supplement. Tap to pay. Dispensed in seconds. No hassle, no waste — just performance fuel when you need it.",
@@ -230,15 +232,16 @@ export const locale: Record<Locale, LocaleStrings> = {
     getMachine: "Fáðu vélina",
     howItWorks: "Svona virkar duftbar",
 
-    duftbarMachine: "duftbar-vélin",
+    duftbarMachine: "Vélin",
     machineDesc:
-      "Vandað tæki sem líkist húsgagni og fellur náttúrulega að umhverfi. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gera hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
+      "Fallegasta húsgagnið sem fellur náttúrulega að umhverfinu. Nákvæm skömmtun, snertilausar greiðslur og vistvæn nálgun gerir hana fullkomna fyrir líkamsrækt, skrifstofur og háskóla.",
 
     machineFeatures1:
       "Einfaldur, tvöfaldur eða þrefaldur skammtar með nákvæmni",
     machineFeatures2: '21,5" snertiskjár með fyrsta flokks viðmóti',
-    machineFeatures3: "Aðeins snertilausar greiðslur (sími, kort eða úr)",
-    machineFeatures4: "Skýjatenging, uppskriftir og fjaruppfærslur",
+    machineFeatures3: "Yfir 1000 skammtar í vél",
+    machineFeatures4: "Aðeins snertilausar greiðslur (sími, kort eða úr)",
+    machineFeatures5: "Skýjatenging, uppskriftir og fjaruppfærslur",
 
     howDesc:
       "Gakktu að. Veldu vöruna. Greiddu með snertingu. Drykkurinn tilbúinn á nokkrum sekúndum. Engin fyrirhöfn — bara eldsneyti þegar þú þarft á því að halda.",
@@ -264,9 +267,9 @@ export const locale: Record<Locale, LocaleStrings> = {
     contactLocationLabel: "Reykjavík, Ísland",
     contactLocationSub:
       "Uppsetningar um land allt — tilraunaverkefni í Evrópu eftir samkomulagi",
-    contactEmailLabel: "hello@duftbar.is",
+    contactEmailLabel: "hello.duftbar@gmail.com",
     contactEmailSub: "Svör innan 24 klst. á virkum dögum",
-    contactPhoneLabel: "+354 555 0000",
+    contactPhoneLabel: "+354 6982326",
     contactPhoneSub: "Sala & Þjónusta",
   },
 };

@@ -2,6 +2,10 @@ import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
+//@ts-ignore
+import mashineImg from "./images/mashine.png";
+// @ts-ignore
+import duftbar from "./images/duftbar.mp4";
 import {
   ArrowRight,
   CheckCircle2,
@@ -63,7 +67,7 @@ import { TypewriterDuftbar } from "./roller";
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
   const [mode, setMode] = useState<"light" | "dark">("light");
-  const [lang, setLang] = useState<Locale>("en");
+  const [lang, setLang] = useState<Locale>("is");
   const t = locale[lang];
 
   useEffect(() => {
@@ -371,16 +375,16 @@ export default function DuftbarPage(): JSX.Element {
                   minHeight: 300,
                 }}
               >
-                <span
+                <img
+                  src={mashineImg}
+                  alt="Duftbar machine"
                   style={{
-                    fontSize: "2rem",
-                    fontWeight: 800,
-                    textAlign: "center",
-                    color: mode === "dark" ? "#fafafa" : "#111827",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover", // eða "contain" ef þú vilt ekki croppa
+                    borderRadius: 16,
                   }}
-                >
-                  IMAGE/VIDEO OF THE DUFTBAR HERE
-                </span>
+                />
               </Card>
 
               <motion.div
@@ -397,6 +401,7 @@ export default function DuftbarPage(): JSX.Element {
                     t.machineFeatures2,
                     t.machineFeatures3,
                     t.machineFeatures4,
+                    t.machineFeatures5,
                   ].map((item) => (
                     <li key={item}>
                       <CheckCircle2 size={20} style={{ marginTop: 2 }} />
@@ -520,26 +525,24 @@ export default function DuftbarPage(): JSX.Element {
                       justifyContent: "center",
                     }}
                   >
-                    <div
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="auto"
                       style={{
-                        position: "absolute",
-                        inset: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        backgroundColor: "#F5F7FB",
+                        borderRadius: 16,
+                        display: "block",
                       }}
                     >
-                      <span
-                        style={{
-                          fontSize: "2rem",
-                          fontWeight: 800,
-                          textAlign: "center",
-                          color: mode === "dark" ? "#ffffffff" : "#ffffffff",
-                        }}
-                      >
-                        IMAGE OF THE DUFTBAR HERE
-                      </span>
-                    </div>
+                      <source src={duftbar} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </div>
               </motion.div>

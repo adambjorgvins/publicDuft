@@ -260,7 +260,6 @@ export const Card = styled(motion.div)`
   border: 1px solid ${({ theme }) => (theme as any).cardBorder};
   background: ${({ theme }) => (theme as any).card};
   border-radius: 24px;
-  padding: 24px;
   aspect-ratio: 4/5;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 20px 60px -20px rgba(0, 0, 0, 0.25);
   color: ${({ theme }) => (theme as any).text};
