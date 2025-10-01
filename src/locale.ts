@@ -168,7 +168,7 @@ export const locale: Record<Locale, LocaleStrings> = {
       { label: "Vélin", href: "#product" },
       { label: "Hvernig virkar", href: "#how" },
       { label: "Fyrir rými", href: "#spaces" },
-      { label: "Teymið", href: "#team" }, // 👈 bætti þessu við
+      { label: "Teymið", href: "#team" },
       { label: "Hafðu samband", href: "#contact" },
       { label: "Orri og Birgitta", href: "/pitch" },
     ],

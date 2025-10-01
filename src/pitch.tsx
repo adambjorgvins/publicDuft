@@ -54,7 +54,7 @@ export default function PitchPage() {
       <br />
       <br />
       <header style={{ ...sectionStyle, paddingTop: 0, textAlign: "center" }}>
-        <h1 style={{ margin: 0, letterSpacing: "-0.02em" }}>Duftbar x WC</h1>
+        <h1 style={{ margin: 0, letterSpacing: "-0.02em" }}>Duftbar x WCI</h1>
         <p style={{ ...pStyle, marginTop: 8 }}>
           Duftbar er sjálfsafgreiðsluvél sem skammtar pre-workout, prótein,
           kreatín, electrolytes og fleira í brúsann á sekúndum. Vélin passar inn
@@ -206,8 +206,8 @@ export default function PitchPage() {
               Duftbar sjálft í fyrstu skrefum.
             </li>
             <li>
-              <strong>Hærri meðaltekjur á heimsókn:</strong> Sjálfsögð
-              lausn sem selur sig sjálf.
+              <strong>Hærri meðaltekjur á heimsókn:</strong> Sjálfsögð lausn sem
+              selur sig sjálf.
             </li>
           </ul>
         </section>
