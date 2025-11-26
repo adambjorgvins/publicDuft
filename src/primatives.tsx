@@ -78,7 +78,11 @@ export const Nav = styled.nav`
 
   a {
     font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: ${({ theme }) => (theme as any).subtleText};
+    transition: color 0.2s ease;
   }
   a:hover {
     color: ${({ theme }) => (theme as any).text};
@@ -236,13 +240,17 @@ export const OutlineBtn = styled.a`
   border: 1px solid ${({ theme }) => (theme as any).cardBorder};
   background: ${({ theme }) => (theme as any).card};
   color: ${({ theme }) => (theme as any).text};
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => (theme as any).soft};
+  }
 `;
 
 /* Sections + Cards */
 export const Section = styled.section<{ bordered?: boolean }>`
   ${(p) =>
     p.bordered ? `border-block:1px solid ${(p.theme as any).cardBorder};` : ""}
-  background:${({ theme }) => (theme as any).bg};
 `;
 
 export const Grid2 = styled.div`

@@ -1,10 +1,16 @@
 import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import emailjs from "@emailjs/browser";
 //@ts-ignore
+import person from "./images/person.png";
+// @ts-ignore
 import mashine from "./images/mashine.png";
-
 // @ts-ignore
 import duftbar from "./images/duftbar.webm";
 import {
@@ -288,47 +294,81 @@ export default function DuftbarPage(): JSX.Element {
             </MobileMenu>
           )}
         </AnimatePresence>
+        <Hero
+          id="hero"
+          style={{
+            position: "relative",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            color: "#fff",
+            overflow: "hidden",
+          }}
+        >
+          {/* Fixed background layer */}
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundImage: `url(${person})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center 25%",
+              backgroundAttachment: "fixed",
+              zIndex: -2,
+              willChange: "transform",
+            }}
+          />
 
-        <Hero id="hero">
-          <HeroBg />
+          {/* Dark gradient overlay */}
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.65))",
+              zIndex: -1,
+            }}
+          />
+
+          {/* Content */}
           <Container
             style={{
+              position: "relative",
+              zIndex: 2,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center", // vertical center
-              alignItems: "center", // horizontal center
-              textAlign: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "1.2rem",
               padding: "0 24px",
             }}
           >
             <H1
               style={{
-                textAlign: "center",
                 margin: 0,
                 letterSpacing: "-0.02em",
-                fontSize: "clamp(3.5rem, 9vw, 4rem)", // extra large locally
+                fontSize: "clamp(3.5rem, 9vw, 4.5rem)",
                 fontWeight: 800,
-                lineHeight: 1.02,
+                lineHeight: 1.05,
               }}
             >
               {text}
               <motion.span
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
-                style={{
-                  display: "inline-block",
-                  fontSize: "1em",
-                }}
+                style={{ display: "inline-block" }}
               >
                 |
               </motion.span>
             </H1>
+
             <Lead
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "3.2em",
+                color: "rgba(255,255,255,0.85)",
+                fontSize: "clamp(16px, 2vw, 20px)",
+                maxWidth: "640px",
               }}
             >
               <TypewriterDuftbar
@@ -340,7 +380,6 @@ export default function DuftbarPage(): JSX.Element {
                     ? "Engar áhyggjur, duftbar reddar þessu."
                     : "no worries we got you"
                 }
-                fontSize="clamp(16px, 2vw, 20px)"
               />
             </Lead>
 
@@ -358,200 +397,320 @@ export default function DuftbarPage(): JSX.Element {
           </Container>
         </Hero>
 
-        {/* Product */}
-        <Section id="product" bordered>
-          <Container style={{ padding: "96px 24px" }}>
-            <Grid2>
-              <Card
-                initial={{ opacity: 0, x: -16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+        <Section
+          id="product"
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            backgroundColor: mode === "dark" ? "#0e0e10" : "#f8fafc",
+            padding: "140px 0",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                mode === "dark"
+                  ? "linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.3))"
+                  : "linear-gradient(to bottom right, rgba(255,255,255,0.7), rgba(255,255,255,0.5))",
+              zIndex: 1,
+            }}
+          />
+
+          <Container
+            style={{
+              position: "relative",
+              zIndex: 2,
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+              alignItems: "center",
+              gap: "64px",
+              padding: "0 24px",
+            }}
+          >
+            {/* Left: Text block */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Kicker>{t.duftbarMachine}</Kicker>
+              <P
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 20,
-                  background: mode === "dark" ? "#1a1a1c" : "#f3f4f6",
-                  minHeight: 300,
+                  fontSize: 18,
+                  color: mode === "dark" ? "#d1d5db" : "#374151",
+                  lineHeight: 1.7,
+                  maxWidth: 560,
+                }}
+              >
+                {t.machineDesc}
+              </P>
+              <List style={{ marginTop: 24 }}>
+                {[
+                  t.machineFeatures1,
+                  t.machineFeatures2,
+                  t.machineFeatures3,
+                  t.machineFeatures4,
+                  t.machineFeatures5,
+                ].map((item, i) => (
+                  <li key={i}>
+                    <CheckCircle2
+                      size={20}
+                      style={{
+                        marginTop: 2,
+                        color: mode === "dark" ? "#22c55e" : "#16a34a",
+                        flexShrink: 0,
+                      }}
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </List>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{
+                position: "relative",
+                borderRadius: 24,
+                overflow: "hidden",
+                boxShadow:
+                  mode === "dark"
+                    ? "0 20px 60px -20px rgba(0,0,0,0.7)"
+                    : "0 20px 60px -20px rgba(0,0,0,0.2)",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: "-20%",
+                  background:
+                    mode === "dark"
+                      ? "radial-gradient(circle at 70% 40%, rgba(59,130,246,0.3), transparent)"
+                      : "radial-gradient(circle at 70% 40%, rgba(96,165,250,0.2), transparent)",
+                  zIndex: 0,
+                }}
+              />
+
+              <div
+                style={{
+                  position: "relative",
+                  backdropFilter: "blur(8px)",
+                  borderRadius: 24,
+                  overflow: "hidden",
+                  background:
+                    mode === "dark"
+                      ? "rgba(30,30,32,0.6)"
+                      : "rgba(255,255,255,0.65)",
                 }}
               >
                 <img
                   src={mashine}
-                  alt="Duftbar machine"
+                  alt="Duftbar Machine"
                   style={{
                     width: "100%",
-                    height: "100%",
+                    height: "auto",
                     objectFit: "cover",
-                    borderRadius: 16,
+                    borderRadius: 24,
                     display: "block",
-                    backgroundColor: "#000",
                   }}
                 />
-              </Card>
-
-              <motion.div
-                initial={{ opacity: 0, x: 16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <Kicker>{t.duftbarMachine}</Kicker>
-                <P>{t.machineDesc}</P>
-                <List>
-                  {[
-                    t.machineFeatures1,
-                    t.machineFeatures2,
-                    t.machineFeatures3,
-                    t.machineFeatures4,
-                    t.machineFeatures5,
-                  ].map((item) => (
-                    <li key={item}>
-                      <CheckCircle2 size={20} style={{ marginTop: 2 }} />
-                      {item}
-                    </li>
-                  ))}
-                </List>
-              </motion.div>
-            </Grid2>
+              </div>
+            </motion.div>
           </Container>
         </Section>
 
         <Section
           id="how"
-          style={{ background: mode === "dark" ? "#111214" : "#f6f6f7" }}
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            padding: "140px 0",
+            background: "transparent",
+          }}
         >
-          <Container style={{ padding: "96px 24px" }}>
-            <Grid2>
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                style={{ order: 2 }}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 0,
+            }}
+          />
+
+          <Container
+            style={{
+              position: "relative",
+              zIndex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "0 24px",
+              gap: "64px",
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Kicker style={{ color: "white" }}>{t.howItWorks}</Kicker>
+              <P
+                style={{
+                  fontSize: 18,
+                  color: "white",
+                  maxWidth: 620,
+                  margin: "12px auto 0",
+                  lineHeight: 1.7,
+                }}
               >
-                <Kicker>{t.howItWorks}</Kicker>
-                <P>{t.howDesc}</P>
-                <HowGrid>
-                  {[
-                    {
-                      icon: <Dumbbell size={20} />,
-                      title: t.stepChoose,
-                      text: t.stepChooseText,
-                    },
-                    {
-                      icon: <Sparkles size={20} />,
-                      title: t.stepTap,
-                      text: t.stepTapText,
-                    },
-                    {
-                      icon: <CheckCircle2 size={20} />,
-                      title: t.stepGo,
-                      text: t.stepGoText,
-                    },
-                  ].map((s, i) => (
-                    <li key={i}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 12,
-                        }}
-                      >
-                        <div
-                          style={{
-                            border: "1px solid var(--outline,#e5e7eb)",
-                            borderRadius: 12,
-                            padding: 8,
-                          }}
-                        >
-                          {s.icon}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 600,
-                            letterSpacing: ".12em",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          {String(i + 1).padStart(6, "Step ")}
-                        </div>
-                      </div>
-                      <div style={{ marginTop: 12, fontWeight: 700 }}>
-                        {s.title}
-                      </div>
-                      <div
-                        style={{
-                          color: mode === "dark" ? "#c7c7c7" : "#525252",
-                        }}
-                      >
-                        {s.text}
-                      </div>
-                    </li>
-                  ))}
-                </HowGrid>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: 16 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                style={{ order: 1 }}
-              >
-                <div
+                {t.howDesc}
+              </P>
+            </motion.div>
+
+            <motion.ul
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              style={{
+                listStyle: "none",
+                margin: 0,
+                padding: 0,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                justifyItems: "stretch",
+                alignItems: "stretch",
+                gap: "48px",
+                maxWidth: 1000,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {[
+                {
+                  icon: <Dumbbell size={22} />,
+                  title: t.stepChoose,
+                  text: t.stepChooseText,
+                },
+                {
+                  icon: <Sparkles size={22} />,
+                  title: t.stepTap,
+                  text: t.stepTapText,
+                },
+                {
+                  icon: <CheckCircle2 size={22} />,
+                  title: t.stepGo,
+                  text: t.stepGoText,
+                },
+              ].map((step, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
                   style={{
                     position: "relative",
+                    background: mode === "dark" ? "#1a1a1d" : "#ffffff",
+                    border: `1px solid ${
+                      mode === "dark" ? "#2f2f32" : "rgba(255, 255, 255, 1)"
+                    }`,
                     borderRadius: 24,
-                    overflow: "hidden",
-                    background: "linear-gradient(135deg, #1f1f22, #0a0a0a)",
-                    aspectRatio: "16/10",
+                    padding: "48px 32px",
                     boxShadow:
-                      "0 1px 0 rgba(255,255,255,.08) inset, 0 30px 80px -40px rgba(0,0,0,.5)",
+                      mode === "dark"
+                        ? "0 10px 40px -20px rgba(0,0,0,0.8)"
+                        : "0 10px 40px -20px rgba(0,0,0,0.15)",
                   }}
                 >
                   <div
                     style={{
                       position: "absolute",
-                      inset: 0,
-                      opacity: 0.3,
-                      background:
-                        "radial-gradient(60rem 40rem at 10% 10%, #60a5fa, transparent), radial-gradient(60rem 40rem at 90% 90%, #a78bfa, transparent)",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
+                      top: -24,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: 48,
+                      height: 48,
+                      borderRadius: "50%",
+                      background: "black",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      color: "#fff",
+                      boxShadow: "0 6px 14px rgba(0,0,0,0.25)",
                     }}
                   >
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                        backgroundColor: "#F5F7FB",
-                        borderRadius: 16,
-                        display: "block",
-                      }}
-                    >
-                      <source src={duftbar} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    {step.icon}
                   </div>
-                </div>
-              </motion.div>
-            </Grid2>
+
+                  <h3
+                    style={{
+                      marginTop: 32,
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: mode === "dark" ? "#f9fafb" : "#111827",
+                    }}
+                  >
+                    {`${i + 1}. ${step.title}`}
+                  </h3>
+
+                  <p
+                    style={{
+                      marginTop: 12,
+                      color: mode === "dark" ? "#c7c7c7" : "#4b5563",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {step.text}
+                  </p>
+                </motion.li>
+              ))}
+            </motion.ul>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              style={{
+                position: "relative",
+                borderRadius: 24,
+                overflow: "hidden",
+                maxWidth: 960,
+                width: "100%",
+                marginTop: 64,
+                boxShadow:
+                  "0 1px 0 rgba(255,255,255,.05) inset, 0 30px 80px -40px rgba(0,0,0,.5)",
+              }}
+            >
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: 24,
+                  display: "block",
+                  backgroundColor: "#000",
+                }}
+              >
+                <source src={duftbar} type="video/mp4" />
+              </video>
+            </motion.div>
           </Container>
         </Section>
+
         <Section
           id="spaces"
           style={{ background: mode === "dark" ? "#0f0f11" : "#fafafa" }}
@@ -627,7 +786,7 @@ export default function DuftbarPage(): JSX.Element {
         <Section
           id="team"
           style={{
-            background: mode === "dark" ? "#111214" : "#f9fafb",
+            background: "transparent",
           }}
         >
           <Container style={{ padding: "96px 24px" }}>
@@ -638,10 +797,12 @@ export default function DuftbarPage(): JSX.Element {
               transition={{ duration: 0.6 }}
               style={{ textAlign: "center", marginBottom: 48 }}
             >
-              <Kicker>
+              <Kicker style={{ color: "white" }}>
                 {lang === "is" ? "Við erum duftbar" : "Meet the Team"}
               </Kicker>
-              <P style={{ maxWidth: 640, margin: "12px auto 0" }}>
+              <P
+                style={{ color: "white", maxWidth: 640, margin: "12px auto 0" }}
+              >
                 {t.teamIntro}
               </P>
             </motion.div>
@@ -678,7 +839,7 @@ export default function DuftbarPage(): JSX.Element {
                       boxShadow: "0 4px 12px rgba(0,0,0,.15)",
                     }}
                   />
-                  <div style={{ fontWeight: 700, fontSize: 18 }}>{m.name}</div>
+
                   <div
                     style={{
                       marginTop: 4,

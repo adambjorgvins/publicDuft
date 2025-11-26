@@ -149,7 +149,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     stepTap: "Tap",
     stepTapText: "Secure, fast, and fully contactless payment",
     stepGo: "Go",
-    stepGoText: "Your drink — crafted in seconds.",
+    stepGoText: "Your dose — dispensed in seconds.",
 
     bringDuftbar: "Bring Duftbar to Your Space",
     bringDesc:
@@ -265,7 +265,7 @@ export const locale: Record<Locale, LocaleStrings> = {
     stepTap: "Greiddu",
     stepTapText: "Snertilaus og örugg greiðsla á sekúndum",
     stepGo: "Njóttu",
-    stepGoText: "Drykkurinn tilbúinn á augabragði.",
+    stepGoText: "Skammturinn tilbúinn á augabragði.",
 
     bringDuftbar: "Komdu duftbar í þitt rými",
     bringDesc:
