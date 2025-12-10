@@ -8,6 +8,7 @@ import person from "./images/person.png";
 import mashine from "./images/mashine.png";
 // @ts-ignore
 import duftbar from "./images/duftbar.webm";
+
 import {
   ArrowRight,
   CheckCircle2,
@@ -848,7 +849,16 @@ export default function DuftbarPage(): JSX.Element {
                       boxShadow: "0 4px 12px rgba(0,0,0,.15)",
                     }}
                   />
-
+                  <div
+                    style={{
+                      marginTop: 8,
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: mode === "dark" ? "#fff" : "#111",
+                    }}
+                  >
+                    {m.name}
+                  </div>
                   <div
                     style={{
                       marginTop: 4,

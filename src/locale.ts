@@ -1,6 +1,13 @@
 // src/data/locale.ts
 export type Locale = "en" | "is";
 
+// @ts-ignore
+import adamos from "./images/adamos.png";
+// @ts-ignore
+import saraos from "./images/saraos.png";
+// @ts-ignore
+import balduros from "./images/balduros.png";
+
 export type NavItem = { label: string; href: string };
 
 export interface LocaleStrings {
@@ -138,19 +145,19 @@ export const locale: Record<Locale, LocaleStrings> = {
         name: "Adam Bæhrenz Björgvinsson",
         role: "Founder – Software & Hardware (BSc Computer Science)",
         text: "Adam leads the full software and hardware development of duftbar — building the core system that connects design, data, and technology into one fluid experience.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+        img: adamos,
       },
       {
         name: "Sara Ísey Isorena Guðjónsdóttir",
         role: "Co-Founder – Mechanical Design (MSc Aerospace Engineering)",
         text: "Sara drives the mechanical and structural design of the machine — merging engineering precision with timeless aesthetics and usability.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145852.png",
+        img: saraos,
       },
       {
         name: "Baldur Geir Gunnarsson",
         role: "Co-Founder – Electrical Design (BSc Mechanical Engineering)",
         text: "Baldur oversees all electrical design and system integration — ensuring every movement, sensor, and motor works in perfect harmony.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+        img: balduros,
       },
     ],
 
@@ -260,19 +267,19 @@ export const locale: Record<Locale, LocaleStrings> = {
         name: "Adam Bæhrenz Björgvinsson",
         role: "Stofnandi – Hugbúnaður & Vélbúnaður (BSc Tölvunarfræði)",
         text: "Leiðir þróun hugbúnaðar og vélbúnaðar duftbar — byggir kerfið sem sameinar hönnun, gögn og tækni í eina heildstæða upplifun.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+        img: adamos,
       },
       {
         name: "Sara Ísey Isorena Guðjónsdóttir",
         role: "Meðstofnandi – Vélhönnun (MSc Flugverkfræði)",
         text: "Sér um vélhönnun og byggingarform vélarinnar — þar sem verkfræði, fagurfræði og notendaupplifun mætast í fullkomnu jafnvægi.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145852.png",
+        img: saraos,
       },
       {
         name: "Baldur Geir Gunnarsson",
         role: "Meðstofnandi – Rafhönnun (BSc Vélaverkfræði)",
         text: "Ber ábyrgð á rafhönnun og samþættingu kerfa — tryggir nákvæmni, öryggi og áreiðanleika í hverjum skammti.",
-        img: "https://cdn-icons-png.flaticon.com/512/145/145867.png",
+        img: balduros,
       },
     ],
 
