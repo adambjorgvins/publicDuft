@@ -13,7 +13,7 @@ export const locale: Record<Locale, Record<string, any>> = {
   is: {
     nav: [
       { label: "Vélin", href: "#product" },
-      { label: "Hvernig virkar", href: "#how" },
+      { label: "Hvernig virkar duftbar", href: "#how" },
       { label: "Fyrir rými", href: "#spaces" },
       { label: "Teymið", href: "#team" }, // 👈 bætti þessu við
       { label: "Hafðu samband", href: "#contact" },

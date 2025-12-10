@@ -3,8 +3,6 @@ import { ThemeProvider } from "styled-components";
 import {
   motion,
   AnimatePresence,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import emailjs from "@emailjs/browser";
 //@ts-ignore
@@ -74,7 +72,7 @@ import { TypewriterDuftbar } from "./roller";
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
   const [mode, setMode] = useState<"light" | "dark">("light");
-  const [lang, setLang] = useState<Locale>("en");
+  const [lang, setLang] = useState<Locale>("is");
   const t = locale[lang];
 
   useEffect(() => {
