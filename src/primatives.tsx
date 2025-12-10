@@ -11,8 +11,9 @@ export const StickyHeader = styled.header`
   position: sticky;
   top: 0;
   z-index: 40;
-  backdrop-filter: blur(8px);
-  background: ${({ theme }) => (theme as any).bg}cc;
+  background: ${({ theme }) =>
+    (theme as any).mode === "dark" ? "#000000" : "#ffffff"};
+
   border-bottom: 1px solid ${({ theme }) => (theme as any).cardBorder};
 `;
 

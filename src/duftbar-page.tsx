@@ -183,7 +183,7 @@ export default function DuftbarPage(): JSX.Element {
   };
 
   return (
-    <ThemeProvider theme={mode === "dark" ? dark : light}>
+    <ThemeProvider theme={{ ...(mode === "dark" ? dark : light), mode }}>
       <GlobalStyle />
       <Page>
         <div
@@ -302,32 +302,39 @@ export default function DuftbarPage(): JSX.Element {
             overflow: "hidden",
           }}
         >
+          {/* FIXED background layer: image + overlay */}
           <div
             style={{
               position: "fixed",
               inset: 0,
-              backgroundImage: `url(${person})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-
-              zIndex: -2, // stays behind EVERYTHING
+              zIndex: -2,
               pointerEvents: "none",
             }}
-          />
+          >
+            {/* Image */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url(${person})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            />
 
-          {/* Dark gradient overlay */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.65))",
-              zIndex: -1,
-            }}
-          />
+            {/* Overlay directly on top of the image */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.75))",
+              }}
+            />
+          </div>
 
-          {/* Content */}
+          {/* HERO CONTENT */}
           <Container
             style={{
               position: "relative",
@@ -791,11 +798,19 @@ export default function DuftbarPage(): JSX.Element {
               transition={{ duration: 0.6 }}
               style={{ textAlign: "center", marginBottom: 48 }}
             >
-              <Kicker style={{ color: "white" }}>
+              <Kicker
+                style={{
+                  color: "white",
+                }}
+              >
                 {lang === "is" ? "Við erum duftbar" : "Meet the Team"}
               </Kicker>
               <P
-                style={{ color: "white", maxWidth: 640, margin: "12px auto 0" }}
+                style={{
+                  color: "white",
+                  maxWidth: 640,
+                  margin: "12px auto 0",
+                }}
               >
                 {t.teamIntro}
               </P>
