@@ -1,9 +1,6 @@
 import React, { JSX, useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import {
-  motion,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
 //@ts-ignore
 import person from "./images/person.png";
@@ -305,27 +302,27 @@ export default function DuftbarPage(): JSX.Element {
             overflow: "hidden",
           }}
         >
-          {/* Fixed background layer */}
           <div
             style={{
               position: "fixed",
               inset: 0,
               backgroundImage: `url(${person})`,
+              backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              backgroundPosition: "center 25%",
-              backgroundAttachment: "fixed",
-              zIndex: -2,
-              willChange: "transform",
+              backgroundPosition: "center",
+
+              zIndex: -2, // stays behind EVERYTHING
+              pointerEvents: "none",
             }}
           />
 
           {/* Dark gradient overlay */}
           <div
             style={{
-              position: "fixed",
+              position: "absolute",
               inset: 0,
               background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.65))",
+                "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.65))",
               zIndex: -1,
             }}
           />
@@ -498,7 +495,6 @@ export default function DuftbarPage(): JSX.Element {
               <div
                 style={{
                   position: "relative",
-                  backdropFilter: "blur(8px)",
                   borderRadius: 24,
                   overflow: "hidden",
                   background:
