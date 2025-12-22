@@ -12,9 +12,12 @@ export const StickyHeader = styled.header`
   top: 0;
   z-index: 40;
   background: ${({ theme }) =>
-    (theme as any).mode === "dark" ? "#000000" : "#ffffff"};
-
+    (theme as any).mode === "dark" ? "rgba(0, 0, 0)" : "rgba(255, 255, 255)"};
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 `;
 
 export const Container = styled.div`
@@ -78,15 +81,30 @@ export const Nav = styled.nav`
   }
 
   a {
+    position: relative;
     font-size: 14px;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.06em;
     color: ${({ theme }) => (theme as any).subtleText};
     transition: color 0.2s ease;
+    padding: 8px 4px;
+  }
+  a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: ${({ theme }) => (theme as any).brand};
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
   }
   a:hover {
     color: ${({ theme }) => (theme as any).text};
+  }
+  a:hover::after {
+    transform: scaleX(1);
   }
 `;
 
@@ -94,11 +112,21 @@ export const MobileMenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  background: none;
-  border: 0;
+  padding: 8px 12px;
+  background: ${({ theme }) => (theme as any).card};
+  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  border-radius: 12px;
   color: ${({ theme }) => (theme as any).text};
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background: ${({ theme }) => (theme as any).soft};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
   @media (min-width: 768px) {
     display: none;
   }
@@ -162,18 +190,40 @@ export const HeaderActions = styled.div`
 `;
 
 export const GhostBtn = styled.button`
-  border:1px solid ${({ theme }) => (theme as any).cardBorder};
+  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
   background: transparent;
-  padding:8px 12px; border-radius:12px; font-size:14px;
-  color:${({ theme }) => (theme as any).text};
-  cursor:pointer;
-  &:hover{ background: ${({ theme }) => (theme as any).soft}
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => (theme as any).text};
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ theme }) => (theme as any).soft};
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
 `;
 
 export const LinkBtn = styled.a`
-  border:1px solid ${({ theme }) => (theme as any).cardBorder};
-  padding:8px 12px; border-radius:12px; font-size:14px;
-  &:hover{ background: ${({ theme }) => (theme as any).soft}
+  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => (theme as any).text};
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &:hover {
+    background: ${({ theme }) => (theme as any).soft};
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
 `;
 
 export const Hero = styled.section`
@@ -183,7 +233,8 @@ export const Hero = styled.section`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 80px 0; /* adjust as you like */
+  padding: 80px 0;
+  min-height: 100vh;
 `;
 
 export const HeroBg = styled.div`
@@ -223,28 +274,50 @@ export const SolidBtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
-  font-size: 14px;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
   border-radius: 16px;
   background: ${({ theme }) => (theme as any).brand};
   color: ${({ theme }) => (theme as any).bg};
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 12px 30px -18px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+      0 20px 40px -20px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 export const OutlineBtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 16px;
-  font-size: 14px;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
   border-radius: 16px;
-  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  border: 2px solid ${({ theme }) => (theme as any).cardBorder};
   background: ${({ theme }) => (theme as any).card};
   color: ${({ theme }) => (theme as any).text};
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     background: ${({ theme }) => (theme as any).soft};
+    border-color: ${({ theme }) => (theme as any).brand};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
@@ -273,6 +346,13 @@ export const Card = styled(motion.div)`
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 20px 60px -20px rgba(0, 0, 0, 0.25);
   color: ${({ theme }) => (theme as any).text};
   overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+      0 24px 80px -24px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 export const VisuallyHidden = styled.span`

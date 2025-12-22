@@ -6,7 +6,7 @@ export default function App() {
   const [authed, setAuthed] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("duftbar-auth") === "true") {
+    if (localStorage.getItem("duftbarPass") === "true") {
       setAuthed(true);
     }
   }, []);
