@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 /* Layout */
 export const Page = styled.div`
   min-height: 100dvh;
+  position: relative;
 `;
 
 export const StickyHeader = styled.header`
@@ -12,34 +13,50 @@ export const StickyHeader = styled.header`
   top: 0;
   z-index: 40;
   background: ${({ theme }) =>
-    (theme as any).mode === "dark" ? "rgba(0, 0, 0)" : "rgba(255, 255, 255)"};
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid ${({ theme }) => (theme as any).cardBorder};
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+    (theme as any).mode === "dark"
+      ? "rgba(10, 10, 10, 0.9)"
+      : "rgba(255, 255, 255)"};
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.04)"};
+  transform: translateZ(0);
+  will-change: transform;
 `;
 
 export const Container = styled.div`
   width: 100%;
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
+
+  @media (min-width: 768px) {
+    padding: 0 48px;
+  }
 `;
 
 export const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 72px;
 `;
 
 export const Grid3 = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   @media (min-width: 900px) {
     grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
   }
 `;
 
@@ -74,7 +91,7 @@ export const LogoMark = styled.div`
 
 export const Nav = styled.nav`
   display: none;
-  gap: 16px;
+  gap: 8px;
 
   @media (min-width: 768px) {
     display: flex;
@@ -82,29 +99,21 @@ export const Nav = styled.nav`
 
   a {
     position: relative;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
     color: ${({ theme }) => (theme as any).subtleText};
-    transition: color 0.2s ease;
-    padding: 8px 4px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 10px 16px;
+    border-radius: 100px;
   }
-  a::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: ${({ theme }) => (theme as any).brand};
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
+
   a:hover {
     color: ${({ theme }) => (theme as any).text};
-  }
-  a:hover::after {
-    transform: scaleX(1);
+    background: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.04)"};
   }
 `;
 
@@ -112,19 +121,26 @@ export const MobileMenuButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
-  background: ${({ theme }) => (theme as any).card};
-  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.1)"
+        : "rgba(0,0,0,0.08)"};
   border-radius: 12px;
   color: ${({ theme }) => (theme as any).text};
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 18px;
 
   &:hover {
-    background: ${({ theme }) => (theme as any).soft};
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.04)"};
+    transform: scale(1.02);
   }
 
   @media (min-width: 768px) {
@@ -135,17 +151,30 @@ export const MobileMenuButton = styled.button`
 export const ThemeToggleWrap = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 8px; /* smá spacing */
+
   button {
-    border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid
+      ${({ theme }) =>
+        (theme as any).mode === "dark"
+          ? "rgba(255,255,255,0.1)"
+          : "rgba(0,0,0,0.08)"};
     background: transparent;
-    padding: 6px 10px;
     border-radius: 12px;
-    font-size: 14px;
     color: ${({ theme }) => (theme as any).text};
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
     &:hover {
-      background: ${({ theme }) => (theme as any).soft};
+      background: ${({ theme }) =>
+        (theme as any).mode === "dark"
+          ? "rgba(255,255,255,0.06)"
+          : "rgba(0,0,0,0.04)"};
+      transform: scale(1.02);
     }
   }
 `;
@@ -170,13 +199,15 @@ export const MobileMenu = styled(motion.nav)`
   }
 
   a {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 500;
     margin-bottom: 24px;
     color: ${({ theme }) => (theme as any).text};
+    letter-spacing: -0.02em;
+    transition: opacity 0.2s;
   }
   a:hover {
-    color: ${({ theme }) => (theme as any).brand};
+    opacity: 0.6;
   }
 `;
 
@@ -190,20 +221,30 @@ export const HeaderActions = styled.div`
 `;
 
 export const GhostBtn = styled.button`
-  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.1)"
+        : "rgba(0,0,0,0.08)"};
   background: transparent;
-  padding: 8px 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: ${({ theme }) => (theme as any).text};
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    background: ${({ theme }) => (theme as any).soft};
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.04)"};
+    transform: scale(1.02);
   }
 `;
 
@@ -233,8 +274,9 @@ export const Hero = styled.section`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 80px 0;
+  padding: 0;
   min-height: 100vh;
+  min-height: 100dvh;
 `;
 
 export const HeroBg = styled.div`
@@ -246,74 +288,112 @@ export const HeroBg = styled.div`
 
 /* Typography + Buttons */
 export const H1 = styled(motion.h1)`
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  font-size: clamp(42px, 8vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  font-size: clamp(56px, 12vw, 140px);
 `;
 export const RightControls = styled.div`
   display: flex;
   align-items: center;
-  gap: 2px; /* hér færðu gap=2px milli burger og sun/moon */
+  gap: 8px;
 `;
 
-export const Lead = styled(motion.p)`
-  max-width: 720px;
-  margin: 16px auto 0;
-  font-size: clamp(16px, 2.2vw, 20px);
+export const Lead = styled(motion.div)`
+  max-width: 540px;
+  margin: 24px auto 0;
+  font-size: clamp(16px, 2vw, 19px);
   color: ${({ theme }) => (theme as any).subtleText};
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 `;
 
 export const Ctas = styled(motion.div)`
-  margin-top: 28px;
+  margin-top: 40px;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
 `;
 
 export const SolidBtn = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 16px;
-  background: ${({ theme }) => (theme as any).brand};
+  gap: 10px;
+  padding: 16px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: 100px;
+  background: ${({ theme }) => (theme as any).text};
   color: ${({ theme }) => (theme as any).bg};
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 12px 30px -18px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
+  border: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
-      0 20px 40px -20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "0 20px 40px -15px rgba(255,255,255,0.15)"
+        : "0 20px 40px -15px rgba(0,0,0,0.25)"};
+  }
+
+  &:hover::before {
+    opacity: 1;
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
   }
 `;
 
 export const OutlineBtn = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 16px;
-  border: 2px solid ${({ theme }) => (theme as any).cardBorder};
-  background: ${({ theme }) => (theme as any).card};
+  gap: 10px;
+  padding: 16px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: 100px;
+  border: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.2)"
+        : "rgba(0,0,0,0.15)"};
+  background: transparent;
   color: ${({ theme }) => (theme as any).text};
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  backdrop-filter: blur(10px);
 
   &:hover {
-    background: ${({ theme }) => (theme as any).soft};
-    border-color: ${({ theme }) => (theme as any).brand};
+    background: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.08)"
+        : "rgba(0,0,0,0.04)"};
+    border-color: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.3)"
+        : "rgba(0,0,0,0.25)"};
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   &:active {
@@ -329,29 +409,43 @@ export const Section = styled.section<{ bordered?: boolean }>`
 
 export const Grid2 = styled.div`
   display: grid;
-  gap: 48px;
+  gap: 32px;
   align-items: center;
-  grid-template-columns: 3fr;
+  grid-template-columns: 1fr;
+
   @media (min-width: 900px) {
     grid-template-columns: 1fr 1fr;
+    gap: 64px;
   }
 `;
 
 export const Card = styled(motion.div)`
   position: relative;
-  border: 1px solid ${({ theme }) => (theme as any).cardBorder};
-  background: ${({ theme }) => (theme as any).card};
+  border: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.08)"
+        : "rgba(0,0,0,0.06)"};
+  background: ${({ theme }) =>
+    (theme as any).mode === "dark"
+      ? "rgba(255,255,255,0.02)"
+      : "rgba(0,0,0,0.01)"};
   border-radius: 24px;
   aspect-ratio: 4/5;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 20px 60px -20px rgba(0, 0, 0, 0.25);
   color: ${({ theme }) => (theme as any).text};
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
-      0 24px 80px -24px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    border-color: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.15)"
+        : "rgba(0,0,0,0.1)"};
+    box-shadow: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "0 40px 80px -30px rgba(0,0,0,0.5)"
+        : "0 40px 80px -30px rgba(0,0,0,0.15)"};
   }
 `;
 
@@ -387,49 +481,72 @@ export const ContactSub = styled.div`
 `;
 
 export const Kicker = styled.h2`
-  font-size: clamp(28px, 3.2vw, 36px);
-  letter-spacing: -0.01em;
+  font-size: clamp(32px, 4vw, 56px);
+  letter-spacing: -0.03em;
   margin: 0;
+  font-weight: 600;
+  line-height: 1.1;
 `;
 
 export const P = styled.p`
-  margin-top: 12px;
+  margin-top: 16px;
   color: ${({ theme }) => (theme as any).subtleText};
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
 `;
 
 export const List = styled.ul`
-  margin-top: 18px;
+  margin-top: 24px;
   padding: 0;
   list-style: none;
   color: ${({ theme }) => (theme as any).subtleText};
+
   li {
     display: flex;
-    gap: 10px;
+    gap: 14px;
     align-items: flex-start;
+    font-size: 16px;
+    line-height: 1.5;
   }
   li + li {
-    margin-top: 10px;
+    margin-top: 14px;
   }
 `;
 
 export const HowGrid = styled.ol`
-  margin-top: 28px;
+  margin-top: 40px;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 16px;
+  gap: 20px;
   grid-template-columns: 1fr;
+
   @media (min-width: 600px) {
     grid-template-columns: repeat(3, 1fr);
   }
+
   li {
-    background: ${({ theme }) => (theme as any).card};
-    border: 1px solid ${({ theme }) => (theme as any).cardBorder};
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+    background: ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.03)"
+        : "rgba(0,0,0,0.02)"};
+    border: 1px solid
+      ${({ theme }) =>
+        (theme as any).mode === "dark"
+          ? "rgba(255,255,255,0.06)"
+          : "rgba(0,0,0,0.05)"};
+    padding: 32px 24px;
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: ${({ theme }) =>
+        (theme as any).mode === "dark"
+          ? "rgba(255,255,255,0.12)"
+          : "rgba(0,0,0,0.1)"};
+    }
   }
 `;
 
@@ -441,28 +558,44 @@ export const Contact = styled.section`
 
 export const ContactGrid = styled.div`
   display: grid;
-  gap: 28px;
+  gap: 48px;
   grid-template-columns: 1fr;
+
   @media (min-width: 900px) {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
   }
 `;
 
 export const ContactForm = styled.form`
   display: grid;
-  gap: 12px;
+  gap: 16px;
   grid-template-columns: 1fr;
+
   @media (min-width: 600px) {
     grid-template-columns: 1fr 1fr;
   }
+
   input,
   textarea {
-    border: 1px solid #d4d4d8;
-    border-radius: 16px;
-    background: #fff;
-    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fafafa;
+    padding: 16px 18px;
+    font-size: 15px;
     outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:focus {
+      border-color: #0a0a0a;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.05);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
   }
+
   textarea,
   .wide {
     grid-column: 1 / -1;
@@ -474,37 +607,55 @@ export const PrimarySubmit = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: 16px;
+  gap: 10px;
+  padding: 18px 32px;
+  border-radius: 100px;
   border: 0;
   cursor: pointer;
-  background: #111;
+  background: #0a0a0a;
   color: #fff;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 export const SideCard = styled.div`
   border: 1px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 20px;
-  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  background: #fafafa;
   display: grid;
-  gap: 14px;
+  gap: 20px;
+
   .row {
     display: flex;
-    gap: 12px;
+    gap: 14px;
   }
   .label {
     font-weight: 600;
   }
   .sub {
     color: #6b7280;
+    font-size: 14px;
   }
 `;
 
 export const FooterWrap = styled.footer`
-  border-top: 1px solid ${({ theme }) => (theme as any).cardBorder};
+  border-top: 1px solid
+    ${({ theme }) =>
+      (theme as any).mode === "dark"
+        ? "rgba(255,255,255,0.06)"
+        : "rgba(0,0,0,0.06)"};
   background: ${({ theme }) => (theme as any).bg};
   color: ${({ theme }) => (theme as any).subtleText};
 `;

@@ -1,4 +1,5 @@
 export const light = {
+  mode: "light",
   bg: "#ffffff",
   text: "#0a0a0a",
   subtleText: "#525252",
@@ -10,6 +11,7 @@ export const light = {
 };
 
 export const dark = {
+  mode: "dark",
   bg: "#0a0a0a",
   text: "#fafafa",
   subtleText: "#c7c7c7",
