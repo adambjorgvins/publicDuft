@@ -718,8 +718,6 @@ export default function DuftbarPage(): JSX.Element {
                   <div
                     style={{
                       position: "relative",
-                      filter:
-                        "drop-shadow(15px 15px 30px rgba(0, 0, 0, 0.3)) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.2))",
                     }}
                   >
                     <img
