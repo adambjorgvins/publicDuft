@@ -60,14 +60,33 @@ export interface LocaleStrings {
     text: string;
     img: string;
   }[];
+  faqTitle: string;
+  faqSubtitle: string;
+  faqs: { question: string; answer: string }[];
+  uniqueFeatures: string;
+  smartNutrition: string;
+  features: { title: string; desc: string }[];
+  benefitsTitle: string;
+  benefitsSubtitle: string;
+  benefitsDesc: string;
+  benefits: { title: string; desc: string }[];
+  dashboardInsights: string;
+  footerDescription: string;
+  footerCopyright: string;
+  footerContact: string;
+  cookieMessage: string;
+  cookieAccept: string;
 }
 
 export const locale: Record<Locale, LocaleStrings> = {
   en: {
     nav: [
-      { label: "The Machine", href: "#product" },
       { label: "How it Works", href: "#how" },
-      { label: "For Spaces", href: "#spaces" },
+      { label: "Features", href: "#features" },
+      { label: "Benefits", href: "#benefits" },
+      { label: "Why duftbar", href: "#comparison" },
+      { label: "FAQ", href: "#faq" },
+      { label: "Spaces", href: "#spaces" },
       { label: "Team", href: "#team" },
       { label: "Contact", href: "#contact" },
     ],
@@ -181,6 +200,97 @@ export const locale: Record<Locale, LocaleStrings> = {
     contactEmailSub: "Replies within 24 hours on weekdays",
     contactPhoneLabel: "+354 6982326",
     contactPhoneSub: "Sales & Support",
+
+    faqTitle: "FAQ's",
+    faqSubtitle: "Frequently Asked Questions",
+    faqs: [
+      {
+        question: "How does duftbar work?",
+        answer:
+          "Simply walk up to the machine, select your product and scoop size on the touchscreen, tap your card or phone to pay, and receive your perfect serving in seconds.",
+      },
+      {
+        question: "What products can duftbar dispense?",
+        answer:
+          "duftbar works with any powder nutrition supplement — protein, pre-workout, creatine, BCAAs, meal replacements, and more. We can customize the product lineup for your space.",
+      },
+      {
+        question: "How often does it need refilling?",
+        answer:
+          "Our high-capacity canisters hold enough product for hundreds of servings. The machine monitors inventory in real-time and sends smart alerts when it's time to refill.",
+      },
+      {
+        question: "Is there a monthly fee?",
+        answer:
+          "We offer flexible partnership models including revenue sharing and leasing options. Contact us to discuss the best fit for your space.",
+      },
+      {
+        question: "What kind of support do you provide?",
+        answer:
+          "We handle installation, training, maintenance, and provide ongoing support. Our cloud dashboard lets you monitor performance 24/7, and we're always available to help.",
+      },
+    ],
+
+    uniqueFeatures: "Unique Features",
+    smartNutrition: "Smart Nutrition Dispensing",
+    features: [
+      {
+        title: "Precise Dosing",
+        desc: "Accurate single, double, or triple scoops every time with zero waste",
+      },
+      {
+        title: "Lightning Fast",
+        desc: "Dispense your product in seconds with an intuitive touch interface",
+      },
+      {
+        title: "Smart Monitoring",
+        desc: "Cloud-connected with live status, alerts, and remote management",
+      },
+      {
+        title: "Contactless Pay",
+        desc: "Secure payments via card, phone, or watch — no cash needed",
+      },
+    ],
+
+    benefitsTitle: "Why Businesses should Choose duftbar",
+    benefitsSubtitle: "Built for Growth",
+    benefitsDesc:
+      "Increase revenue, enhance member experience, and deliver instant nutrition — all automated",
+    benefits: [
+      {
+        title: "Revenue boost",
+        desc: "Turn your space into a new revenue stream",
+      },
+      {
+        title: "Member satisfaction",
+        desc: "Give your customers instant access to the nutrition they need, when they need it",
+      },
+      {
+        title: "Save time",
+        desc: "No restocking hassles, no checkout lines — fully automated operations",
+      },
+      {
+        title: "Zero waste",
+        desc: "Precise dispensing means no spills, no mess, and minimal product loss",
+      },
+      {
+        title: "Dashboard insights",
+        desc: "Track sales, inventory, and performance from anywhere with our dashboard",
+      },
+      {
+        title: "Modern design",
+        desc: "A sleek machine that looks great in any modern space",
+      },
+    ],
+
+    dashboardInsights: "Dashboard insights",
+    footerDescription:
+      "The world's first powder-only nutrition dispenser. Instant fuel for gyms, offices, universities, and high-performance spaces.",
+    footerCopyright: "duftbar ehf. All rights reserved.",
+    footerContact: "Contact: hello.duftbar@gmail.com | +354 6982326",
+    cookieMessage:
+      "We use cookies to improve your experience and analyze site traffic. By clicking Accept, you consent to our use of cookies.",
+    cookieAccept: "Accept",
   },
 
   // ===========================
@@ -189,9 +299,12 @@ export const locale: Record<Locale, LocaleStrings> = {
 
   is: {
     nav: [
-      { label: "Vélin", href: "#product" },
-      { label: "Hvernig virkar duftbar", href: "#how" },
-      { label: "Fyrir rými", href: "#spaces" },
+      { label: "Hvernig virkar þetta", href: "#how" },
+      { label: "Eiginleikar", href: "#features" },
+      { label: "Kostir", href: "#benefits" },
+      { label: "Af hverju duftbar", href: "#comparison" },
+      { label: "Algengar spurningar", href: "#faq" },
+      { label: "Staðsetningar", href: "#spaces" },
       { label: "Teymið", href: "#team" },
       { label: "Hafðu samband", href: "#contact" },
     ],
@@ -200,108 +313,199 @@ export const locale: Record<Locale, LocaleStrings> = {
     items: ["fæðubótarefninu?"],
     afterItems: [
       "Seinn í tíma?",
-      "Þarft orku á ferðinni?",
-      "duftbar — næring einfölduð.",
+      "Þarftu smá boost á leiðinni?",
+      "duftbar — næring, einfölduð.",
     ],
 
     talkToUs: "Hafðu samband",
 
     heroLead:
-      "Fyrsta duft-einangraða næringarvélin í heiminum — hönnuð til að auka sölu, draga úr sóun og gera næringu aðgengilega á nokkrum sekúndum.",
-    getMachine: "Komdu duftbar í þitt rými",
+      "Fyrsta næringarvélin í heiminum sem skammtar eingöngu duft — hönnuð til að auka sölu, draga úr sóun og gera næringu aðgengilega á örfáum sekúndum.",
+    getMachine: "Komdu duftbar í rýmið þitt",
 
     duftbarMachine: "duftbar vélin",
     machineDesc:
-      "duftbar er stílhrein og nútímaleg sjálfsafgreiðsluvél sem skammtar eingöngu næringardufti — prótein, pre-workout, kreatín, glútamín, kolvetni eða aðrar duftblöndur — á sekúndum, án vatns og án blöndunar. Hún tekur hvaða duft sem er frá hvaða framleiðanda sem er, og hentar fullkomlega fyrir rými sem vilja auka sölu, bæta upplifun og draga úr umbúðasóun.",
-    machineFeatures1: "Nákvæmir skammtar — einfaldur, tvöfaldur eða þrefaldur",
-    machineFeatures2: "Hraðvirkt, einfalt og leiðandi viðmót á snertiskjá",
-    machineFeatures3: "Stór geymsla með snjöllum áfyllingartilkynningum",
-    machineFeatures4: "Snertilausar greiðslur — sími, kort eða úr",
-    machineFeatures5: "Tengt kerfi með rauntímastöðu, áminningum og yfirliti",
+      "duftbar er stílhrein, nútímaleg sjálfsafgreiðsluvél sem skammtar næringarduft — eins og prótein, pre-workout eða kreatín — á örfáum sekúndum. Hún er hönnuð fyrir fjölfarin rými sem vilja bjóða upp á þægilega næringu án sóðaskapar eða umbúðasóunar.",
+    machineFeatures1: "Nákvæmir skammtar — einn, tveir eða þrír",
+    machineFeatures2: "Hraðvirkt og leiðandi viðmót á snertiskjá",
+    machineFeatures3: "Stór geymslugeta með snjöllum áfyllingartilkynningum",
+    machineFeatures4: "Snertilausar greiðslur — kort, sími eða úr",
+    machineFeatures5:
+      "Skýjatengd með rauntímastöðu, tilkynningum og fjaryfirliti",
 
     howItWorks: "Hvernig virkar duftbar?",
     howDesc:
-      "Gakktu að, veldu, borgaðu — og skammturinn kemur á nokkrum sekúndum.",
+      "Gakktu að, veldu vöru, borgaðu — og skammturinn er tilbúinn á örfáum sekúndum.",
     stepChoose: "Veldu",
-    stepChooseText: "Veldu tegund, bragð og skammtastærð",
+    stepChooseText: "Veldu vöru, bragð og skammtastærð",
     stepTap: "Borgaðu",
-    stepTapText: "Hraðvirk og örugg snertilaus greiðsla",
+    stepTapText: "Hröð, örugg og snertilaus greiðsla",
     stepGo: "Njóttu",
     stepGoText: "Skammturinn er tilbúinn strax.",
 
     spacesTitle: "Fullkomið fyrir nútímaleg rými",
     spacesDesc:
-      "duftbar eykur sölu, bætir upplifun og gerir næringu aðgengilega á sekúndum — hentar öllum rýmum sem vilja bæta þjónustu og þægindi.",
+      "duftbar eykur sölu, bætir upplifun og veitir hreina, tafarlausa næringu — tilvalið fyrir annasöm rými.",
     spaces: [
       {
-        title: "Líkamsrækt & Stúdíó",
-        text: "Auktu sölu og bættu þjónustu með instant prótein- og pre-workout skömmtum.",
+        title: "Líkamsrækt & stúdíó",
+        text: "Auktu sölu og ánægju með tafarlausu próteini og pre-workout.",
       },
       {
         title: "Háskólar",
-        text: "Gefur nemendum hraðan og nútímalegan aðgang að orku milli fyrirlestra.",
+        text: "Gefðu nemendum hraðan og aðgengilegan orkuskammt milli tíma.",
       },
       {
-        title: "Skrifstofur & Sameiginleg vinnurými",
-        text: "Sjálfbært eldsneyti sem heldur starfsfólki orkumiklu og einbeittu.",
+        title: "Skrifstofur & samvinnurými",
+        text: "Sjálfbært eldsneyti sem heldur teymum orkumiklum og einbeittum.",
       },
       {
-        title: "Íþróttaleikvangar & Viðburðir",
-        text: "Næring á sekúndum fyrir leikmenn og gesti — þegar hraði skiptir máli.",
+        title: "Leikvangar & viðburðir",
+        text: "Næring á staðnum — fyrir íþróttafólk og gesti þegar frammistaða skiptir máli.",
       },
     ],
 
     taglines: [
-      "Næring, einföld og falleg.",
-      "Orka á sekúndum — hvar sem er.",
-      "Snjallt, hreint og tilbúið strax.",
+      "Næring, fallega einfölduð.",
+      "Tafarlaust eldsneyti — hvar sem er.",
+      "Snjallt, hreint og tilbúið á sekúndum.",
       "Nútímaleg næring fyrir nútímaleg rými.",
     ],
 
-    teamTitle: "Teymið á bakvið duftbar",
+    teamTitle: "Teymið á bak við duftbar",
     teamIntro:
-      "Við trúum að næring eigi að vera einföld, falleg og aðgengileg. duftbar sameinar hönnun, notendavænni og þægindum í eina heildstæða upplifun.",
+      "Við trúum að næring eigi að vera einföld, falleg og aðgengileg. duftbar sameinar hönnun, skýrleika og þægindi í eina hnökralausa upplifun. Þetta er ekki bara vél — þetta er nýr staðall í næringu eftir þörfum.",
 
     team: [
       {
         name: "Adam Bæhrenz Björgvinsson",
-        role: "Stofnandi – Hugbúnaður & Vélbúnaður (BSc Tölvunarfræði)",
-        text: "Leiðir þróun hugbúnaðar og vélbúnaðar duftbar — byggir kerfið sem sameinar hönnun, gögn og tækni í eina heildstæða upplifun.",
+        role: "Stofnandi – Hugbúnaður & vélbúnaður (BSc Tölvunarfræði)",
+        text: "Adam leiðir alla hugbúnaðar- og vélbúnaðarþróun duftbar — byggir kjarnakerfið sem tengir saman hönnun, gögn og tækni í eina heildstæða upplifun.",
         img: adamos,
       },
       {
         name: "Sara Ísey Isorena Guðjónsdóttir",
         role: "Meðstofnandi – Vélhönnun (MSc Flugverkfræði)",
-        text: "Sér um vélhönnun og byggingarform vélarinnar — þar sem verkfræði, fagurfræði og notendaupplifun mætast í fullkomnu jafnvægi.",
+        text: "Sara sér um vélræna og burðarhönnun vélarinnar — sameinar verkfræðilega nákvæmni við tímalausa fagurfræði og notagildi.",
         img: saraos,
       },
       {
         name: "Baldur Geir Gunnarsson",
         role: "Meðstofnandi – Rafhönnun (BSc Vélaverkfræði)",
-        text: "Ber ábyrgð á rafhönnun og samþættingu kerfa — tryggir nákvæmni, öryggi og áreiðanleika í hverjum skammti.",
+        text: "Baldur ber ábyrgð á rafhönnun og samþættingu kerfa — tryggir að skynjarar, mótorar og öll hreyfing vinni saman í fullkomnu samræmi.",
         img: balduros,
       },
     ],
 
-    bringDuftbar: "Komdu duftbar inn í þitt rými",
+    bringDuftbar: "Komdu duftbar í rýmið þitt",
     bringDesc:
-      "Við sjáum um uppsetningu, þjónustu og stuðning — þú leggur til rýmið. duftbar eykur sölu, eflir þjónustu og bætir næringaraðgengi til muna.",
+      "Við sjáum um uppsetningu, þjónustu og stuðning — þú leggur til staðsetninguna. duftbar eykur sölu, bætir þægindi og veitir tafarlausan, nútímalegan aðgang að næringu fyrir viðskiptavini eða starfsfólk.",
 
-    formName: "Nafn þitt",
+    formName: "Nafn",
     formContact: "Netfang eða símanúmer",
     formVenue: "Staður (líkamsrækt, skrifstofa, háskóli …)",
     formNotes: "Eitthvað sem við ættum að vita?",
-    requestPlacement: "Senda beiðni",
+    requestPlacement: "Senda fyrirspurn",
 
     footerMade: "Hannað af ástríðu. Byggt á Íslandi.",
-    footerPayments: "Öruggar greiðslur með Verifone",
+    footerPayments: "Öruggar greiðslur í gegnum Verifone",
 
     contactLocationLabel: "Reykjavík, Ísland",
-    contactLocationSub:
-      "Uppsetningar um land allt — evrópskar prufur í undirbúningi.",
+    contactLocationSub: "Uppsetningar um allt land — Evrópuverkefni í þróun.",
     contactEmailLabel: "hello.duftbar@gmail.com",
-    contactEmailSub: "Svör innan 24 klst. á virkum dögum",
+    contactEmailSub: "Svörum innan 24 klst. á virkum dögum",
     contactPhoneLabel: "+354 6982326",
-    contactPhoneSub: "Sala & Þjónusta",
+    contactPhoneSub: "Sala & þjónusta",
+
+    faqTitle: "Algengar spurningar",
+    faqSubtitle: "Spurt og svarað",
+    faqs: [
+      {
+        question: "Hvernig virkar duftbar?",
+        answer:
+          "Gakktu að vélinni, veldu vöru og skammtastærð á snertiskjánum, borgaðu með korti eða síma og fáðu skammtinn þinn á örfáum sekúndum.",
+      },
+      {
+        question: "Hvaða vörur getur duftbar skammtað?",
+        answer:
+          "duftbar virkar með öllum duftformuðum fæðubótarefnum — próteini, pre-workout, kreatíni, BCAA, máltíðarstaðgöngum og fleiru. Við getum aðlagað vöruframboðið að þínu rými.",
+      },
+      {
+        question: "Hversu oft þarf að fylla á vélina?",
+        answer:
+          "Stór hylki geyma nægt magn fyrir hundruð skammta. Vélin fylgist með birgðastöðu í rauntíma og sendir tilkynningar þegar þarf að fylla á.",
+      },
+      {
+        question: "Er mánaðargjald?",
+        answer:
+          "Við bjóðum upp á sveigjanleg samstarfslíkön, meðal annars tekjuskiptingu og leigu. Hafðu samband og við finnum lausn sem hentar þínu rými.",
+      },
+      {
+        question: "Hvaða stuðning veitið þið?",
+        answer:
+          "Við sjáum um uppsetningu, þjálfun, viðhald og áframhaldandi stuðning. Skýjatengt stjórnborð gerir þér kleift að fylgjast með afköstum 24/7 og við erum alltaf til staðar ef eitthvað kemur upp.",
+      },
+    ],
+
+    uniqueFeatures: "Sérstakir eiginleikar",
+    smartNutrition: "Snjöll skömmtun næringar",
+    features: [
+      {
+        title: "Nákvæm skömmtun",
+        desc: "Einn, tveir eða þrír skammtar í hvert sinn — án sóunar",
+      },
+      {
+        title: "Leifturhröð",
+        desc: "Skammtar á örfáum sekúndum með leiðandi snertiskjáviðmóti",
+      },
+      {
+        title: "Snjöll vöktun",
+        desc: "Skýjatengd með rauntímastöðu, tilkynningum og fjarstýringu",
+      },
+      {
+        title: "Snertilaus greiðsla",
+        desc: "Öruggar greiðslur með korti, síma eða úri — ekkert reiðufé",
+      },
+    ],
+
+    benefitsTitle: "Af hverju ættu fyrirtæki að velja duftbar?",
+    benefitsSubtitle: "Hannað fyrir vöxt",
+    benefitsDesc:
+      "Auktu tekjur, bættu upplifun og veittu tafarlausa næringu — allt sjálfvirkt.",
+    benefits: [
+      {
+        title: "Aukin sala",
+        desc: "Bættu við nýjum tekjustraumi í rýmið þitt",
+      },
+      {
+        title: "Meiri ánægja",
+        desc: "Gefðu fólki tafarlausan aðgang að næringu þegar þörf er á",
+      },
+      {
+        title: "Sparar tíma",
+        desc: "Engar biðraðir og engin afgreiðsla — sjálfvirk rekstur",
+      },
+      {
+        title: "Lítil sóun",
+        desc: "Nákvæm skömmtun þýðir engin hella, ekkert sull og lágmarks vörutap",
+      },
+      {
+        title: "Innsýn í stjórnborði",
+        desc: "Fylgstu með sölu, birgðum og afköstum hvar sem er",
+      },
+      {
+        title: "Nútímaleg hönnun",
+        desc: "Stílhrein vél sem passar vel í öll nútímaleg rými",
+      },
+    ],
+
+    dashboardInsights: "Innsýn í stjórnborði",
+    footerDescription:
+      "Fyrsta næringarvélin í heiminum sem skammtar eingöngu duft. Tafarlaust eldsneyti fyrir líkamsrækt, skrifstofur, háskóla og afkastamiðuð rými.",
+    footerCopyright: "duftbar ehf. Öll réttindi áskilin.",
+    footerContact: "Hafðu samband: hello.duftbar@gmail.com | +354 6982326",
+    cookieMessage:
+      "Við notum vafrakökur til að bæta upplifun þína og greina umferð á vefnum. Með því að smella á „Samþykkja“ samþykkir þú notkun okkar á vafrakökum.",
+    cookieAccept: "Samþykkja",
   },
 };

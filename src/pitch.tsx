@@ -68,14 +68,18 @@ export default function PitchPage() {
       <br />
       <br />
       <br />
+      <br />
+      <br />
       <header style={{ ...sectionStyle, paddingTop: 0, textAlign: "center" }}>
         <h1 style={{ margin: 0, letterSpacing: "-0.02em" }}>Duftbar x WCI</h1>
+
         <p style={{ ...pStyle, marginTop: 8 }}>
           Duftbar er sjálfsafgreiðsluvél sem skammtar pre-workout, prótein,
           kreatín, electrolytes og fleira í brúsann á sekúndum. Vélin passar inn
           á hvaða stað sem er og breytir einföldu vatnsstoppi í eitthvað miklu
           betra.
         </p>
+
         <section aria-labelledby="af-hverju" style={sectionStyle}>
           <h2 id="af-hverju" style={h2Style}>
             Myndir unnar út frá teikningum og settar í raunverulegt umhverfi með
@@ -83,6 +87,7 @@ export default function PitchPage() {
             gæti orðið
           </h2>
         </section>
+
         <img
           src={duftmachine}
           alt="Duftbar sjálfsafgreiðsluvél"
@@ -95,6 +100,7 @@ export default function PitchPage() {
             borderRadius: 12,
           }}
         />
+
         <img
           src={duftbarphoto}
           alt="Duftbar sjálfsafgreiðsluvél"
@@ -238,6 +244,82 @@ export default function PitchPage() {
           ))}
         </div>
       </div>
+
+      {/* duftbar vélin section með flex layout */}
+      <section
+        style={{ maxWidth: 1400, margin: "0 auto", padding: "48px 24px" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 48,
+            alignItems: "flex-start",
+          }}
+        >
+          {/* Text stack */}
+          <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+            <h2 style={{ ...h2Style, fontSize: 32, marginBottom: 24 }}>
+              duftbar vélin
+            </h2>
+            <p style={pStyle}>
+              duftbar er sjálfvirk og nútímaleg sjálfsafgreiðsluvél sem skammtar
+              pre-workout, prótein, kreatín, electrolytes og fleiri
+              fæðubótarefni — prótein, pre-workout, kreatín, glutamín, kolvetni
+              eða aðrar duftblöndur — á sekúndum. Hún tekur hvaða duft sem er
+              frá hvaða framleiðanda sem er, og hentar fullkomlega fyrir rými
+              sem vilja auka sölu, bæta upplifun og draga úr umburðarsóðun.
+            </p>
+            <ul style={{ ...ulStyle, marginTop: 20 }}>
+              <li style={{ marginBottom: 8 }}>
+                Nákvæmir skammtar — einfaldur, tvöfaldur eða þrefaldur
+              </li>
+              <li style={{ marginBottom: 8 }}>
+                Hraðvirkt, einfalt og leiðandi viðmót á snertiskjá
+              </li>
+              <li style={{ marginBottom: 8 }}>
+                Stór geymsla með snillegu afyllingarkerfi
+              </li>
+              <li style={{ marginBottom: 8 }}>
+                Snertilausar greiðslur — sími, kort eða úr
+              </li>
+              <li style={{ marginBottom: 8 }}>
+                Tengt kerfi með rauntímastöðu, áminningum og yfirlit
+              </li>
+            </ul>
+          </div>
+
+          {/* Image stack */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flexShrink: 0,
+              width: 350,
+            }}
+          >
+            <img
+              src={duftmachine}
+              alt="Duftbar sjálfsafgreiðsluvél"
+              loading="lazy"
+              decoding="async"
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: 12,
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        @media (max-width: 768px) {
+          section > div {
+            flex-direction: column !important;
+          }
+        }
+      `}</style>
 
       <section aria-labelledby="af-hverju" style={sectionStyle}>
         <h2 id="af-hverju" style={h2Style}>

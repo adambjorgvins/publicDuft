@@ -7,7 +7,8 @@ export const light = {
   cardBorder: "#e5e5e5",
   soft: "#f6f6f7",
   outline: "#eaeaea",
-  brand: "#0a0a0a",
+  brand: "#1e40af", // Dark blue accent
+  accent: "#ea580c", // Coral accent
 };
 
 export const dark = {
@@ -19,5 +20,6 @@ export const dark = {
   cardBorder: "#1f1f22",
   soft: "#111214",
   outline: "#26272b",
-  brand: "#fafafa",
+  brand: "#3b82f6", // Blue accent
+  accent: "#fb923c", // Coral accent
 };

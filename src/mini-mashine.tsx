@@ -4,7 +4,7 @@ import type { JSX } from "react";
 
 export default function MachineMiniSVG(): JSX.Element {
   const [step, setStep] = useState<"main" | "variant" | "grams" | "dispense">(
-    "main"
+    "main",
   );
   const [selected, setSelected] = useState<string | null>(null);
   const [variant, setVariant] = useState<string | null>(null);
@@ -70,8 +70,8 @@ export default function MachineMiniSVG(): JSX.Element {
         height="600"
         rx="20"
         fill="#1a1a1a"
-        stroke="#ff6600"
-        strokeWidth="4"
+        stroke="none"
+        strokeWidth="0"
       />
 
       {/* Title */}
@@ -118,7 +118,7 @@ export default function MachineMiniSVG(): JSX.Element {
           (g) => {
             setGrams(parseInt(g));
             setStep("dispense");
-          }
+          },
         )}
 
       {/* Big dispenser slot */}
@@ -132,32 +132,28 @@ export default function MachineMiniSVG(): JSX.Element {
         stroke="#333"
       />
 
-      {/* Dispensing LED + powder streams */}
+      {/* Dispensing indicator */}
       {step === "dispense" && (
         <>
           {/* LED indicator on POS */}
-          <rect x="508" y="138" width="54" height="20" rx="3" fill="#0f0" />
-          {/* Powder streams */}
-          {["#ffaa00", "#ff4444", "#00e5ff"].map((color, i) => (
-            <motion.line
-              key={i}
-              x1={180 + i * 120}
-              y1="360"
-              x2={180 + i * 120}
-              y2="490"
-              stroke={color}
-              strokeWidth="6"
-              strokeLinecap="round"
-              initial={{ opacity: 0, y2: 360 }}
-              animate={{ opacity: [0, 1, 0.5, 1], y2: [360, 490, 360] }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.4,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
+          <rect x="508" y="138" width="54" height="20" rx="3" fill="#666" />
+          {/* Clean powder stream */}
+          <motion.line
+            x1={320}
+            y1="360"
+            x2={320}
+            y2="490"
+            stroke="#888"
+            strokeWidth="8"
+            strokeLinecap="round"
+            initial={{ opacity: 0, y2: 360 }}
+            animate={{ opacity: [0, 1, 0.5, 1], y2: [360, 490, 360] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
         </>
       )}
 
@@ -179,7 +175,7 @@ export default function MachineMiniSVG(): JSX.Element {
             width="54"
             height="20"
             rx="3"
-            fill="#0f9"
+            fill="#444"
             opacity="0.85"
           />
         )}

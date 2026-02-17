@@ -1,4 +1,12 @@
-import React, { JSX, useEffect, useState, lazy, memo } from "react";
+import React, {
+  JSX,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  lazy,
+  memo,
+} from "react";
 import { ThemeProvider } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
@@ -18,10 +26,17 @@ import {
   MapPin,
   Phone,
   Sparkles,
-  Sun,
-  Moon,
-  ArrowDown,
   MousePointerClick,
+  TrendingUp,
+  Eye,
+  Clock,
+  Shield,
+  Users,
+  Zap,
+  Target,
+  X,
+  Check,
+  Plus,
 } from "lucide-react";
 
 import {
@@ -32,25 +47,16 @@ import {
   Nav as TopNav,
   HeaderActions,
   GhostBtn,
-  LinkBtn,
   Hero,
-  HeroBg,
   H1,
   Lead,
-  Ctas,
   SolidBtn,
-  OutlineBtn,
   VisuallyHidden,
   ContactRow,
   ContactLabel,
   ContactSub,
   Section,
-  Grid2,
-  Card,
-  Kicker,
   P,
-  List,
-  HowGrid,
   Contact,
   ContactGrid,
   ContactForm,
@@ -59,19 +65,94 @@ import {
   FooterWrap,
   MobileMenuButton,
   MobileMenu,
-  ThemeToggleWrap,
   RightControls,
-  Grid3,
 } from "./primatives";
 import { GlobalStyle } from "./global-styles";
-import { dark, light } from "./theme";
-import { Locale, locale } from "./locale";
+import { light } from "./theme";
+import { Locale, locale, LocaleStrings } from "./locale";
 import { Logo } from "./logo";
 import { TypewriterDuftbar } from "./roller";
 
+// FAQ Accordion Component
+const FAQ = ({ t }: { t: LocaleStrings }) => {
+  const [openIndex, setOpenIndex] = useState<number>(0);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      {t.faqs.map((faq: any, index: number) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: index * 0.05 }}
+          style={{
+            background: "#ffffff",
+            border: "1px solid rgba(0,0,0,0.08)",
+            borderRadius: "16px",
+            overflow: "hidden",
+          }}
+        >
+          <button
+            onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+            style={{
+              width: "100%",
+              padding: "24px 28px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              textAlign: "left",
+              fontSize: "17px",
+              fontWeight: 600,
+              color: "#0a0a0a",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <span>{faq.question}</span>
+            <motion.div
+              animate={{ rotate: openIndex === index ? 45 : 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                flexShrink: 0,
+                marginLeft: "16px",
+              }}
+            >
+              <Plus size={20} />
+            </motion.div>
+          </button>
+          <AnimatePresence>
+            {openIndex === index && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                style={{ overflow: "hidden" }}
+              >
+                <div
+                  style={{
+                    padding: "0 28px 24px",
+                    fontSize: "15px",
+                    lineHeight: 1.7,
+                    color: "rgba(0,0,0,0.6)",
+                  }}
+                >
+                  {faq.answer}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
-  const [mode, setMode] = useState<"light" | "dark">("light");
   const [lang, setLang] = useState<Locale>("is");
   const t = locale[lang];
 
@@ -84,16 +165,111 @@ export default function DuftbarPage(): JSX.Element {
         setProgress(scrolled);
       });
     };
-    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
-    if (saved) {
-      setMode(saved);
-    } else {
-      setMode("light");
-    }
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const navSectionIds = [
+    "how",
+    "features",
+    "benefits",
+    "comparison",
+    "faq",
+    "spaces",
+    "team",
+    "contact",
+  ];
+
+  const [activeSection, setActiveSection] = useState<string>("");
+  const [isScrollingTo, setIsScrollingTo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getActiveFromScroll = () => {
+      // If we're programmatically scrolling to a section, lock to that section
+      if (isScrollingTo) return;
+
+      const scrollY = window.scrollY;
+      const viewportH = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+
+      // At bottom of page, activate last section
+      if (scrollY + viewportH >= docH - 50) {
+        setActiveSection(`#${navSectionIds[navSectionIds.length - 1]}`);
+        return;
+      }
+
+      // Find which section occupies the most viewport space
+      let bestId = "";
+      let bestOverlap = 0;
+      const trigger = viewportH * 0.4; // top 40% of viewport is the "trigger zone"
+
+      for (const id of navSectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+
+        const rect = el.getBoundingClientRect();
+        // Section must have its top within viewport to be considered
+        if (rect.top > viewportH) continue;
+
+        // How much of this section is in the top portion of viewport
+        const top = Math.max(rect.top, 0);
+        const bottom = Math.min(rect.bottom, trigger);
+        const overlap = Math.max(0, bottom - top);
+
+        // Also give priority if section top is close to viewport top
+        const distFromTop = Math.abs(rect.top);
+        const proximity = distFromTop < 200 ? 200 - distFromTop : 0;
+        const score = overlap + proximity;
+
+        if (score > bestOverlap) {
+          bestOverlap = score;
+          bestId = id;
+        }
+      }
+
+      // Only set active if a section actually scored (not on hero)
+      setActiveSection(bestId ? `#${bestId}` : "");
+    };
+
+    const onScroll = () => {
+      requestAnimationFrame(getActiveFromScroll);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Initial check
+    getActiveFromScroll();
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isScrollingTo]);
+
+  const scrollToSection = (href: string) => {
+    const el = document.querySelector(href);
+    if (!el) return;
+
+    // Lock active state immediately
+    setActiveSection(href);
+    setIsScrollingTo(href);
+
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Release lock after scroll completes
+    // Listen for scroll end
+    let scrollTimeout: ReturnType<typeof setTimeout>;
+    const onScrollEnd = () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setIsScrollingTo(null);
+        window.removeEventListener("scroll", onScrollEnd);
+      }, 100);
+    };
+    window.addEventListener("scroll", onScrollEnd, { passive: true });
+
+    // Safety fallback
+    setTimeout(() => {
+      setIsScrollingTo(null);
+      window.removeEventListener("scroll", onScrollEnd);
+    }, 1500);
+  };
 
   const [text, setText] = useState("");
   const [phase, setPhase] = useState<"duftbar" | "dots" | "eraseDots" | "wink">(
@@ -146,7 +322,6 @@ export default function DuftbarPage(): JSX.Element {
     return () => clearTimeout(timeout);
   }, [text, phase]);
 
-  const [menuOpen, setMenuOpen] = useState(false);
   const items = t.items;
   const afterItems = t.afterItems;
 
@@ -180,18 +355,158 @@ export default function DuftbarPage(): JSX.Element {
     return () => clearInterval(timer);
   }, [phaseIndex]);
 
-  const toggleTheme = () => {
-    const next = mode === "dark" ? "light" : "dark";
-    setMode(next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch {}
+  const getCurrentSectionIndex = () => {
+    if (!activeSection) return -1;
+    const index = t.nav.findIndex((n) => n.href === activeSection);
+    return index >= 0 ? index : -1;
   };
 
   return (
-    <ThemeProvider theme={{ ...(mode === "dark" ? dark : light), mode }}>
+    <ThemeProvider theme={light}>
       <GlobalStyle />
       <Page>
+        {/* Vertical Navigation - Right Side */}
+        {(() => {
+          const currentIdx = getCurrentSectionIndex();
+          const totalItems = t.nav.length;
+          const itemHeight = 150;
+          const dotSize = 8;
+          const activeDotSize = 10;
+          const totalHeight = (totalItems - 1) * itemHeight;
+
+          // Progress line: from center of first dot to center of active dot
+          const progressHeight =
+            currentIdx <= 0 ? 0 : (currentIdx / (totalItems - 1)) * totalHeight;
+
+          return (
+            <div
+              style={{
+                position: "fixed",
+                right: "40px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 100,
+                display: window.innerWidth < 1024 ? "none" : "block",
+              }}
+            >
+              {/* Track container — exact height matches dot-to-dot distance */}
+              <div style={{ position: "relative", height: totalHeight }}>
+                {/* Background track line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    right: `${activeDotSize / 2 - 1}px`,
+                    top: "0",
+                    height: "100%",
+                    width: "2px",
+                    background: "rgba(0,0,0,0.08)",
+                    borderRadius: "1px",
+                  }}
+                />
+
+                {/* Active progress line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    right: `${activeDotSize / 2 - 1}px`,
+                    top: "0",
+                    width: "2px",
+                    height: `${progressHeight}px`,
+                    background: "#000",
+                    borderRadius: "1px",
+                    transition: "height 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+                    willChange: "height",
+                  }}
+                />
+
+                {/* Navigation items positioned at exact intervals */}
+                {t.nav.map((navItem, index) => {
+                  const isActive = activeSection === navItem.href;
+                  const isPast = index <= currentIdx;
+                  const yPos = index * itemHeight;
+                  const currentDotSize = isActive ? activeDotSize : dotSize;
+
+                  return (
+                    <div
+                      key={navItem.href}
+                      style={{
+                        position: "absolute",
+                        right: "0",
+                        top: `${yPos}px`,
+                        transform: "translateY(-50%)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                        gap: "14px",
+                      }}
+                    >
+                      {/* Label */}
+                      <a
+                        href={navItem.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToSection(navItem.href);
+                        }}
+                        style={{
+                          fontSize: "13px",
+                          fontWeight: isActive ? 600 : 400,
+                          letterSpacing: isActive ? "-0.01em" : "0",
+                          color: isActive ? "#000" : "rgba(0,0,0,0.45)",
+                          textDecoration: "none",
+                          transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                          cursor: "pointer",
+                          whiteSpace: "nowrap",
+                          transform: isActive
+                            ? "translateX(-2px)"
+                            : "translateX(0)",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isActive) {
+                            e.currentTarget.style.color = "rgba(0,0,0,0.8)";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive) {
+                            e.currentTarget.style.color = "rgba(0,0,0,0.45)";
+                          }
+                        }}
+                      >
+                        {navItem.label}
+                      </a>
+
+                      {/* Dot — always centered on the track line */}
+                      <div
+                        style={{
+                          width: `${activeDotSize}px`,
+                          height: `${activeDotSize}px`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: `${currentDotSize}px`,
+                            height: `${currentDotSize}px`,
+                            borderRadius: "50%",
+                            background: "#000",
+                            transition:
+                              "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                            boxShadow: isActive
+                              ? "0 0 0 3px rgba(0,0,0,0.06)"
+                              : "none",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Minimal progress indicator */}
         <div
           style={{
@@ -200,516 +515,354 @@ export default function DuftbarPage(): JSX.Element {
             top: 0,
             height: 4,
             width: `${progress}%`,
-            background:
-              mode === "dark" ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.3)",
+            background: "rgba(0,0,0,0.3)",
             zIndex: 50,
             transition: "width .2s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         />
 
-        <StickyHeader>
-          <Container>
-            <Row>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  cursor: "pointer",
-                }}
-              >
-                <Logo size={26} />
-                <span
-                  style={{
-                    fontWeight: 500,
-                    fontSize: 15,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  duftbar
-                </span>
-              </a>
-
-              <TopNav>
-                {t.nav.map((n) => (
-                  <a
-                    key={n.href}
-                    href={n.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const el = document.querySelector(n.href);
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {n.label}
-                  </a>
-                ))}
-              </TopNav>
-
-              <RightControls>
-                <HeaderActions></HeaderActions>
-                <ThemeToggleWrap>
-                  <GhostBtn onClick={toggleTheme} aria-label="Toggle theme">
-                    {mode === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-                  </GhostBtn>
-                </ThemeToggleWrap>
-                <GhostBtn
-                  onClick={() => setLang(lang === "en" ? "is" : "en")}
-                  style={{
-                    width: "auto",
-                    padding: "0 16px",
-                    fontSize: 13,
-                    fontWeight: 500,
-                  }}
-                >
-                  {lang === "en" ? "ÍS" : "EN"}
-                </GhostBtn>
-                <MobileMenuButton
-                  onClick={() => setMenuOpen(true)}
-                  aria-label="Open menu"
-                >
-                  ☰
-                </MobileMenuButton>
-              </RightControls>
-            </Row>
-          </Container>
-        </StickyHeader>
-        <AnimatePresence>
-          {menuOpen && (
-            <MobileMenu
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.3 }}
+        {/* Simple Header - Logo and Language Switcher */}
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 99,
+            padding: "20px 40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+          >
+            <Logo size={28} />
+            <span
+              style={{
+                fontWeight: 600,
+                fontSize: 17,
+                letterSpacing: "-0.02em",
+                color: "#000",
+              }}
             >
-              <button className="close" onClick={() => setMenuOpen(false)}>
-                ✕
-              </button>
+              duftbar
+            </span>
+          </a>
 
-              {t.nav.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {n.label}
-                </a>
-              ))}
-
-              <div style={{ marginTop: "auto" }}>
-                <GhostBtn onClick={toggleTheme}>
-                  {mode === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-                </GhostBtn>
-                <GhostBtn onClick={() => setLang(lang === "en" ? "is" : "en")}>
-                  {lang === "en" ? "ÍSL" : "EN"}
-                </GhostBtn>
-              </div>
-            </MobileMenu>
-          )}
-        </AnimatePresence>
+          <button
+            onClick={() => setLang(lang === "en" ? "is" : "en")}
+            style={{
+              background: "rgba(255,255,255,0.9)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(0,0,0,0.1)",
+              borderRadius: "8px",
+              padding: "8px 16px",
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#fff";
+              e.currentTarget.style.borderColor = "rgba(0,0,0,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "rgba(255,255,255,0.9)";
+              e.currentTarget.style.borderColor = "rgba(0,0,0,0.1)";
+            }}
+          >
+            {lang === "en" ? "ÍS" : "EN"}
+          </button>
+        </div>
         <Hero
           id="hero"
           style={{
             position: "relative",
-            height: "100dvh",
+            minHeight: "100vh",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            color: "#fff",
             overflow: "hidden",
+            paddingTop: "100px",
+            paddingBottom: "80px",
           }}
         >
-          {/* FIXED background layer: image + overlay */}
           <div
             style={{
-              position: "fixed",
+              position: "absolute",
               inset: 0,
-              zIndex: -2,
+              opacity: 0.02,
               pointerEvents: "none",
+              display: "grid",
+              gridTemplateColumns: `repeat(auto-fill, minmax(${window.innerWidth < 768 ? "50px" : "70px"}, 1fr))`,
+              gridAutoRows: `${window.innerWidth < 768 ? "50px" : "70px"}`,
+              gap: window.innerWidth < 768 ? "25px" : "35px",
+              padding: "20px",
+              alignContent: "start",
             }}
           >
-            {/* Image */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage: `url(${person})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
-
-            {/* Overlay directly on top of the image */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.75))",
-              }}
-            />
+            {[...Array(1000)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Logo size={window.innerWidth < 768 ? 20 : 24} />
+              </div>
+            ))}
           </div>
 
-          {/* HERO CONTENT */}
-          <Container
-            style={{
-              position: "relative",
-              zIndex: 2,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0",
-              padding: "0 24px",
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          <Container style={{ maxWidth: 1400, padding: "0 24px" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 900 ? "1fr" : "1fr 1fr",
+                gap: "80px",
+                alignItems: "center",
+              }}
             >
-              <H1
-                style={{
-                  margin: 0,
-                  letterSpacing: "-0.03em",
-                  fontSize: "clamp(3rem, 10vw, 7rem)",
-                  fontWeight: 700,
-                  lineHeight: 0.95,
-                }}
+              {/* Left: Text Content */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                {text}
-                <motion.span
-                  animate={{ opacity: [1, 0, 1] }}
-                  transition={{ repeat: Infinity, duration: 1 }}
-                  style={{ display: "inline-block", fontWeight: 300 }}
+                <H1
+                  style={{
+                    fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                    fontWeight: 800,
+                    lineHeight: 1.1,
+                    color: "black",
+                    letterSpacing: "-0.04em",
+                    marginBottom: "24px",
+                  }}
                 >
-                  |
-                </motion.span>
-              </H1>
-            </motion.div>
+                  duftbar
+                </H1>
+                <Lead
+                  style={{
+                    fontSize: "clamp(17px, 2vw, 20px)",
+                    lineHeight: 1.6,
+                    color: "rgba(0,0,0,0.7)",
+                    marginBottom: "40px",
+                    maxWidth: "540px",
+                  }}
+                >
+                  {t.heroLead}
+                </Lead>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                  }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <SolidBtn
+                      href="#contact"
+                      style={{
+                        background: "black",
+                        color: "#fff",
+                        padding: "18px 36px",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        boxShadow: "0 8px 24px rgba(30, 64, 175, 0.25)",
+                        border: "none",
+                      }}
+                    >
+                      {t.getMachine} <ArrowRight size={18} />
+                    </SolidBtn>
+                  </motion.div>
+                </div>
+              </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.3,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              <Lead
+              {/* Right: Product Dashboard Screenshot */}
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.2,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
                 style={{
-                  color: "rgba(255,255,255,0.9)",
-                  fontSize: "clamp(15px, 2vw, 18px)",
-                  maxWidth: "480px",
-                  marginTop: "24px",
+                  position: "relative",
                 }}
               >
-                <TypewriterDuftbar
-                  afterItems={t.afterItems}
-                  forgotYour={t.forgotYour}
-                  items={t.items}
-                  finalText={
-                    lang === "is"
-                      ? "Engar áhyggjur, duftbar reddar þessu."
-                      : "no worries we got you"
-                  }
-                />
-              </Lead>
-            </motion.div>
-
-            <Ctas
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.5,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              style={{ marginTop: "48px" }}
-            >
-              <SolidBtn
-                href="#contact"
-                style={{ background: "#fff", color: "#0a0a0a" }}
-              >
-                {t.getMachine} <ArrowDown size={16} />
-              </SolidBtn>
-              <OutlineBtn
-                href="#how"
-                style={{ borderColor: "rgba(255,255,255,0.25)", color: "#fff" }}
-              >
-                {t.howItWorks}
-              </OutlineBtn>
-            </Ctas>
+                <div
+                  style={{
+                    position: "relative",
+                  }}
+                >
+                  {/* Machine */}
+                  <div
+                    style={{
+                      position: "relative",
+                      filter:
+                        "drop-shadow(15px 15px 30px rgba(0, 0, 0, 0.3)) drop-shadow(0 30px 40px rgba(0, 0, 0, 0.2))",
+                    }}
+                  >
+                    <img
+                      src={mashine}
+                      alt="Duftbar Machine"
+                      style={{
+                        width: "100%",
+                        borderRadius: "16px",
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </Container>
         </Hero>
 
-        {/* Scrolling Brand Banner */}
-        <div
+        {/* INFINITE SCROLLING LOGO BANNER */}
+        <Section
           style={{
-            width: "100%",
-            height: 50,
-            background:
-              mode === "dark"
-                ? "linear-gradient(90deg, #1a1a1a 0%, #0a0a0a 50%, #1a1a1a 100%)"
-                : "linear-gradient(90deg, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%)",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            borderTop: mode === "dark" ? "1px solid #333" : "1px solid #e5e7eb",
-            borderBottom:
-              mode === "dark" ? "1px solid #333" : "1px solid #e5e7eb",
             position: "relative",
+            padding: "60px 0",
+            background: "#ffffff",
+            overflow: "hidden",
+            borderTop: "1px solid rgba(0,0,0,0.06)",
+            borderBottom: "1px solid rgba(0,0,0,0.06)",
           }}
         >
-          <div
-            id="brand-banner-scroll"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 60,
-              whiteSpace: "nowrap",
-              animation: "scrollBanner 25s linear infinite",
-              willChange: "transform",
-            }}
-          >
-            {/* Duplicate content for seamless loop */}
-            {[0, 1].map((set) =>
-              [...Array(15)].map((_, index) => (
-                <svg
-                  key={`${set}-${index}`}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 150 32"
-                  width="120"
-                  height="26"
-                  style={{ opacity: 0.7, flexShrink: 0 }}
-                >
-                  <path
-                    fill="currentColor"
-                    d="M.783.194 0 31.767h7.085l4.345-18.975h.274l-1.331 18.975h7.045L26.148.194h-6.225l-4.462 19.87h-.274L16.48.193H10.49l-4.736 19.87H5.48L7.046.193H.783ZM32.05 11.86l-2.113 14.113c-.157 1.011-.314 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.155.04-.389.079-.7L30.17 11.86c.157-.972.314-1.555 1.096-1.555.666 0 .9.272.9.933 0 .078-.078.272-.117.622Zm5.637.621c.235-1.477.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-6.028 0-6.772.972-7.633 6.61l-1.957 12.831c-.235 1.633-.313 2.8-.313 3.422 0 2.838 1.957 3.188 5.989 3.188 5.91 0 6.81-.894 7.672-6.61l1.918-12.83ZM52.07 12.987c.274-1.789.391-2.917.391-3.305 0-2.528-1.096-3.81-3.17-3.81-.94 0-2.075.466-3.366 1.36l.156-1.205h-5.715l-3.835 25.74h5.675l2.975-19.597c.157-1.01.43-1.438 1.135-1.438.548 0 .783.233.783.816 0 .078 0 .311-.04.622l-.665 4.394h5.128l.548-3.577ZM55.277.194 50.54 31.767h5.675L60.992.194h-5.715ZM70.261.194l-1.056 7.038c-1.057-.894-1.958-1.36-3.093-1.36-3.836 0-4.736 2.915-5.362 7.115l-1.8 11.82c-.236 1.477-.392 2.566-.392 3.266 0 2.45 1.33 3.81 3.64 3.81 1.174 0 2.231-.466 3.484-1.36l.463 1.244h5.095L75.976.194h-5.715Zm-1.8 12.015-1.996 13.337c-.157.972-.431 1.438-1.175 1.438-.548 0-.783-.233-.783-.816 0-.078 0-.273.04-.622l1.996-13.337c.156-1.01.47-1.439 1.174-1.439.509 0 .822.311.822.778 0 .117-.039.311-.078.661ZM98.113 6.532c.195-1.283.313-2.333.313-3.11C98.426.194 96.156 0 91.458 0c-3.483 0-5.636.039-6.967 1.439-1.057 1.127-1.33 2.76-1.683 5.093L79.99 25.39c-.235 1.478-.313 2.644-.313 3.46 0 2.8 2.426 3.15 6.967 3.15 3.444 0 5.558-.117 6.85-1.4 1.174-1.166 1.409-2.838 1.761-5.21l1.096-7.038h-6.654l-1.018 6.844c-.156 1.01-.352 1.594-1.252 1.594-.627 0-.861-.272-.861-.933 0-.156 0-.39.039-.661l2.779-18.47c.156-.971.313-1.555 1.174-1.555.705 0 .979.272.979.933 0 .04-.04.234-.079.623l-.626 4.199h6.615l.666-4.394ZM100.971.194l-4.736 31.573h5.676L106.686.194h-5.715ZM119.831 12.481c.235-1.516.352-2.605.352-3.266 0-2.994-1.996-3.344-6.028-3.344-6.067 0-6.772 1.011-7.633 6.61l-.352 2.294h5.715l.43-2.916c.157-1.01.314-1.555 1.214-1.555.626 0 .783.272.783.933 0 0-.039.194-.118.622l-.509 3.383-5.48 2.955c-2.152 1.166-2.896 2.138-3.248 4.588l-.392 2.527c-.195 1.322-.352 2.411-.352 3.266 0 2.294 1.057 3.344 3.366 3.344 1.331 0 2.505-.466 3.836-1.322l.463 1.167h5.056l2.897-19.286Zm-6.928 8.204-.822 5.288c-.157 1.05-.353 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.194.04-.428.079-.7l.391-2.605c.157-1.088.313-1.827 1.292-2.255l1.018-.428ZM120.038 22.513l-.43 2.8c-.235 1.593-.314 2.76-.314 3.42 0 2.84 1.957 3.19 5.989 3.19 5.872 0 6.811-.895 7.672-6.61l.313-2.334c.118-.7.235-1.4.235-2.06 0-1.284-.587-2.217-1.722-2.878l-2.192-1.244c-1.566-.894-2.584-1.089-2.584-2.41 0-.273.079-.545.118-.895l.235-1.633c.156-1.01.352-1.555 1.096-1.555.665 0 .9.272.9.933 0 .039-.039.233-.117.622l-.431 2.916h5.715l.352-2.294c.235-1.438.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-5.245 0-6.732.661-7.476 5.56l-.43 2.683c-.157 1.167-.274 1.983-.274 2.45 0 1.555.822 2.372 2.661 3.344l2.075 1.127c1.448.778 1.8 1.128 1.8 1.983 0 .04 0 .272-.078.739l-.352 2.216c-.157 1.011-.313 1.556-1.174 1.556-.588 0-.783-.273-.783-.856 0-.194.039-.428.078-.7l.509-3.46h-5.715ZM134.813 22.513l-.431 2.8c-.235 1.593-.313 2.76-.313 3.42 0 2.84 1.957 3.19 5.989 3.19 5.871 0 6.811-.895 7.672-6.61l.313-2.334c.117-.7.235-1.4.235-2.06 0-1.284-.587-2.217-1.723-2.878l-2.191-1.244c-1.566-.894-2.584-1.089-2.584-2.41 0-.273.078-.545.118-.895l.234-1.633c.157-1.01.353-1.555 1.096-1.555.666 0 .901.272.901.933 0 .039-.039.233-.118.622l-.43 2.916h5.714l.353-2.294c.235-1.438.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-5.245 0-6.732.661-7.476 5.56l-.431 2.683c-.156 1.167-.274 1.983-.274 2.45 0 1.555.822 2.372 2.662 3.344l2.075 1.127c1.448.778 1.8 1.128 1.8 1.983 0 .04 0 .272-.078.739l-.352 2.216c-.157 1.011-.314 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.194.04-.428.079-.7l.509-3.46h-5.715Z"
-                  ></path>
-                </svg>
-              )),
-            )}
-          </div>
           <style>
             {`
-            @keyframes scrollBanner {
-              from { transform: translateX(0); }
-              to { transform: translateX(calc(-120px * 15 - 60px * 15)); }
-            }
-          `}
+              @keyframes scroll-left {
+                0% {
+                  transform: translateX(0);
+                }
+                100% {
+                  transform: translateX(-50%);
+                }
+              }
+              
+              .logo-track {
+                display: flex;
+                width: max-content;
+                animation: scroll-left 30s linear infinite;
+              }
+              
+              .logo-track:hover {
+                animation-play-state: paused;
+              }
+            `}
           </style>
-        </div>
-
-        <Section
-          id="product"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            backgroundColor: mode === "dark" ? "#0a0a0a" : "#fafafa",
-            padding: "160px 0",
-          }}
-        >
-          <Container
+          <div
             style={{
-              position: "relative",
-              zIndex: 2,
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              alignItems: "center",
-              gap: "80px",
-              padding: "0 24px",
+              display: "flex",
+              width: "100%",
             }}
           >
-            {/* Left: Text block */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              style={{ maxWidth: 600 }}
-            >
-              <div
-                style={{
-                  display: "inline-block",
-                  padding: "8px 16px",
-                  background:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.06)"
-                      : "rgba(0,0,0,0.04)",
-                  borderRadius: 100,
-                  fontSize: 12,
-                  fontWeight: 500,
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase",
-                  marginBottom: 24,
-                  color:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.85)"
-                      : "rgba(0,0,0,0.5)",
-                }}
-              >
-                {lang === "is" ? "Varan" : "Product"}
-              </div>
-              <Kicker>{t.duftbarMachine}</Kicker>
-              <P
-                style={{
-                  fontSize: 17,
-                  color:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.85)"
-                      : "rgba(0,0,0,0.6)",
-                  lineHeight: 1.8,
-                  maxWidth: 520,
-                }}
-              >
-                {t.machineDesc}
-              </P>
-              <List style={{ marginTop: 32 }}>
-                {[
-                  t.machineFeatures1,
-                  t.machineFeatures2,
-                  t.machineFeatures3,
-                  t.machineFeatures4,
-                  t.machineFeatures5,
-                ].map((item, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                  >
-                    <CheckCircle2
-                      size={18}
-                      style={{
-                        marginTop: 3,
-                        color: mode === "dark" ? "#22c55e" : "#16a34a",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <span
-                      style={{
-                        color:
-                          mode === "dark"
-                            ? "rgba(255,255,255,0.7)"
-                            : "rgba(0,0,0,0.7)",
-                      }}
-                    >
-                      {item}
-                    </span>
-                  </motion.li>
-                ))}
-              </List>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.8,
-                delay: 0.2,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              style={{
-                position: "relative",
-                borderRadius: 32,
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  position: "relative",
-                  borderRadius: 32,
-                  overflow: "hidden",
-                  background:
-                    mode === "dark"
-                      ? "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)"
-                      : "linear-gradient(145deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.01) 100%)",
-                  border: `1px solid ${mode === "dark" ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)"}`,
-                }}
-              >
-                <img
-                  src={mashine}
-                  alt="Duftbar Machine"
-                  loading="lazy"
-                  decoding="async"
+            <div className="logo-track">
+              {[...Array(20)].map((_, i) => (
+                <div
+                  key={i}
                   style={{
-                    width: "100%",
-                    height: "auto",
-                    objectFit: "cover",
-                    borderRadius: 32,
-                    display: "block",
+                    padding: "0 48px",
+                    display: "flex",
+                    alignItems: "center",
+                    opacity: 0.4,
+                    transition: "opacity 0.3s ease",
                   }}
-                />
-              </div>
-            </motion.div>
-          </Container>
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "0.8";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "0.4";
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 150 32"
+                    width="150"
+                    height="32"
+                    style={{ display: "block" }}
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M.783.194 0 31.767h7.085l4.345-18.975h.274l-1.331 18.975h7.045L26.148.194h-6.225l-4.462 19.87h-.274L16.48.193H10.49l-4.736 19.87H5.48L7.046.193H.783ZM32.05 11.86l-2.113 14.113c-.157 1.011-.314 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.155.04-.389.079-.7L30.17 11.86c.157-.972.314-1.555 1.096-1.555.666 0 .9.272.9.933 0 .078-.078.272-.117.622Zm5.637.621c.235-1.477.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-6.028 0-6.772.972-7.633 6.61l-1.957 12.831c-.235 1.633-.313 2.8-.313 3.422 0 2.838 1.957 3.188 5.989 3.188 5.91 0 6.81-.894 7.672-6.61l1.918-12.83ZM52.07 12.987c.274-1.789.391-2.917.391-3.305 0-2.528-1.096-3.81-3.17-3.81-.94 0-2.075.466-3.366 1.36l.156-1.205h-5.715l-3.835 25.74h5.675l2.975-19.597c.157-1.01.43-1.438 1.135-1.438.548 0 .783.233.783.816 0 .078 0 .311-.04.622l-.665 4.394h5.128l.548-3.577ZM55.277.194 50.54 31.767h5.675L60.992.194h-5.715ZM70.261.194l-1.056 7.038c-1.057-.894-1.958-1.36-3.093-1.36-3.836 0-4.736 2.915-5.362 7.115l-1.8 11.82c-.236 1.477-.392 2.566-.392 3.266 0 2.45 1.33 3.81 3.64 3.81 1.174 0 2.231-.466 3.484-1.36l.463 1.244h5.095L75.976.194h-5.715Zm-1.8 12.015-1.996 13.337c-.157.972-.431 1.438-1.175 1.438-.548 0-.783-.233-.783-.816 0-.078 0-.273.04-.622l1.996-13.337c.156-1.01.47-1.439 1.174-1.439.509 0 .822.311.822.778 0 .117-.039.311-.078.661ZM98.113 6.532c.195-1.283.313-2.333.313-3.11C98.426.194 96.156 0 91.458 0c-3.483 0-5.636.039-6.967 1.439-1.057 1.127-1.33 2.76-1.683 5.093L79.99 25.39c-.235 1.478-.313 2.644-.313 3.46 0 2.8 2.426 3.15 6.967 3.15 3.444 0 5.558-.117 6.85-1.4 1.174-1.166 1.409-2.838 1.761-5.21l1.096-7.038h-6.654l-1.018 6.844c-.156 1.01-.352 1.594-1.252 1.594-.627 0-.861-.272-.861-.933 0-.156 0-.39.039-.661l2.779-18.47c.156-.971.313-1.555 1.174-1.555.705 0 .979.272.979.933 0 .04-.04.234-.079.623l-.626 4.199h6.615l.666-4.394ZM100.971.194l-4.736 31.573h5.676L106.686.194h-5.715ZM119.831 12.481c.235-1.516.352-2.605.352-3.266 0-2.994-1.996-3.344-6.028-3.344-6.067 0-6.772 1.011-7.633 6.61l-.352 2.294h5.715l.43-2.916c.157-1.01.314-1.555 1.214-1.555.626 0 .783.272.783.933 0 0-.039.194-.118.622l-.509 3.383-5.48 2.955c-2.152 1.166-2.896 2.138-3.248 4.588l-.392 2.527c-.195 1.322-.352 2.411-.352 3.266 0 2.294 1.057 3.344 3.366 3.344 1.331 0 2.505-.466 3.836-1.322l.463 1.167h5.056l2.897-19.286Zm-6.928 8.204-.822 5.288c-.157 1.05-.353 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.194.04-.428.079-.7l.391-2.605c.157-1.088.313-1.827 1.292-2.255l1.018-.428ZM120.038 22.513l-.43 2.8c-.235 1.593-.314 2.76-.314 3.42 0 2.84 1.957 3.19 5.989 3.19 5.872 0 6.811-.895 7.672-6.61l.313-2.334c.118-.7.235-1.4.235-2.06 0-1.284-.587-2.217-1.722-2.878l-2.192-1.244c-1.566-.894-2.584-1.089-2.584-2.41 0-.273.079-.545.118-.895l.235-1.633c.156-1.01.352-1.555 1.096-1.555.665 0 .9.272.9.933 0 .039-.039.233-.117.622l-.431 2.916h5.715l.352-2.294c.235-1.438.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-5.245 0-6.732.661-7.476 5.56l-.43 2.683c-.157 1.167-.274 1.983-.274 2.45 0 1.555.822 2.372 2.661 3.344l2.075 1.127c1.448.778 1.8 1.128 1.8 1.983 0 .04 0 .272-.078.739l-.352 2.216c-.157 1.011-.313 1.556-1.174 1.556-.588 0-.783-.273-.783-.856 0-.194.039-.428.078-.7l.509-3.46h-5.715ZM134.813 22.513l-.431 2.8c-.235 1.593-.313 2.76-.313 3.42 0 2.84 1.957 3.19 5.989 3.19 5.871 0 6.811-.895 7.672-6.61l.313-2.334c.117-.7.235-1.4.235-2.06 0-1.284-.587-2.217-1.723-2.878l-2.191-1.244c-1.566-.894-2.584-1.089-2.584-2.41 0-.273.078-.545.118-.895l.234-1.633c.157-1.01.353-1.555 1.096-1.555.666 0 .901.272.901.933 0 .039-.039.233-.118.622l-.43 2.916h5.714l.353-2.294c.235-1.438.352-2.527.352-3.266 0-2.994-1.996-3.344-6.028-3.344-5.245 0-6.732.661-7.476 5.56l-.431 2.683c-.156 1.167-.274 1.983-.274 2.45 0 1.555.822 2.372 2.662 3.344l2.075 1.127c1.448.778 1.8 1.128 1.8 1.983 0 .04 0 .272-.078.739l-.352 2.216c-.157 1.011-.314 1.556-1.175 1.556-.587 0-.783-.273-.783-.856 0-.194.04-.428.079-.7l.509-3.46h-5.715Z"
+                    ></path>
+                  </svg>
+                </div>
+              ))}
+            </div>
+          </div>
         </Section>
 
+        {/* HOW IT WORKS SECTION */}
         <Section
           id="how"
           style={{
             position: "relative",
-            overflow: "hidden",
-            padding: "160px 0",
-            background: mode === "dark" ? "#0a0a0a" : "#1a1a1a",
-            isolation: "isolate",
+            padding: "120px 0",
+            background: "#f8fafc",
           }}
         >
-          <Container
-            style={{
-              position: "relative",
-              zIndex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              padding: "0 24px",
-              gap: "80px",
-            }}
-          >
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
             >
               <div
                 style={{
                   display: "inline-block",
                   padding: "8px 16px",
-                  background: "rgba(255,255,255,0.15)",
+                  background: "rgba(147, 51, 234, 0.08)",
+                  color: "#9333ea",
                   borderRadius: 100,
                   fontSize: 12,
-                  fontWeight: 500,
-                  letterSpacing: "0.05em",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   marginBottom: 24,
-                  color: "rgba(255,255,255,0.85)",
                 }}
               >
                 {lang === "is" ? "Hvernig virkar þetta" : "How it works"}
               </div>
-              <Kicker style={{ color: "white" }}>{t.howItWorks}</Kicker>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                {t.howItWorks}
+              </h2>
               <P
                 style={{
                   fontSize: 17,
-                  color: "rgba(255,255,255,0.75)",
-                  maxWidth: 500,
+                  color: "rgba(0,0,0,0.6)",
+                  maxWidth: 600,
                   margin: "16px auto 0",
                   lineHeight: 1.7,
                 }}
@@ -718,46 +871,36 @@ export default function DuftbarPage(): JSX.Element {
               </P>
             </motion.div>
 
-            <motion.ul
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+            <div
               style={{
-                listStyle: "none",
-                margin: 0,
-                padding: 0,
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                justifyItems: "stretch",
-                alignItems: "stretch",
-                gap: "24px",
-                maxWidth: 1000,
-                width: "100%",
-                position: "relative",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)",
+                gap: "32px",
+                marginBottom: "64px",
               }}
             >
               {[
                 {
-                  icon: <MousePointerClick size={22} />,
+                  icon: <MousePointerClick size={28} />,
                   title: t.stepChoose,
                   text: t.stepChooseText,
                   iconColor: "#6366f1",
                 },
                 {
-                  icon: <Sparkles size={22} />,
+                  icon: <Sparkles size={28} />,
                   title: t.stepTap,
                   text: t.stepTapText,
                   iconColor: "#f59e0b",
                 },
                 {
-                  icon: <CheckCircle2 size={22} />,
+                  icon: <CheckCircle2 size={28} />,
                   title: t.stepGo,
                   text: t.stepGoText,
                   iconColor: "#10b981",
                 },
               ].map((step, i) => (
-                <motion.li
+                <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -768,35 +911,24 @@ export default function DuftbarPage(): JSX.Element {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{
-                    position: "relative",
-                    background:
-                      mode === "dark"
-                        ? "rgba(255,255,255,0.03)"
-                        : "rgba(255,255,255,0.95)",
-                    border: `1px solid ${
-                      mode === "dark"
-                        ? "rgba(255,255,255,0.06)"
-                        : "rgba(0,0,0,0.05)"
-                    }`,
-                    borderRadius: 24,
-                    padding: "40px 28px 36px",
-                    backdropFilter: "blur(10px)",
+                    background: "#ffffff",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "40px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
                   }}
                 >
                   <div
                     style={{
-                      display: "inline-flex",
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "12px",
+                      background: "rgba(0,0,0,0.04)",
+                      color: step.iconColor,
+                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      width: 52,
-                      height: 52,
-                      borderRadius: "50%",
-                      background:
-                        mode === "dark"
-                          ? "rgba(255,255,255,0.08)"
-                          : "rgba(0,0,0,0.04)",
-                      color: step.iconColor,
-                      marginBottom: 20,
+                      marginBottom: 24,
                     }}
                   >
                     {step.icon}
@@ -805,10 +937,11 @@ export default function DuftbarPage(): JSX.Element {
                   <h3
                     style={{
                       marginTop: 0,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: 600,
-                      color: mode === "dark" ? "#fff" : "#0a0a0a",
-                      letterSpacing: "-0.02em",
+                      color: "#0a0a0a",
+                      letterSpacing: "-0.01em",
+                      marginBottom: 12,
                     }}
                   >
                     {step.title}
@@ -816,105 +949,666 @@ export default function DuftbarPage(): JSX.Element {
 
                   <p
                     style={{
-                      marginTop: 10,
-                      color:
-                        mode === "dark"
-                          ? "rgba(255,255,255,0.5)"
-                          : "rgba(0,0,0,0.5)",
+                      margin: 0,
+                      color: "rgba(0,0,0,0.6)",
                       lineHeight: 1.6,
                       fontSize: 15,
                     }}
                   >
                     {step.text}
                   </p>
-                </motion.li>
+                </motion.div>
               ))}
-            </motion.ul>
+            </div>
 
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 position: "relative",
                 maxWidth: 1000,
                 width: "100%",
-                marginTop: 40,
-                background: mode === "dark" ? "#0a0a0a" : "#fff",
+                margin: "0 auto",
+                background: "#ffffff",
                 borderRadius: 24,
-                padding: 4,
-                isolation: "isolate",
-                transform: "translateZ(0)",
+                padding: 8,
+                border: "1px solid rgba(0,0,0,0.06)",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.1)",
               }}
             >
               <video
                 autoPlay
                 loop
                 muted
-                playsInline
+                // @ts-ignore
+                playsInPlace
                 preload="auto"
                 style={{
                   width: "100%",
                   height: "auto",
                   display: "block",
-                  borderRadius: 20,
-                  transform: "translateZ(0)",
-                  backfaceVisibility: "hidden",
+                  borderRadius: 16,
                 }}
               >
                 <source src={duftbar} type="video/webm" />
               </video>
-            </div>
+            </motion.div>
           </Container>
         </Section>
 
+        {/* FEATURES SECTION - "Unique Features" */}
         <Section
-          id="spaces"
-          style={{ background: mode === "dark" ? "#0a0a0a" : "#fafafa" }}
+          id="features"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#ffffff",
+          }}
         >
-          <Container style={{ padding: "160px 24px" }}>
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
+            {/* Section Tag & Title */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              style={{ textAlign: "center", marginBottom: 64 }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
             >
               <div
                 style={{
                   display: "inline-block",
                   padding: "8px 16px",
-                  background:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.06)"
-                      : "rgba(0,0,0,0.04)",
+                  background: "rgba(30, 64, 175, 0.08)",
+                  color: "#1e40af",
                   borderRadius: 100,
                   fontSize: 12,
-                  fontWeight: 500,
-                  letterSpacing: "0.05em",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginBottom: 20,
+                }}
+              >
+                {t.uniqueFeatures}
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                {t.smartNutrition}
+              </h2>
+            </motion.div>
+
+            {/* 2x2 Feature Grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "repeat(2, 1fr)",
+                gap: "32px",
+              }}
+            >
+              {[
+                { icon: <Target size={28} />, ...t.features[0] },
+                { icon: <Zap size={28} />, ...t.features[1] },
+                { icon: <Shield size={28} />, ...t.features[2] },
+                { icon: <CheckCircle2 size={28} />, ...t.features[3] },
+              ].map((feature: any, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  style={{
+                    background: "#f8fafc",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "40px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 12px 24px rgba(0,0,0,0.08)",
+                  }}
+                >
+                  {/* Icon */}
+                  <div
+                    style={{
+                      width: "56px",
+                      height: "56px",
+                      borderRadius: "12px",
+                      background: "rgba(30, 64, 175, 0.1)",
+                      color: "#1e40af",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "24px",
+                    }}
+                  >
+                    {feature.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: 600,
+                      marginBottom: "12px",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "15px",
+                      lineHeight: 1.6,
+                      color: "rgba(0,0,0,0.6)",
+                      margin: 0,
+                    }}
+                  >
+                    {feature.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </Section>
+
+        {/* BENEFITS SECTION - "Run the Case, not the Paperwork" */}
+        <Section
+          id="benefits"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#f8fafc",
+          }}
+        >
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
+            {/* Section Tag & Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background: "rgba(249, 115, 22, 0.08)",
+                  color: "#ea580c",
+                  borderRadius: 100,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginBottom: 20,
+                }}
+              >
+                {t.benefitsTitle}
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                {t.benefitsSubtitle}
+              </h2>
+              <p
+                style={{
+                  fontSize: "18px",
+                  lineHeight: 1.6,
+                  color: "rgba(0,0,0,0.6)",
+                  maxWidth: "700px",
+                  margin: "0 auto",
+                }}
+              >
+                {t.benefitsDesc}
+              </p>
+            </motion.div>
+
+            {/* Benefits Grid */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)",
+                gap: "24px",
+                marginBottom: "48px",
+              }}
+            >
+              {[
+                { icon: <TrendingUp size={24} />, ...t.benefits[0] },
+                { icon: <Users size={24} />, ...t.benefits[1] },
+                { icon: <Clock size={24} />, ...t.benefits[2] },
+              ].map((benefit: any, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  style={{
+                    background: "#ffffff",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "32px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "12px",
+                      background: "rgba(249, 115, 22, 0.1)",
+                      color: "#ea580c",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {benefit.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 600,
+                      marginBottom: "12px",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {benefit.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "15px",
+                      lineHeight: 1.6,
+                      color: "rgba(0,0,0,0.6)",
+                      margin: 0,
+                    }}
+                  >
+                    {benefit.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Second Row of Benefits */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)",
+                gap: "24px",
+              }}
+            >
+              {[
+                { icon: <Shield size={24} />, ...t.benefits[3] },
+                { icon: <Eye size={24} />, ...t.benefits[4] },
+                { icon: <Sparkles size={24} />, ...t.benefits[5] },
+              ].map((benefit: any, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: (i + 3) * 0.1 }}
+                  style={{
+                    background: "#ffffff",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "32px",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "12px",
+                      background: "rgba(249, 115, 22, 0.1)",
+                      color: "#ea580c",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {benefit.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 600,
+                      marginBottom: "12px",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {benefit.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "15px",
+                      lineHeight: 1.6,
+                      color: "rgba(0,0,0,0.6)",
+                      margin: 0,
+                    }}
+                  >
+                    {benefit.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </Container>
+        </Section>
+
+        {/* COMPARISON SECTION - "Why Kuratech" */}
+        <Section
+          id="comparison"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#ffffff",
+          }}
+        >
+          <Container style={{ maxWidth: 1000, padding: "0 24px" }}>
+            {/* Section Tag & Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background: "rgba(22, 163, 74, 0.08)",
+                  color: "#16a34a",
+                  borderRadius: 100,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginBottom: 20,
+                }}
+              >
+                Why duftbar
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                A smarter way to serve nutrition
+              </h2>
+            </motion.div>
+
+            {/* Comparison Two-Column Layout */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "1fr 1fr",
+                gap: "32px",
+                background: "#f8fafc",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: "24px",
+                padding: "48px",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.06)",
+              }}
+            >
+              {/* Traditional vending Column */}
+              <div>
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    marginBottom: "24px",
+                    color: "rgba(0,0,0,0.9)",
+                  }}
+                >
+                  Traditional vending
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                  }}
+                >
+                  {[
+                    "Pre-packaged products with excess waste",
+                    "Limited product variety and flexibility",
+                    "Frequent manual restocking required",
+                  ].map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <X
+                        size={20}
+                        style={{
+                          color: "#ef4444",
+                          flexShrink: 0,
+                          marginTop: "2px",
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "15px",
+                          lineHeight: 1.6,
+                          color: "rgba(0,0,0,0.7)",
+                        }}
+                      >
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* duftbar Column */}
+              <div>
+                <h3
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    marginBottom: "24px",
+                    color: "rgba(0,0,0,0.9)",
+                  }}
+                >
+                  duftbar
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                  }}
+                >
+                  {[
+                    "Fresh, precise servings with zero packaging waste",
+                    "Flexible product options — easily swap flavors",
+                    "Automated monitoring with smart refill alerts",
+                    "Cloud-connected with real-time data & insights",
+                  ].map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <Check
+                        size={20}
+                        style={{
+                          color: "#22c55e",
+                          flexShrink: 0,
+                          marginTop: "2px",
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontSize: "15px",
+                          lineHeight: 1.6,
+                          color: "rgba(0,0,0,0.7)",
+                        }}
+                      >
+                        {item}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </Container>
+        </Section>
+
+        {/* FAQ SECTION - Accordion */}
+        <Section
+          id="faq"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#f8fafc",
+          }}
+        >
+          <Container style={{ maxWidth: 900, padding: "0 24px" }}>
+            {/* Section Tag & Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: "64px" }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background: "rgba(147, 51, 234, 0.08)",
+                  color: "#9333ea",
+                  borderRadius: 100,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginBottom: 20,
+                }}
+              >
+                {t.faqTitle}
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                {t.faqSubtitle}
+              </h2>
+            </motion.div>
+
+            {/* FAQ Accordion */}
+            <FAQ t={t} />
+          </Container>
+        </Section>
+
+        <Section
+          id="spaces"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#f8fafc",
+          }}
+        >
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background: "rgba(22, 163, 74, 0.08)",
+                  color: "#16a34a",
+                  borderRadius: 100,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   marginBottom: 24,
-                  color:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.5)"
-                      : "rgba(0,0,0,0.4)",
                 }}
               >
                 {lang === "is" ? "Staðsetningar" : "Locations"}
               </div>
-              <Kicker>{t.spacesTitle}</Kicker>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
+                }}
+              >
+                {t.spacesTitle}
+              </h2>
               <P
                 style={{
-                  maxWidth: 500,
+                  fontSize: 17,
+                  maxWidth: 600,
                   margin: "16px auto 0",
-                  color:
-                    mode === "dark"
-                      ? "rgba(255,255,255,0.8)"
-                      : "rgba(0,0,0,0.5)",
+                  color: "rgba(0,0,0,0.6)",
+                  lineHeight: 1.7,
                 }}
               >
                 {t.spacesDesc}
               </P>
             </motion.div>
 
-            <Grid2>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768 ? "1fr" : "repeat(2, 1fr)",
+                gap: "32px",
+              }}
+            >
               {t.spaces.map((s, i) => (
                 <motion.div
                   key={s.title}
@@ -923,118 +1617,127 @@ export default function DuftbarPage(): JSX.Element {
                   viewport={{ once: true }}
                   transition={{
                     duration: 0.6,
-                    delay: i * 0.08,
+                    delay: i * 0.1,
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{
-                    background:
-                      mode === "dark" ? "rgba(255,255,255,0.02)" : "#fff",
-                    border: `1px solid ${
-                      mode === "dark"
-                        ? "rgba(255,255,255,0.06)"
-                        : "rgba(0,0,0,0.05)"
-                    }`,
-                    borderRadius: 24,
-                    padding: 32,
-                    textAlign: "left",
-                    transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                    background: "#ffffff",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "40px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
                   }}
                 >
                   <div
                     style={{
+                      width: "56px",
+                      height: "56px",
+                      marginBottom: 24,
+                      borderRadius: "12px",
+                      background: "rgba(22, 163, 74, 0.1)",
+                      color: "#16a34a",
                       display: "flex",
-                      justifyContent: "center",
                       alignItems: "center",
-                      width: 48,
-                      height: 48,
-                      marginBottom: 20,
-                      borderRadius: "50%",
-                      background: mode === "dark" ? "#fff" : "#0a0a0a",
-                      color: mode === "dark" ? "#0a0a0a" : "#fff",
+                      justifyContent: "center",
                     }}
                   >
-                    {i === 0 && <Dumbbell size={20} />}
-                    {i === 1 && <Sparkles size={20} />}
-                    {i === 2 && <CheckCircle2 size={20} />}
-                    {i === 3 && <MapPin size={20} />}
+                    {i === 0 && <Dumbbell size={24} />}
+                    {i === 1 && <Sparkles size={24} />}
+                    {i === 2 && <CheckCircle2 size={24} />}
+                    {i === 3 && <MapPin size={24} />}
                   </div>
-                  <div
+                  <h3
                     style={{
                       fontWeight: 600,
-                      fontSize: 18,
-                      letterSpacing: "-0.02em",
+                      fontSize: 20,
+                      letterSpacing: "-0.01em",
+                      marginBottom: 12,
                     }}
                   >
                     {s.title}
-                  </div>
-                  <div
+                  </h3>
+                  <p
                     style={{
-                      marginTop: 10,
+                      margin: 0,
                       fontSize: 15,
-                      color:
-                        mode === "dark"
-                          ? "rgba(255,255,255,0.5)"
-                          : "rgba(0,0,0,0.5)",
+                      color: "rgba(0,0,0,0.6)",
                       lineHeight: 1.6,
                     }}
                   >
                     {s.text}
-                  </div>
+                  </p>
                 </motion.div>
               ))}
-            </Grid2>
+            </div>
           </Container>
         </Section>
 
         <Section
           id="team"
           style={{
-            background: "transparent",
+            position: "relative",
+            padding: "120px 0",
+            background: "#ffffff",
           }}
         >
-          <Container style={{ padding: "160px 24px" }}>
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              style={{ textAlign: "center", marginBottom: 64 }}
+              style={{ textAlign: "center", marginBottom: "80px" }}
             >
               <div
                 style={{
                   display: "inline-block",
                   padding: "8px 16px",
-                  background: "rgba(255,255,255,0.12)",
+                  background: "rgba(249, 115, 22, 0.08)",
+                  color: "#ea580c",
                   borderRadius: 100,
                   fontSize: 12,
-                  fontWeight: 500,
-                  letterSpacing: "0.05em",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   marginBottom: 24,
-                  color: "rgba(255,255,255,0.9)",
                 }}
               >
                 {lang === "is" ? "Teymið" : "Team"}
               </div>
-              <Kicker
+              <h2
                 style={{
-                  color: "white",
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  fontWeight: 700,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "16px",
                 }}
               >
                 {lang === "is" ? "Við erum duftbar" : "Meet the Team"}
-              </Kicker>
+              </h2>
               <P
                 style={{
-                  color: "rgba(255,255,255,0.9)",
-                  maxWidth: 500,
+                  fontSize: 17,
+                  color: "rgba(0,0,0,0.6)",
+                  maxWidth: 600,
                   margin: "16px auto 0",
+                  lineHeight: 1.7,
                 }}
               >
                 {t.teamIntro}
               </P>
             </motion.div>
 
-            <Grid3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  window.innerWidth < 768
+                    ? "1fr"
+                    : "repeat(auto-fit, minmax(300px, 1fr))",
+                gap: "32px",
+              }}
+            >
               {t.team.map((m, i) => (
                 <motion.div
                   key={m.name}
@@ -1047,19 +1750,12 @@ export default function DuftbarPage(): JSX.Element {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   style={{
-                    background:
-                      mode === "dark"
-                        ? "rgba(255,255,255,0.03)"
-                        : "rgba(255,255,255,0.95)",
-                    border: `1px solid ${
-                      mode === "dark"
-                        ? "rgba(255,255,255,0.06)"
-                        : "rgba(0,0,0,0.05)"
-                    }`,
-                    borderRadius: 24,
-                    padding: 32,
+                    background: "#f8fafc",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    borderRadius: "16px",
+                    padding: "40px",
                     textAlign: "center",
-                    backdropFilter: "blur(10px)",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
                   }}
                 >
                   <img
@@ -1068,59 +1764,62 @@ export default function DuftbarPage(): JSX.Element {
                     loading="lazy"
                     decoding="async"
                     style={{
-                      width: 80,
-                      height: 80,
+                      width: 96,
+                      height: 96,
                       borderRadius: "50%",
                       objectFit: "cover",
-                      margin: "0 auto 20px",
-                      border: `3px solid ${mode === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)"}`,
+                      margin: "0 auto 24px",
+                      border: "3px solid rgba(0,0,0,0.06)",
                     }}
                   />
-                  <div
+                  <h3
                     style={{
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: 600,
-                      color: mode === "dark" ? "#fff" : "#0a0a0a",
-                      letterSpacing: "-0.02em",
+                      color: "#0a0a0a",
+                      letterSpacing: "-0.01em",
+                      marginBottom: 8,
                     }}
                   >
                     {m.name}
-                  </div>
+                  </h3>
                   <div
                     style={{
-                      marginTop: 4,
+                      marginBottom: 16,
                       fontSize: 13,
                       fontWeight: 500,
-                      color:
-                        mode === "dark"
-                          ? "rgba(255,255,255,0.85)"
-                          : "rgba(0,0,0,0.6)",
+                      color: "rgba(0,0,0,0.5)",
                       textTransform: "uppercase",
                       letterSpacing: "0.05em",
                     }}
                   >
                     {m.role}
                   </div>
-                  <div
+                  <p
                     style={{
-                      marginTop: 16,
+                      margin: 0,
                       fontSize: 14,
+                      color: "rgba(0,0,0,0.6)",
                       lineHeight: 1.6,
-                      color:
-                        mode === "dark"
-                          ? "rgba(255,255,255,0.9)"
-                          : "rgba(0,0,0,0.7)",
                     }}
                   >
                     {m.text}
-                  </div>
+                  </p>
                 </motion.div>
               ))}
-            </Grid3>
+            </div>
           </Container>
         </Section>
-        <Contact id="contact">
-          <Container style={{ padding: "160px 24px" }}>
+
+        <Contact
+          id="contact"
+          style={{
+            position: "relative",
+            padding: "120px 0",
+            background: "#f8fafc",
+          }}
+        >
+          <Container style={{ maxWidth: 1200, padding: "0 24px" }}>
             <ContactGrid>
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -1132,20 +1831,37 @@ export default function DuftbarPage(): JSX.Element {
                   style={{
                     display: "inline-block",
                     padding: "8px 16px",
-                    background: "rgba(0,0,0,0.04)",
+                    background: "rgba(30, 64, 175, 0.08)",
+                    color: "#1e40af",
                     borderRadius: 100,
                     fontSize: 12,
-                    fontWeight: 500,
-                    letterSpacing: "0.05em",
+                    fontWeight: 600,
+                    letterSpacing: "0.08em",
                     textTransform: "uppercase",
                     marginBottom: 24,
-                    color: "rgba(0,0,0,0.4)",
                   }}
                 >
                   {lang === "is" ? "Hafa samband" : "Contact"}
                 </div>
-                <Kicker style={{ color: "#0a0a0a" }}>{t.bringDuftbar}</Kicker>
-                <P style={{ color: "rgba(0,0,0,0.5)", maxWidth: 400 }}>
+                <h2
+                  style={{
+                    fontSize: "clamp(2rem, 4vw, 2.5rem)",
+                    fontWeight: 700,
+                    lineHeight: 1.2,
+                    letterSpacing: "-0.02em",
+                    marginBottom: "16px",
+                  }}
+                >
+                  {t.bringDuftbar}
+                </h2>
+                <P
+                  style={{
+                    fontSize: 16,
+                    color: "rgba(0,0,0,0.6)",
+                    maxWidth: 450,
+                    lineHeight: 1.7,
+                  }}
+                >
                   {t.bringDesc}
                 </P>
 
@@ -1284,20 +2000,38 @@ export default function DuftbarPage(): JSX.Element {
         <FooterWrap>
           <Container
             style={{
-              padding: "80px 24px",
+              padding: "80px 24px 60px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              gap: 24,
+              gap: 32,
               textAlign: "center",
+              maxWidth: 800,
             }}
           >
-            <Logo size={28} />
+            <Logo size={32} />
+
+            <p
+              style={{
+                fontSize: "18px",
+                lineHeight: 1.6,
+                color: "rgba(0,0,0,0.7)",
+                maxWidth: "600px",
+                margin: 0,
+              }}
+            >
+              {t.footerDescription}
+            </p>
+
             <div
               style={{
+                marginTop: "40px",
+                paddingTop: "32px",
+                borderTop: "1px solid rgba(0,0,0,0.1)",
+                width: "100%",
                 display: "flex",
                 flexDirection: "column",
-                gap: 6,
+                gap: 12,
               }}
             >
               <div
@@ -1305,42 +2039,19 @@ export default function DuftbarPage(): JSX.Element {
                   fontWeight: 500,
                   fontSize: 13,
                   letterSpacing: "-0.01em",
+                  color: "rgba(0,0,0,0.6)",
                 }}
               >
-                © {new Date().getFullYear()} Duftbar ehf.
+                © {new Date().getFullYear()} {t.footerCopyright}
               </div>
-              <div style={{ fontSize: 12, opacity: 0.5 }}>{t.footerMade}</div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                marginTop: 8,
-              }}
-            >
-              <span
+              <div
                 style={{
-                  fontSize: 11,
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  opacity: 0.4,
+                  fontSize: 12,
+                  color: "rgba(0,0,0,0.4)",
                 }}
               >
-                {t.footerPayments}
-              </span>
-              <img
-                src="https://logosandtypes.com/wp-content/uploads/2024/07/verifone.svg"
-                alt="Verifone"
-                loading="lazy"
-                decoding="async"
-                style={{
-                  height: 20,
-                  filter: mode === "dark" ? "invert(1) grayscale(1)" : "none",
-                  opacity: 0.5,
-                }}
-              />
+                {t.footerContact}
+              </div>
             </div>
           </Container>
         </FooterWrap>

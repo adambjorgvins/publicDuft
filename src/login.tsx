@@ -384,7 +384,7 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
         </motion.form>
 
         <Divider>
-          <span>Duftbar</span>
+          <span>duftbar</span>
         </Divider>
 
         <Footer>Aðeins fyrir fjárfesta og teymi 🚀</Footer>
