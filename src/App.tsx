@@ -5,7 +5,8 @@ import { light, dark } from "./theme";
 import { GlobalStyle } from "./global-styles";
 import DuftbarPage from "./duftbar-page";
 import Login from "./login";
-import { trackPageView } from "./analytics";
+import { trackPageView, setAnalyticsConsent } from "./analytics";
+import { CookieConsent, getCookieConsent } from "./cookie-consent";
 
 // Component to track page views on route changes
 function PageViewTracker() {
@@ -30,11 +31,25 @@ export default function App() {
     if (localStorage.getItem("duftbarPass") === "true") {
       setAuthed(true);
     }
+
+    // Initialize analytics based on existing consent
+    const consent = getCookieConsent();
+    if (consent === "accepted") {
+      setAnalyticsConsent(true);
+    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("duftbar-theme", isDark ? "dark" : "light");
   }, [isDark]);
+
+  const handleAcceptCookies = () => {
+    setAnalyticsConsent(true);
+  };
+
+  const handleDeclineCookies = () => {
+    setAnalyticsConsent(false);
+  };
 
   const theme = isDark ? dark : light;
 
@@ -55,6 +70,10 @@ export default function App() {
             }
           />
         </Routes>
+        <CookieConsent
+          onAccept={handleAcceptCookies}
+          onDecline={handleDeclineCookies}
+        />
       </BrowserRouter>
     </ThemeProvider>
   );

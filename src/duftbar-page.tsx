@@ -37,6 +37,7 @@ import {
   X,
   Check,
   Plus,
+  Menu,
 } from "lucide-react";
 
 import {
@@ -154,6 +155,7 @@ const FAQ = ({ t }: { t: LocaleStrings }) => {
 export default function DuftbarPage(): JSX.Element {
   const [progress, setProgress] = useState<number>(0);
   const [lang, setLang] = useState<Locale>("is");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = locale[lang];
 
   useEffect(() => {
@@ -562,31 +564,121 @@ export default function DuftbarPage(): JSX.Element {
             </span>
           </a>
 
-          <button
-            onClick={() => setLang(lang === "en" ? "is" : "en")}
-            style={{
-              background: "rgba(255,255,255,0.9)",
-              backdropFilter: "blur(10px)",
-              border: "1px solid rgba(0,0,0,0.1)",
-              borderRadius: "8px",
-              padding: "8px 16px",
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#fff";
-              e.currentTarget.style.borderColor = "rgba(0,0,0,0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.9)";
-              e.currentTarget.style.borderColor = "rgba(0,0,0,0.1)";
-            }}
-          >
-            {lang === "en" ? "ÍS" : "EN"}
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Language switcher - hidden on mobile */}
+            <button
+              onClick={() => setLang(lang === "en" ? "is" : "en")}
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(0,0,0,0.1)",
+                borderRadius: "8px",
+                padding: "8px 16px",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: window.innerWidth < 768 ? "none" : "block",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.borderColor = "rgba(0,0,0,0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.9)";
+                e.currentTarget.style.borderColor = "rgba(0,0,0,0.1)";
+              }}
+            >
+              {lang === "en" ? "ÍS" : "EN"}
+            </button>
+
+            {/* Hamburger menu button - visible on mobile */}
+            <MobileMenuButton
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{
+                background: "rgba(255,255,255,0.9)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <Menu size={20} />
+            </MobileMenuButton>
+          </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <MobileMenu
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <button
+                className="close"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  alignSelf: "flex-end",
+                }}
+              >
+                <X size={28} />
+              </button>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "24px",
+                  paddingTop: "20px",
+                }}
+              >
+                {t.nav.map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(item.href);
+                      setMobileMenuOpen(false);
+                    }}
+                    style={{
+                      fontSize: "24px",
+                      fontWeight: 600,
+                      color: "#000",
+                      textDecoration: "none",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+
+                {/* Language switcher in mobile menu */}
+                <button
+                  onClick={() => {
+                    setLang(lang === "en" ? "is" : "en");
+                  }}
+                  style={{
+                    background: "rgba(0,0,0,0.05)",
+                    border: "1px solid rgba(0,0,0,0.1)",
+                    borderRadius: "12px",
+                    padding: "16px 24px",
+                    fontSize: 18,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    marginTop: "20px",
+                  }}
+                >
+                  {lang === "en" ? "Íslenska" : "English"}
+                </button>
+              </div>
+            </MobileMenu>
+          )}
+        </AnimatePresence>
         <Hero
           id="hero"
           style={{
