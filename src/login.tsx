@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Page, SolidBtn } from "./primatives";
 import { Logo } from "./logo";
+import { trackLogin } from "./analytics";
 
 /* Animated gradient background */
 const gradientMove = keyframes`
@@ -291,6 +292,7 @@ export default function Login({ onSuccess }: { onSuccess: () => void }) {
 
     if (pin === "duftbar1234") {
       localStorage.setItem("duftbarPass", "true");
+      trackLogin("password");
       onSuccess();
     } else {
       setError("Rangt lykilorð 🔐");

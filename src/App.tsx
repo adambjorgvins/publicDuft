@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { light, dark } from "./theme";
 import { GlobalStyle } from "./global-styles";
 import DuftbarPage from "./duftbar-page";
 import Login from "./login";
+import { trackPageView } from "./analytics";
+
+// Component to track page views on route changes
+function PageViewTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location]);
+
+  return null;
+}
 
 export default function App() {
   const [authed, setAuthed] = useState(false);
@@ -30,6 +42,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <BrowserRouter>
+        <PageViewTracker />
         <Routes>
           <Route
             path="/"
